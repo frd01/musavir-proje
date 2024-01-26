@@ -1,0 +1,11 @@
+﻿@model Tacmin.Model.Mukellef.BeyannameDonemModel
+
+
+@(Html.Kendo().DropDownListFor(m => m.Donem_Adi)
+        .Name("drop_beyanname")
+        .DataValueField("Id")
+        .DataTextField("Donem_Adi")
+        .Events(e=>e.Change("drop_beyanname_change_event"))
+        .BindTo((System.Collections.IEnumerable)ViewData["beyannameDonemListesi"])
+        
+)

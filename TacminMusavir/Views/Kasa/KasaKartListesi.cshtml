@@ -1,0 +1,280 @@
+﻿@{
+
+    Title = "KASA KARTLARI";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+          Html.Ty().TyToolBar().Items(item =>
+          {
+
+              item.Add().Btn_Custom(label: "Yeni", icon: "new", clickEvent: "yeni_kart_click_event")
+               .HtmlAttributes(new { @class = "kendoprimary" });
+
+              item.Add().Btn_Custom(label: "Detay", icon: "detail", clickEvent: "detay_kart_click_event")
+               .HtmlAttributes(new { @class = "kendowarning" });
+
+
+          })
+         )
+    </div>
+</div>
+<br />
+
+@(Html.Kendo().DataSource<Tacmin.Model.Kasa.KartListeModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Kasa.KartListeModel>().Name("master")
+        .Columns(c=>
+        {
+
+            c.Bound(m => m.KasaKodu).Filterable(ftb => ftb.Multi(true).Search(true)).Width(100);
+            c.Bound(m => m.KasaAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Aciklama).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.ParaBirimi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Tahsilat).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class= "text-right" });
+            c.Bound(m => m.Odeme).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" });
+            c.Bound(m => m.Bakiye).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" });
+        })
+        .Height(230)
+        .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+              .Events(e => e.Change("kasa_select_event"))
+        )
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_kasa_kart")
+        .Items(item =>
+        {
+
+            item.Add().Text("Tüm Hareketler")
+            .Selected(true)
+            .Content(Html.Partial("Listeler/KasaTumListe").ToString());
+
+            item.Add().Text("Cari Hareketleri")
+            .Content(Html.Partial("Listeler/KasaCariListe").ToString());
+
+            item.Add().Text("Banka Hareketleri")
+            .Content(Html.Partial("Listeler/KasaBankaListe").ToString());
+        })
+        )
+    </div>
+</div>
+
+<div>
+    @(
+    Html.Kendo().Window()
+    .Name("wn_kasa_kart")
+    .Title("Yeni Kasa Kartı")
+    .Content(Html.Partial("KasaKartDetay").ToString())
+    .Visible(false)
+    .Modal(true)
+    .Height(300)
+    .Width(650)
+
+
+    )
+</div>
+
+
+
+
+
+<script>
+
+    let select_kasa_id = null
+
+    $(document).ready(function () {
+
+        try {
+
+            const grid_tum = $("#grid_tum").data("kendoGrid")
+
+            grid_tum.setDataSource([])
+
+        } catch {
+
+            console.log("")
+        }
+
+        try {
+
+            const grid_kasa_cari = $("#grid_kasa_cari").data("kendoGrid")
+
+            grid_kasa_cari.setDataSource([])
+
+        } catch {
+
+            console.log("")
+        }
+
+        try {
+
+            const grid_kasa_banka = $("#grid_kasa_banka").data("kendoGrid")
+
+            grid_kasa_banka.setDataSource([])
+
+        } catch {
+
+            console.log("")
+        }
+    })
+
+   
+
+   async function kart_model_yukle() {
+
+       const response = await $.ajax({
+
+           url: "@Url.Action("KasaKartDetay", "kasa")",
+           method: "POST",
+           dataType: "Json",
+           data: { kasaId: select_kasa_id }
+       })
+
+       if (response != null) {
+
+           const kart_window = $("#wn_kasa_kart").data("kendoWindow")
+
+           $("#tx_kasa_kodu").data("kendoTextBox").value(response.KasaKodu)
+           $("#tx_kasa_adi").data("kendoTextBox").value(response.KasaAdi)
+           $("#tx_ozel_kod").data("kendoTextBox").value(response.OzelKod)
+           $("#tx_aciklama").data("kendoTextBox").value(response.Aciklama)
+           $("#tx_muh_kodu").data("kendoTextBox").value(response.MuhasebeKodu)
+
+           $("#cm_para_birim").data("kendoComboBox").value(response.ParaBirimId)
+        
+
+           if (response.Aktif == true) {
+
+               $("#ch_aktif:checked").val(true)
+           }
+
+          
+
+           kart_window.title(response.KasaAdi)
+           kart_window.center()
+           kart_window.open()
+       }
+    }
+
+    async function kasa_ayrinti_liste_yukle() {
+
+        if (select_kasa_id!= null) {
+
+            const kasa_ayrinti_listesi = await $.ajax({
+
+                url: "@Url.Action("KasaAyrintiListe","kasa")",
+                method: "POST",
+                dataType: "Json",
+                data: { kasaId: select_kasa_id }
+            })
+
+            for (var i = 0; i < kasa_ayrinti_listesi.length; i++) {
+
+                kasa_ayrinti_listesi[i].Tarih = new Date(parseInt(kasa_ayrinti_listesi[i].Tarih.substr(6)))
+
+            }
+
+            try {
+
+                const grid_tum = $("#grid_tum").data("kendoGrid")
+
+                grid_tum.setDataSource(kasa_ayrinti_listesi)
+
+            } catch {
+
+                console.log("")
+            }
+
+            try {
+
+                const grid_kasa_cari = $("#grid_kasa_cari").data("kendoGrid")
+
+                const kasa_cari_liste = kasa_ayrinti_listesi.filter(x=>x.Modul == "cari")
+
+                grid_kasa_cari.setDataSource(kasa_cari_liste)
+
+            } catch {
+
+                console.log("")
+            }
+
+            try {
+
+                const grid_kasa_banka = $("#grid_kasa_banka").data("kendoGrid")
+
+                const kasa_banka_liste = kasa_ayrinti_listesi.filter(x => x.Modul == "cari")
+
+                grid_kasa_banka.setDataSource(kasa_banka_liste)
+
+            } catch {
+
+                console.log("")
+            }
+
+
+        }
+    }
+
+    async function kasa_select_event(e) {
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            select_kasa_id = item.Id
+
+            select_kasa_kart_id = item.Id
+
+         }
+
+        await kasa_ayrinti_liste_yukle()
+
+        
+
+    }
+
+    function yeni_kart_click_event() {
+
+        const kart_window = $("#wn_kasa_kart").data("kendoWindow")
+
+        kart_window.center()
+        kart_window.open()
+    }
+
+    async function detay_kart_click_event() {
+
+        if (select_kasa_id == null) {
+
+            mesaj("Kasa Seçiniz.", "error")
+            return
+        }
+
+        await kart_model_yukle()
+    }
+
+</script>

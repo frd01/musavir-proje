@@ -1,0 +1,59 @@
+﻿<div class="row p-2">
+    <div class="col-md-12 k-card">
+        <div id="div_veri">
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="d-flex flex-row">
+            <div class="p-2">
+                @(
+
+                Html.Kendo().Button().Content("Token Al")
+                .Name("btn_islem")
+                .Events(e=>e.Click("btn_islem_click_event"))
+)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="~/assets/islemler/maliyeGirisler.js" ></script>
+
+<script>
+
+    async function btn_islem_click_event() {
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const musavir = await $.ajax({
+
+            url: "@Url.Action("GetMusavirBilgi", "musavir")",
+            method : "GET"
+        })
+
+        const token_islem = await digital_vergi_dairesi_giris(musavir)
+
+        console.log("Token İşlem : ", token_islem)
+
+        if (token_islem.is_kullanici == true) {
+
+            console.log("Token : ", token_islem.token)
+        }
+
+
+        //await digital_vergi_dairesi_cikis_yap(token_islem.token, musavir.tcNo, musavir.vergi_no)
+
+      
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+        
+
+
+    }
+
+</script>

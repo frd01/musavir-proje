@@ -1,0 +1,222 @@
+﻿<div class="container-fluid ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex flex-row">
+                <div class="p-2" style="width : 25%;">
+                    @Html.Label("Mükellefler")
+                </div>
+                <div class="p-2" style="width : 75%;">
+                    @(
+                Html.Kendo().ComboBox()
+                .Name("hzl_gr_cm_cariler")
+                .Filter("contains")
+                .DataTextField("Unvan")
+                .DataValueField("Id")
+                .HtmlAttributes(new { style = "width : 100%",@class="form-control form-control-sm" })
+                .Events(e=>e.Select("hzl_gr_cm_cariler_select_event"))
+                )
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex flex-row justify-content-end">
+                <div class="p-2 mt-4">
+                    <button id="mly_hzl_grs_btn" class="btn btn-primary btn-sm" onclick="interaktif_vd_portal_click_event()">
+                        <img src="~/assets/img/ivd_logo_no_text.png" width="25" height="25" />
+                        İnter Aktif Vergi Dairesi Giriş
+                    </button>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+
+
+    const gib_model = {
+
+        gibKodu: null,
+        gibSifre: null,
+        gibParala: null,
+        isSecim : false
+    }
+
+
+
+    function hzl_gr_cm_cariler_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        gib_model.gibKodu = dataItem.GibKodu
+        gib_model.gibParala = dataItem.GibParola
+        gib_model.gibSifre = dataItem.GibSifre
+
+        gib_model.isSecim = true
+    }
+
+    async function inter_aktif_islem() {
+
+        kendo.ui.progress($('.k-window'), true);
+
+        const token_islem = await inter_aktif_giris(gib_model.gibKodu, gib_model.gibSifre, gib_model.gibParala)
+
+        if (token_islem.islemDurum == false) {
+
+            alert(token_islem.mesaj)
+            return
+        }
+
+        const url = inter_aktif_portal_giris_url(token_islem.token)
+
+        kendo.ui.progress($('.k-window'), false);
+        const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+
+        wn_hzl_gr_inter_aktif.close()
+
+        window.open(url, "_blank")
+    }
+
+    async function e_arsiv_portal_islem() {
+
+        kendo.ui.progress($('.k-window'), true);
+
+        const token_islem = await e_arsiv_giris(gib_model.gibKodu, gib_model.gibSifre, gib_model.gibParala)
+
+        if (token_islem.islemDurum == false) {
+
+            alert(token_islem.mesaj)
+            return
+        }
+
+        const url = e_arsiv_portal_giris_url(token_islem.token)
+
+        window.open(url, "_blank")
+
+        const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+
+        wn_hzl_gr_inter_aktif.close()
+
+        kendo.ui.progress($('.k-window'), false);
+    }
+
+   async function interaktif_vd_portal_click_event() {
+
+       if (gib_model.isSecim == false) {
+
+            alert("Firma Seçiniz.")
+            return
+        }
+
+       if (gib_model.gibKodu == null || gib_model.gibParala == null || gib_model.gibSifre == null) {
+
+            alert("Firmanın Gib Bilgileri Eksik Kontrol Ediniz.")
+            return
+       }
+
+       if (maliye_giris_tur == "inter_aktif") {
+
+           await inter_aktif_islem()
+       }
+
+       if (maliye_giris_tur == "e_arsiv") {
+
+           await e_arsiv_portal_islem()
+       }
+
+       if (maliye_giris_tur == "internet_vergi_dairesi") {
+
+           await internet_vd_page_url()
+       }
+
+       if (maliye_giris_tur == "digital_vergi_dairesi") {
+
+           await digital_vd_page_url()
+       }
+    }
+
+    async function digital_vd_page_url() {
+
+        kendo.ui.progress($('.k-window'), true);
+
+         const musavir = await $.ajax({
+
+            url: "@Url.Action("GetMusavirBilgi", "musavir")",
+            method : "GET"
+        })
+
+        if (musavir.gib_kod.length <= 0 || musavir.gib_sifre.length <= 0 || musavir.gib_parola.length <= 0) {
+
+            kendo.ui.progress($('.k-window'), false);
+            alert("Gib Bilgileriniz Eksik Tamamlayınız.")
+
+            return
+        }
+
+        const token_islem = await digital_mukellef_vergi_dairesi_giris(gib_model.gibKodu, gib_model.gibSifre, gib_model.gibParala)
+
+        console.log("token işlem : ", token_islem)
+
+        if (token_islem.is_kullanici == false) {
+            kendo.ui.progress($('.k-window'), false);
+            alert(token_islem.hata_mesaj)
+
+            return
+        }
+
+        kendo.ui.progress($('.k-window'), false);
+
+        const pageUrl = "https://dijital.gib.gov.tr/portal"
+
+        window.open(pageUrl,"_blank")
+    }
+
+    async function internet_vd_page_url() {
+
+        kendo.ui.progress($('.k-window'), true);
+
+         const musavir = await $.ajax({
+
+            url: "@Url.Action("GetMusavirBilgi", "musavir")",
+            method : "GET"
+        })
+
+        if (musavir.gib_kod.length <= 0 || musavir.gib_sifre.length <= 0 || musavir.gib_parola.length <= 0) {
+
+            kendo.ui.progress($('.k-window'), false);
+            alert("Gib Bilgileriniz Eksik Tamamlayınız.")
+
+            return
+        }
+
+        const token_islem = await internet_vergi_dairesi_giris(musavir)
+
+        console.log("token işlem : ", token_islem)
+
+        if (token_islem.is_kullanici == false) {
+            kendo.ui.progress($('.k-window'), false);
+            alert(token_islem.hata_mesaj)
+
+            return
+        }
+
+        kendo.ui.progress($('.k-window'), false);
+
+        const pageUrl = "https://intvrg.gib.gov.tr/intvrg_side/main.jsp?token=" + token_islem.token + "&appName=tdvd"
+
+        window.open(pageUrl,"_blank")
+    }
+
+    function interaktif_vd_portal_form_kapat_click_event() {
+
+        const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+
+        wn_hzl_gr_inter_aktif.close()
+    }
+
+</script>

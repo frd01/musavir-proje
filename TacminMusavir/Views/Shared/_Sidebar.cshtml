@@ -1,0 +1,88 @@
+﻿<aside class="main-sidebar sidebar-light-danger elevation-4">
+    <!-- Brand Logo -->
+    <a href="/" class="brand-link">
+        <img src="~/assets/img/logo/logo-dark.png" class="brand-image">
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/assets/img/no-user-img-white.png" class="img-circle">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">@VirtualContext.AdSoyad</a>
+            </div>
+        </div>
+
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Ara" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-compact" data-widget="treeview" role="menu" data-accordion="false">
+                @{
+                    foreach (var menu in mainMenu)
+                    {
+                        if (menu.YETKI == null || VirtualContext.yetkiKontrol(menu.YETKI.NAME))
+                        {
+                            var submenustr = "";
+                            if (menu.SUBMENU != null)
+                            {
+                                var menubos = true;
+                                submenustr += "<ul class='nav nav-treeview'>";
+                                foreach (var submenu in menu.SUBMENU)
+                                {
+                                    if (submenu.YETKI == null || VirtualContext.yetkiKontrol(submenu.YETKI.NAME))
+                                    {
+                                        submenustr += $@"
+                                                    <li class='nav-item'>
+                                                        <a class='nav-link' href='{submenu.URL}'>
+                                                            <i class='{submenu.ICONCLASS}'></i>
+                                                            <p>{submenu.TITLE}</p>
+                                                        </a>
+                                                    </li>
+                                                ";
+                                        menubos = false;
+                                    }
+                                }
+                                submenustr += "</ul>";
+                                if (menubos)
+                                {
+                                    submenustr = "";
+                                }
+                            }
+
+                            if (menu.SUBMENU == null || (menu.SUBMENU != null && submenustr != ""))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@menu.URL">
+                                        <i class='@menu.ICONCLASS'></i>
+                                        <p>@menu.TITLE</p>
+
+                                        @if (submenustr != "")
+                                        {
+                                            <i class="right fas fa-angle-left"></i>
+                                        }
+                                    </a>
+
+                                    @Html.Raw(submenustr)
+                                </li>
+                            }
+                        }
+                    }
+                }
+            </ul>
+        </nav>
+    </div>
+    <!-- /.sidebar -->
+</aside>

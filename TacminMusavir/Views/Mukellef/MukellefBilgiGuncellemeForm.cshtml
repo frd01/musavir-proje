@@ -1,0 +1,106 @@
+﻿<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex flex-row">
+                <div class="p-2" style="width : 30%;">
+                    <button class="btn btn-success" onclick="excel_dosya_indir_click_event()">
+                        Excel Dosya İndir
+                    </button>
+                </div>
+                <div class="p-2" style="width : 70%;">
+                    @Html.Kendo().TextBox().Name("tx_file").HtmlAttributes(new { type = "file", accept = ".xls", style = "width : 100%;" })<br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="d-flex flex-row justify-content-end" onclick="mukellef_bilgi_guncelle_click_event()">
+                <button class="btn btn-warning">
+                    Bilgi Güncelle
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    async function mukellef_bilgi_guncelle_click_event() {
+
+        const fileUpload = $("#tx_file").get(0);
+
+        const files = fileUpload.files
+
+        if (files.length <= 0) {
+
+            alert("Excel Dosyası Seçiniz.")
+            return
+        }
+
+        const excelFile = files[0]
+
+        console.log("excelFile : ", excelFile)
+
+        if (excelFile.name.toString().split('.')[1] != 'xls') {
+
+            alert('Excel Listesini "xls" formatında yükleyiniz.')
+
+            return
+        }
+
+        const formData = new FormData()
+
+        formData.append(excelFile.name, excelFile)
+
+
+        const result = await $.ajax({
+
+            url: "@Url.Action("MukellefGibBilgiGuncelle", "mukellef")",
+            method: "POST",
+            contentType: false,
+            processData: false,
+            data: formData
+        })
+
+        alert(result.Mesaj)
+
+    }
+
+    async function excel_dosya_indir_click_event() {
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const data_model = await $.ajax({
+
+            url: "@Url.Action("MukellefGibGuncellemeExcelListesi", "mukellef")",
+            method : "GET"
+        })
+
+        const model = {
+
+            musteri_listesi: data_model.FirmaListesi,
+            dosya_adi: data_model.DosyaAdi
+        }
+
+        await $.ajax({
+
+            url: "http://localhost:5510/node-api/mukellef-gib-excel-olustur",
+            method: "POST",
+            dataType: "json",
+            data: {
+                musteri_listesi: JSON.stringify(data_model.FirmaListesi),
+                dosya_adi: data_model.DosyaAdi
+            }
+        })
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+        const excel_dosya_link = "http://localhost:5510/node-api/mukellef-gib-excel-dosya"
+
+        window.open(excel_dosya_link,"_blank")
+    }
+
+</script>

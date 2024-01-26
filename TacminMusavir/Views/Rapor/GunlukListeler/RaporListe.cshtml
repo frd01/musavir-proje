@@ -1,0 +1,166 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Rapor.GunlukIslemModel>()
+    .Name("raporGridds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Rapor.GunlukIslemModel>().Name("raporGrid")
+        .Columns(c=>
+        {
+
+            c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:dd.MM.yyyy}").Width(85).HtmlAttributes(new { @class="text-center" });
+
+            c.Bound(m => m.Beyaname).ClientTemplate(
+                    "<div class='text-center'>"
+                    + "<a href='#=BeyanameUrl#' target='_blank'>"
+                    + "#=Beyaname#"
+                    + "</a>"
+                    + "</div>"
+                    ).Width(110).Filterable(false);
+
+            c.Bound(m => m.Bildirge).ClientTemplate(
+                    "<div class='text-center'>"
+                    + "<a href='#=BildirgeUrl#' target='_blank'>"
+                    + "#=Bildirge#"
+                    + "</a>"
+                    + "</div>"
+                    ).Width(90).Filterable(false);
+
+
+            c.Group(gr => gr
+             .Title("Tebligatlar")
+
+             .Columns(cl =>
+             {
+
+                 cl.Bound(m => m.GelirIdaresiTebligat).ClientTemplate(
+                     "<div class='text-center'>"
+                     + "<a href='#=GelirIdaresiTebligatUrl#' target='_blank'>"
+                     + "#=GelirIdaresiTebligat#"
+                     + "</a>"
+                     + "</div>"
+                     ).Width(100).Filterable(false);
+
+                 cl.Bound(m => m.VergiDenetimTebligat).ClientTemplate(
+                    "<div class='text-center'>"
+                    + "<a href='#=VergiDenetimTebligatUrl#' target='_blank'>"
+                    + "#=VergiDenetimTebligat#"
+                    + "</a>"
+                    + "</div>"
+                    ).Width(115).Filterable(false);
+
+                 cl.Bound(m => m.TicaretBakanligiTebligat).ClientTemplate(
+                  "<div class='text-center'>"
+                  + "<a href='#=TicaretBakanligiTebligatUrl#' target='_blank'>"
+                  + "#=TicaretBakanligiTebligat#"
+                  + "</a>"
+                  + "</div>"
+                  ).Width(130).Filterable(false);
+
+                 cl.Bound(m => m.IcisleriTebligat).ClientTemplate(
+                "<div class='text-center'>"
+                + "<a href='#=IcisleriTebligatUrl#' target='_blank'>"
+                + "#=IcisleriTebligat#"
+                + "</a>"
+                + "</div>"
+                ).Width(125).Filterable(false);
+
+
+
+             })
+            );
+
+            c.Group(gr => gr
+
+            .Title("E-Arşiv Faturalar")
+            .Columns(cl => {
+
+                cl.Bound(m => m.GelenFatura).ClientTemplate(
+             "<div class='text-center'>"
+             + "<a href='#=GelenFaturaUrl#' target='_blank'>"
+             + "#=GelenFatura#"
+             + "</a>"
+             + "</div>"
+             ).Width(105).Filterable(false);
+
+                cl.Bound(m => m.GidenFatura).ClientTemplate(
+            "<div class='text-center'>"
+            + "<a href='#=GidenFaturaUrl#' target='_blank'>"
+            + "#=GidenFatura#"
+            + "</a>"
+            + "</div>"
+            ).Width(105).Filterable(false);
+
+            })
+            );
+
+            c.Bound(m => m.IseGiris).ClientTemplate(
+          "<div class='text-center'>"
+          + "<a href='#=IseGirisUrl#' target='_blank'>"
+          + "#=IseGiris#"
+          + "</a>"
+          + "</div>"
+          ).Width(90).Filterable(false);
+
+            c.Bound(m => m.IseCikis).ClientTemplate(
+         "<div class='text-center'>"
+         + "<a href='#=IseCikisUrl#' target='_blank'>"
+         + "#=IseCikis#"
+         + "</a>"
+         + "</div>"
+         ).Width(90).Filterable(false);
+
+
+            c.Group(gr => gr
+
+             .Title("E-Viziteler")
+             .Columns(cl => {
+
+                 cl.Bound(m => m.IsKazasi).ClientTemplate(
+                   "<div class='text-center'>"
+                   + "<a href='#=IsKazasiUrl#' target='_blank'>"
+                   + "#=IsKazasi#"
+                   + "</a>"
+                   + "</div>"
+                   ).Width(75).Filterable(false);
+
+                 cl.Bound(m => m.MeslekHastalik).ClientTemplate(
+                   "<div class='text-center'>"
+                   + "<a href='#=MeslekHastalikUrl#' target='_blank'>"
+                   + "#=MeslekHastalik#"
+                   + "</a>"
+                   + "</div>"
+                   ).Width(85).Filterable(false);
+
+                 cl.Bound(m => m.Hastalik).ClientTemplate(
+                  "<div class='text-center'>"
+                  + "<a href='#=HastalikUrl#' target='_blank'>"
+                  + "#=Hastalik#"
+                  + "</a>"
+                  + "</div>"
+                  ).Width(75).Filterable(false);
+
+                 cl.Bound(m => m.Analik).ClientTemplate(
+                 "<div class='text-center'>"
+                 + "<a href='#=AnalikUrl#' target='_blank'>"
+                 + "#=Analik#"
+                 + "</a>"
+                 + "</div>"
+                 ).Width(60).Filterable(false);
+
+             })
+            );
+
+        })
+        .Height(500)
+        .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+        .Events(e => e.Change("rapor_grid_select_change"))
+        )
+    </div>
+</div>

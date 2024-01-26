@@ -1,0 +1,93 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button class="btn btn-primary" onclick="giris_yap()">
+                    Sözleşme Sorgula
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_sozlesme")
+        .Items(item =>
+        {
+
+            item.Add().Text("Geçerli Olanlar")
+            .Selected(true)
+            .Content(Html.Partial("Sozlesmeler/GecerliSozlesmeler").ToString());
+
+            item.Add().Text("Müşavir İptal")
+           .Content(Html.Partial("Sozlesmeler/MusavirIptal").ToString());
+
+            item.Add().Text("Mükellef İptal")
+           .Content(Html.Partial("Sozlesmeler/MukellefIptal").ToString());
+        })
+        )
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="~/assets/islemler/maliyeGirisler.js"></script>
+
+<script>
+
+    let token = null
+
+    async function giris_yap() {
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const musavir = await $.ajax({
+
+            url: "@Url.Action("GetMusavirBilgi", "musavir")",
+            method : "GET"
+        })
+
+        console.log("musavir : ", musavir)
+
+
+
+        if (musavir.gib_kod.length <= 0 || musavir.gib_sifre.length <= 0 || musavir.gib_parola.length <= 0) {
+
+            kendo.ui.progress($('#content_div_id'), false);
+            mesaj("Gib Bilgileriniz Eksik Tamamlayınız.","error")
+
+            return
+        }
+
+        if (musavir.vergi_no.length <= 0) {
+
+            kendo.ui.progress($('#content_div_id'), false);
+
+            mesaj("Vergi Nonuz Eksik Tamamlayınız.", "error")
+            return
+        }
+
+        const token_islem = await internet_vergi_dairesi_giris(musavir)
+
+        console.log("token işlem : ", token_islem)
+
+        if (token_islem.is_kullanici == false) {
+
+            mesaj(token_islem.hata_mesaj, "error")
+
+            return
+        }
+
+        await gecerliSozlesmeListesiYukle(token_islem.token, musavir.vergi_no)
+
+        await musavirIptalSozlesmeListesiYukle(token_islem.token, musavir.vergi_no)
+        await mukellefIptalSozlesmeListesiYukle(token_islem.token, musavir.vergi_no)
+
+        await internet_vergi_dairesi_cikis(token_islem.token)
+
+    }
+
+</script>

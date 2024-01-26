@@ -1,0 +1,164 @@
+﻿@{
+    Title = "Banka İşlem Listesi";
+}
+
+@(Html.Kendo().DataSource<Tacmin.Model.Banka.BankaIslemListeModel>()
+    .Name("banka_gridds")
+    .Ajax(x => x.PageSize(20)
+    .Aggregates(agr => {
+
+
+        agr.Add(p => p.Yatan).Sum();
+        agr.Add(p => p.Cekilen).Sum();
+        agr.Add(p => p.Bakiye).Sum();
+
+    })
+    )
+)
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Banka.BankaIslemListeModel>().Name("banka_grid")
+        .Columns(c=>
+        {
+
+            c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(110);
+            c.Bound(m => m.IslemTuru).Filterable(ftb => ftb.Multi(true).Search(true)).Width(130);
+            c.Bound(m => m.FisNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(120);
+            c.Bound(m => m.Aciklama).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Yatan).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(170)
+             .ClientFooterTemplate("<div class='toplam_css'>#=toDecimal(sum)#</div>"); ;
+            c.Bound(m => m.Cekilen).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(170)
+             .ClientFooterTemplate("<div class='toplam_css'>#=toDecimal(sum)#</div>"); ;
+            c.Bound(m => m.Bakiye).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(170)
+             .ClientFooterTemplate("<div id='cr_bakiye' class='toplam_css'></div>");
+        })
+        .Height(240)
+        .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+        .Events(e=>e.DataBound("grid_databound_event").Change("banka_select_event"))
+        )
+    </div>
+</div>
+<script>
+
+    let genel_select_model = null
+
+    $(document).ready(function () {
+
+        $("#banka_grid").dblclick(function () {
+
+            if (genel_select_model != null) {
+               
+                if (genel_select_model.Islem == "cari") {
+
+                    banka_cari_fis_ac(genel_select_model)
+                }
+
+                if (genel_select_model.Islem == "kasa") {
+
+                    banka_kasa_fis_ac(genel_select_model)
+                }
+            }
+        })
+    })
+
+    function banka_kayit_duzelt_click_event() {
+
+        if (genel_select_model == null) {
+
+            mesaj("Kayıt Seçiniz.", "error")
+            return
+        }
+
+        if (genel_select_model.Islem == "cari") {
+
+            banka_cari_fis_duzelt(genel_select_model)
+            kendo.ui.progress($('.content'), false);
+        }
+
+        if (genel_select_model.Islem == "kasa") {
+
+            banka_kasa_fis_duzelt(genel_select_model)
+            kendo.ui.progress($('.k-window'), false);
+        }
+    }
+
+    function banka_select_event(e) {
+
+        
+        genel_select_model = null
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            genel_select_model = {
+
+                Aciklama: item.Aciklama,
+                KasaId: item.KasaId,
+                FisNo: item.FisNo,
+                BankaAdi: item.BankaAdi,
+                BankaKodu: item.BankaKodu,
+                CariUnvan: item.CariUnvan,
+                BankaId: item.BankaId,
+                CariKodu: item.CariKodu,
+                TabloAciklama: item.TabloAciklama,
+                Id: item.Id,
+                Islem: item.Islem,
+                IslemTuru: item.IslemTuru,
+                TabloId: item.TabloId,
+                Tarih: item.Tarih,
+                Cekilen: item.Cekilen,
+                Yatan: item.Yatan,
+                Bakiye: item.Bakiye,
+                KasaKodu: item.KasaKodu,
+                KasaAdi: item.KasaAdi,
+                CariId : item.CariId
+            }
+           
+
+        }
+
+    }
+
+    function grid_databound_event(e) {
+
+        var banka_grid = $("#banka_grid").data("kendoGrid");
+        const liste = banka_grid.dataSource._pristineData;
+
+        let bakiye = 0
+
+        if (liste.length >0) {
+
+            bakiye = liste[liste.length - 1].Bakiye
+        }
+
+        $("#cr_bakiye").html('<span>' + toDecimal(bakiye) + '</span>')
+    }
+
+</script>
+
+<style>
+
+    .toplam_css{
+
+        width : 100%;
+        text-align : right;
+        font-weight : bold;
+    }
+
+</style>

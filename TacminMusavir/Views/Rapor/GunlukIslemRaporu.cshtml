@@ -1,0 +1,64 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_gunluk")
+        .Items(item =>
+        {
+
+            item.Add().Text("İşlem Raporu")
+            .Selected(true)
+            .Content(Html.Partial("../Rapor/GunlukListeler/RaporListe").ToString());
+
+            item.Add().Text("İşlem Hataları")
+            .Content(Html.Partial("../Rapor/GunlukListeler/IslemHataListe").ToString());
+
+            item.Add().Text("Gib Şifresi Girilmemiş Firmalar")
+            .Content(Html.Partial("../Rapor/GunlukListeler/GibFirmaListe").ToString());
+
+            item.Add().Text("Sgk Bilgileri Eksik Firmalar")
+            .Content(Html.Partial("../Rapor/GunlukListeler/SgkFirmaListe").ToString());
+        })
+        )
+    </div>
+</div>
+
+<script>
+
+
+
+    $(document).ready(async function () {
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        await gibFirmaGridYukle();
+        await sgkFirmaGridYukle();
+        await islemHatalariGridYukle();
+
+        kendo.ui.progress($('#content_div_id'), false);
+    })
+
+    function rapor_grid_select_change(e) {
+
+        secilen_beyannameler = []
+        detay_secilen_beyannameler = []
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            console.log("Grid İtem : ", item)
+          
+        }
+
+
+
+    }
+
+</script>

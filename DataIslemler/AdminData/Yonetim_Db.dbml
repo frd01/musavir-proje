@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Yonetim_Musavir_Db" Class="Yonetim_DbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.1.165;Initial Catalog=Yonetim_Musavir_Db;User ID=sa" SettingsObjectName="DataIslemler.Properties.Settings" SettingsPropertyName="Yonetim_Musavir_DbConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.SmsFirmalar" Member="SmsFirmalars">
+    <Type Name="SmsFirmalar">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirmaAdi" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KULLANICI_TANIMLARI" Member="KULLANICI_TANIMLARIs">
+    <Type Name="KULLANICI_TANIMLARI">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="KULLANICI_KODU" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SIFRE" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="AKTIF" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="YETKILER" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="YETKILI" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ADI" Type="System.String" DbType="NVarChar(70)" CanBeNull="true" />
+      <Column Name="SOYADI" Type="System.String" DbType="NVarChar(70)" CanBeNull="true" />
+      <Column Name="GIB_KODU" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="GIB_SIFRE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="NTB_KODU" Type="System.String" DbType="NVarChar(11)" CanBeNull="true" />
+      <Column Name="NTB_SIFRE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="USERNAME" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PASSWORD" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="AD" Type="System.String" DbType="NVarChar(75)" CanBeNull="true" />
+      <Column Name="SOYAD" Type="System.String" DbType="NVarChar(75)" CanBeNull="true" />
+      <Column Name="DATA_ADI" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Unvan" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Telefon" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Mail" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SehirId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IlceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Text_Sifre" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Adres" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LisansBaslangicTarihi" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="LisansBitisTarihi" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="VergiDaireId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VergiNo" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="TcNo" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="MysoftKullaniciAdi" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="MysoftSifre" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="MailKullaniciAdi" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="MailSifre" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SmsKullaniciAdi" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="SmsSifre" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="GibParola" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SmsFirmaId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SmsBaslik" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KullaniciGirisleri" Member="KullaniciGirisleris">
+    <Type Name="KullaniciGirisleri">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Tarih" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.GetKullaniciListesi" Method="GetKullaniciListesi">
+    <ElementType Name="GetKullaniciListesiResult">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="KULLANICI_KODU" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SIFRE" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="AKTIF" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="YETKILER" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="YETKILI" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ADI" Type="System.String" DbType="NVarChar(70)" CanBeNull="true" />
+      <Column Name="SOYADI" Type="System.String" DbType="NVarChar(70)" CanBeNull="true" />
+      <Column Name="GIB_KODU" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="GIB_SIFRE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="NTB_KODU" Type="System.String" DbType="NVarChar(11)" CanBeNull="true" />
+      <Column Name="NTB_SIFRE" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="USERNAME" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PASSWORD" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="AD" Type="System.String" DbType="NVarChar(75)" CanBeNull="true" />
+      <Column Name="SOYAD" Type="System.String" DbType="NVarChar(75)" CanBeNull="true" />
+      <Column Name="DATA_ADI" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Unvan" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Telefon" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Mail" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="SehirId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IlceId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Text_Sifre" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Adres" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LisansBaslangicTarihi" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="LisansBitisTarihi" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="VergiDaireId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VergiNo" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="TcNo" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+</Database>

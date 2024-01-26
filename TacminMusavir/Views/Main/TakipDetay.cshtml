@@ -1,0 +1,19 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Mukellef.TakipFirma>()
+            .Name("detaygridds")
+            .Ajax(x => x.PageSize(20))
+
+        )
+<div class="row p2">
+    <div class="col-md-12">
+        @(Html.Ty().TyGrid<Tacmin.Model.Mukellef.TakipFirma>
+            ().Name("detaygrid")
+            .Columns(c => {
+                c.Bound(x => x.Unvan);
+            })
+            .Height(250)
+            .Pageable(page => page.Enabled(false))
+        )
+    </div>
+</div>
+
+

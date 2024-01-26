@@ -1,0 +1,266 @@
+﻿@Html.Ty().TyToolBar().Items(items =>
+{
+    items.Add().Btn_Custom(label: "Kaydet", clickEvent: "btn_beyanname_kaydet_click_event",id : "btn_beyanname_kaydet");
+})
+
+@(Html.Kendo().DataSource<Tacmin.Model.Mukellef.BeyannameTakipModel>()
+    .Name("bytakipds")
+    .Ajax(x => x.PageSize(20))
+)
+@(Html.Ty().TyGrid<Tacmin.Model.Mukellef.BeyannameTakipModel>().Name("bytakip")
+    .Columns(c => {
+
+        c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.Kdv1).ClientTemplate("#=Kdv1.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Kdv2).ClientTemplate("#=Kdv2.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Kdv4).ClientTemplate("#=Kdv4.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Muh_Sgk).ClientTemplate("#=Muh_Sgk.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Muh_Sgk2).ClientTemplate("#=Muh_Sgk2.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.G_Gecici).ClientTemplate("#=G_Gecici.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.K_Gecici).ClientTemplate("#=K_Gecici.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Ba).ClientTemplate("#=Ba.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Bs).ClientTemplate("#=Bs.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Gelir).ClientTemplate("#=Gelir.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Gelir_1001E).ClientTemplate("#=Gelir_1001E.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Kurumlar).ClientTemplate("#=Kurumlar.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Otv1).ClientTemplate("#=Otv1.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Otv3A).ClientTemplate("#=Otv3A.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Otv3B).ClientTemplate("#=Otv3B.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Otv4).ClientTemplate("#=Otv4.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Oiv).ClientTemplate("#=Oiv.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Turizm).ClientTemplate("#=Turizm.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Poset).ClientTemplate("#=Poset.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+        c.Bound(m => m.Damga).ClientTemplate("#=Damga.Donem_Adi#").EditorTemplateName("ClientBeyannameDonem").Width(80).Filterable(false);
+
+
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Events(e => e.Edit("bytakip_edit_event_change").Change("bytakip_change_event"))
+    .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Cell))
+    
+    
+)
+
+<script>
+
+    const takip_listesi = []
+    let select_firma_id = null
+    let select_cell = null
+    function grid_combo_change_event(e) {
+
+        var dataItem = this.dataItem(e.item);
+
+        var model = {
+
+            Id: dataItem.Id,
+            Donem_Adi: dataItem.Donem_Adi
+        }
+        console.log("model : ", model)
+        if (dataItem != null) {
+            dataItem.SelectedValue = selectedValue;
+        }
+    }
+
+    function bytakip_change_event() {
+
+        console.log("bytakip_change_event : ")
+        var cell = this.select()
+
+        console.log("cel index : ", cell.index())
+
+        select_cell = cell.index()
+
+        var grid = $("#bytakip").data("kendoGrid");
+        grid.saveChanges();
+    }
+
+    function drop_beyanname_change_event(e) {
+        var dataItem = this.dataItem(e.item);
+
+        const model = {
+
+            Id: dataItem.Id,
+            Donem_Adi: dataItem.Donem_Adi
+        }
+
+        console.log("model : ", model)
+
+        var grid = $("#bytakip").data("kendoGrid");
+
+        for (let i = 0; i < takip_listesi.length; i++) {
+
+            const item = takip_listesi[i]
+
+            if (item.Id == select_firma_id) {
+
+                if (select_cell == 1) {
+
+                    takip_listesi[i].Kdv1 = model
+                }
+                if (select_cell == 2) {
+
+                    takip_listesi[i].Kdv2 = model
+                }
+                if (select_cell == 3) {
+
+                    takip_listesi[i].Kdv4 = model
+                }
+                if (select_cell == 4) {
+
+                    takip_listesi[i].Muh_Sgk = model
+                }
+                if (select_cell == 5) {
+
+                    takip_listesi[i].Muh_Sgk2 = model
+                }
+                if (select_cell == 6) {
+
+                    takip_listesi[i].G_Gecici = model
+                }
+                if (select_cell == 7) {
+
+                    takip_listesi[i].K_Gecici = model
+                }
+                if (select_cell == 8) {
+
+                    takip_listesi[i].Ba = model
+                }
+                if (select_cell == 9) {
+
+                    takip_listesi[i].Bs = model
+                }
+                if (select_cell == 10) {
+
+                    takip_listesi[i].Gelir = model
+                }
+                if (select_cell == 11) {
+
+                    takip_listesi[i].Gelir_1001E = model
+                }
+                if (select_cell == 12) {
+
+                    takip_listesi[i].Kurumlar = model
+                }
+                if (select_cell == 13) {
+
+                    takip_listesi[i].Otv1 = model
+                }
+                if (select_cell == 14) {
+
+                    takip_listesi[i].Otv3A = model
+                }
+                if (select_cell == 15) {
+
+                    takip_listesi[i].Otv3B = model
+                }
+                if (select_cell == 16) {
+
+                    takip_listesi[i].Otv4 = model
+                }
+                if (select_cell == 17) {
+
+                    takip_listesi[i].Oiv = model
+                }
+                if (select_cell == 18) {
+
+                    takip_listesi[i].Turizm = model
+                }
+                if (select_cell == 19) {
+
+                    takip_listesi[i].Poset = model
+                }
+                if (select_cell == 20) {
+
+                    takip_listesi[i].Damga = model
+                }
+            }
+        }
+
+        grid.setDataSource(takip_listesi)
+    }
+
+    function bytakip_edit_event_change(e) {
+
+        select_firma_id = e.model.Id
+    }
+
+    $(document).ready(function () {
+
+        $.ajax({
+
+            method: "GET",
+            url: '@Url.RouteUrl(new { controller = "mukellef", action = "GetBeyannameTakipList" })',
+            success: function (data) {
+
+                var grid = $("#bytakip").data("kendoGrid");
+
+                for (let i = 0; i < data.length; i++) {
+
+                    const model = { ...data[i], uid: get_id() }
+
+                    takip_listesi.push(model)
+                }
+
+                grid.setDataSource(takip_listesi)
+            }
+
+        });
+    })
+
+
+    function get_id() {
+
+        let u = '', i = 0;
+        while (i++ < 36) {
+            var c = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i - 1], r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            u += (c == '-' || c == '4') ? c : v.toString(16)
+        }
+        return u;
+    }
+
+    function btn_beyanname_kaydet_click_event() {
+
+        kendo.ui.progress($('.content'), true);
+
+        var grid = $("#bytakip").data("kendoGrid");
+
+        const liste = grid.dataSource._pristineData;
+
+        const data_list = []
+
+        for (let i = 0; i < liste.length; i++) {
+
+            const model = liste[i]
+
+            data_list.push(model)
+        }
+
+        // kendo.stringify($("#bytakip").data("kendoGrid").dataSource.view())
+        
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.RouteUrl(new { controller = "mukellef", action = "TakipListesiGuncelle" })',
+            data: { beyanname_takip_listesi: data_list },
+            dataType : "json",
+            success: function () {
+                kendo.ui.progress($('.content'), false);
+                alert("Beyanname Takip Bilgileri Güncellendi.")
+            },
+            error: function (e) {
+                kendo.ui.progress($('.content'), false);
+                console.log(e.message)
+            }
+        })
+    }
+
+</script>
+<style>
+    thead tr{
+        background-color : blue !important;
+    }
+    .k-header{
+        background-color : red !important;
+    }
+   
+</style>

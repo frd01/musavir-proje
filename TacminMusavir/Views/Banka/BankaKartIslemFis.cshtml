@@ -1,0 +1,316 @@
+﻿@Html.Hidden("Id")
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1" style="width : 15%;">
+                <span>Banka Kodu</span>
+            </div>
+            <div class="p-1" style="width : 30%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_banka_kodu")
+                    .HtmlAttributes(new { style = "width : 100%;",@class = "form-control" })
+                 )
+            </div>
+            <div class="p-1 text-right mt-1" style="width : 9%;margin-left : 150px;">
+                <span class="text-right">Döviz Cinsi</span>
+            </div>
+            <div class="p-1" style="width : 30%;">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("cm_para_birim")
+                .DataTextField("Value")
+                .DataValueField("Id")
+                .SelectedIndex(156)
+                .Suggest(true)
+                .HtmlAttributes(new { style = "width : 100%;", @class="form-control"})
+                .DataSource(dt =>
+                {
+
+                    dt.Read("GetParaBirimListesi", "banka");
+                })
+                .Events(e=>e.Select("cm_para_birim_select_event").DataBound("cm_para_birim_databound_event"))
+                )
+                
+            </div>
+           
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1" style="width : 15%;">
+                <span>Banka Adı</span>
+            </div>
+            <div class="p-1" style="width : 50%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_banka_adi")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control" })
+                 )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1" style="width : 15%;">
+                <span>Şube Adı/Kodu</span>
+            </div>
+            <div class="p-1" style="width : 30%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_sube_adi")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control" })
+                 )
+            </div>
+            <div class="p-1" style="width : 20%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_sube_kodu")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control" })
+                 )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1" style="width : 15%;">
+                <span>Hesap Türü</span>
+            </div>
+            <div class="p-1" style="width : 30%;">
+                @(
+                 Html.Kendo().ComboBox()
+                 .Name("cm_hesap_turleri")
+                 .Suggest(true)
+                 .DataTextField("Value")
+                 .DataValueField("Id")
+                 .SelectedIndex(0)
+                 .HtmlAttributes(new { style = "width : 100%;", @class = "form-control" })
+                 .DataSource(dt =>
+                 {
+
+                     dt.Read("GetHesapTurListesi", "banka");
+                 })
+                 .Events(e=>e.Select("cm_hesap_turleri_select_event"))
+                 )
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1" style="width : 15%;">
+                <span>Hesap Adı</span>
+            </div>
+            <div class="p-1" style="width : 30%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_hesap_adi")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control" })
+                 )
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1" style="width : 15%;">
+                <span>Hesap No</span>
+            </div>
+            <div class="p-1" style="width : 30%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_hesap_no")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control" })
+                 )
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="p-1 text-right mt-1"  style="width : 15%;">
+                <span>Iban No</span>
+            </div>
+            <div class="p-1" style="width : 50%;">
+                @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_iban_no")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control" })
+                 )
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button class="btn btn-warning" id="btn_kaydet" onclick="btn_kaydet_click_event()">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    KAYDET
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-danger" id="btn_kapat" onclick="btn_kapat_click_event()">
+                    <i class="fa-solid fa-rectangle-xmark"></i>
+                    KAPAT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+
+    function getClass() {
+
+        return "form-control"
+    }
+
+    function cm_para_birim_databound_event(e) {
+
+
+    }
+
+    function mesaj(mesaj, icon) {
+
+        Swal.fire({
+            icon: icon,
+            title: 'İşlem Sonucu',
+            text: mesaj,
+            confirmButtonText: "Tamam"
+        })
+    }
+
+    const kart_model = {
+
+        Id: null,
+        BankaKodu: "",
+        BankaAdi: "",
+        SubeAdi: "",
+        SubeKodu: "",
+        HesapTurId: 1,
+        HesapAdi: "",
+        HesapNo: "",
+        IbanNo: "",
+        ParaBirimId : 157
+    }
+
+    function cm_para_birim_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        kart_model.ParaBirimId = dataItem.Id
+    }
+
+    function cm_hesap_turleri_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        kart_model.HesapTurId = dataItem.Id
+    }
+
+    async function btn_kaydet_click_event() {
+
+        const tx_banka_kodu = $("#tx_banka_kodu").data("kendoTextBox").value()
+        const tx_banka_adi = $("#tx_banka_adi").data("kendoTextBox").value()
+        const tx_sube_adi = $("#tx_sube_adi").data("kendoTextBox").value()
+        const tx_sube_kodu = $("#tx_sube_kodu").data("kendoTextBox").value()
+        const tx_hesap_adi = $("#tx_hesap_adi").data("kendoTextBox").value()
+        const tx_hesap_no = $("#tx_hesap_no").data("kendoTextBox").value()
+        const tx_iban_no = $("#tx_iban_no").data("kendoTextBox").value()
+
+        if (tx_banka_kodu != null) kart_model.BankaKodu = tx_banka_kodu
+        if (tx_banka_adi != null) kart_model.BankaAdi = tx_banka_adi
+        if (tx_sube_adi != null) kart_model.SubeAdi = tx_sube_adi
+        if (tx_sube_kodu != null) kart_model.SubeKodu = tx_sube_kodu
+        if (tx_hesap_adi != null) kart_model.HesapAdi = tx_hesap_adi
+        if (tx_hesap_no != null) kart_model.HesapNo = tx_hesap_no
+        if (tx_iban_no != null) kart_model.IbanNo = tx_iban_no
+
+        if (islem_tur == "yenikayit") {
+
+            const kayit_res = await $.ajax({
+
+                url: "@Url.Action("YeniBankaKartKaydi","banka")",
+                method: "POST",
+                dataType: "Json",
+                data: { clientData: kart_model }
+            })
+
+            
+
+            const wn_banka_fis = $("#wn_banka_fis").data("kendoWindow")
+
+            if (kayit_res.IslemDurum == false) {
+
+                alert(kayit_res.Mesaj,"error")
+            }
+            if (kayit_res.IslemDurum == true) {
+
+                wn_banka_fis.close()
+                mesaj(kayit_res.Mesaj, "success")
+                window.location.reload()
+            }
+        }
+
+        if (islem_tur == "guncelleme") {
+
+            kart_model.Id = $("#Id").val()
+
+            const kayit_res = await $.ajax({
+
+                url: "@Url.Action("BankaKartGuncelleme", "banka")",
+                method: "POST",
+                dataType: "Json",
+                data: { clientData: kart_model }
+            })
+
+            const wn_banka_fis = $("#wn_banka_fis").data("kendoWindow")
+
+            if (kayit_res.IslemDurum == false) {
+
+                alert(kayit_res.Mesaj,"error")
+            }
+            if (kayit_res.IslemDurum == true) {
+
+                wn_banka_fis.close()
+                mesaj(kayit_res.Mesaj, "success")
+                window.location.reload()
+            }
+        }
+
+    }
+
+    function btn_kapat_click_event() {
+
+        const wn_banka_fis = $("#wn_banka_fis").data("kendoWindow")
+        wn_banka_fis.close()
+    }
+
+    function field_load() {
+
+        kendo.syncReady(function () { jQuery("#cm_para_birim").kendoComboBox({ "select": cm_para_birim_select_event, "dataSource": { "transport": { "read": { "url": "/banka/getparabirimlistesi" }, "prefix": "" }, "schema": { "errors": "Errors" } }, "dataTextField": "Value", "dataValueField": "Id", "index": 156, "suggest": true }); });
+    }
+
+    function css_class_load() {
+
+
+
+        $(".k-window-content").css("background-color", "#e8e8e8")
+
+        $(".k-input").addClass("form-control")
+    }
+
+</script>
+<style>
+
+   /* .k-window-content {
+        background-color: #e8e8e8;
+    }*/
+
+   span {
+       width : 100%;
+       text-align : right;
+   }
+
+    
+
+</style>
+ 

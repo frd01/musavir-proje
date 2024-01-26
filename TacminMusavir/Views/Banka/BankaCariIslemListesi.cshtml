@@ -1,0 +1,59 @@
+﻿@{
+    Title = "Banka İşlem Listesi";
+}
+
+@(Html.Kendo().DataSource<Tacmin.Model.Banka.BankaIslemListeModel>()
+    .Name("cari_gridds")
+    .Ajax(x => x.PageSize(20)
+    .Aggregates(agr => {
+
+
+        agr.Add(p => p.Yatan).Sum();
+        agr.Add(p => p.Cekilen).Sum();
+        agr.Add(p => p.Bakiye).Sum();
+
+    })
+    )
+)
+
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Banka.BankaIslemListeModel>().Name("cari_grid")
+        .Columns(c=>
+        {
+
+            c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(110);
+            c.Bound(m => m.CariUnvan).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.FisNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(120);
+            c.Bound(m => m.TabloAciklama).Filterable(ftb => ftb.Multi(true).Search(true)).Width(250);
+            c.Bound(m => m.Yatan).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(170)
+             .ClientFooterTemplate("<div class='toplam_css'>#=toDecimal(sum)#</div>"); ;
+            c.Bound(m => m.Cekilen).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(170)
+             .ClientFooterTemplate("<div class='toplam_css'>#=toDecimal(sum)#</div>"); ;
+           
+        })
+        .Height(300)
+        )
+    </div>
+</div>
+<script>
+
+    
+    
+
+    
+
+</script>
+
+<style>
+
+    .toplam_css {
+        width: 100%;
+        text-align: right;
+        font-weight: bold;
+    }
+</style>

@@ -1,0 +1,270 @@
+﻿@model Tacmin.Model.Hesap.KullaniciModel
+
+@{
+    Title = "Hesabım";
+}
+
+@Html.Ty().TyToolBar().Items(item =>
+{
+    item.Add().Save().Click("onKaydetClick").HtmlAttributes(new { @class = "kendosuccess" });
+})
+
+<form id="postForm" method="post" action="@Url.RouteUrl(new { controller = "hesap", action = "HesapKayitUpdate" })">
+    <div class="row mt-10">
+        <div class="col-md-3">
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    <div class="text-center">
+                        <img class="profile-user-img img-fluid img-circle" src="~/assets/img/no-user-img-black.png">
+                    </div>
+
+                    <h3 class="profile-username text-center">@VirtualContext.AdSoyad</h3>
+
+                    <p class="text-muted text-center">@VirtualContext.UserKodu</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            @Html.Kendo().TabStrip().Name("mukellefKayitTab").Items(tab =>
+{
+            tab.Add().Text("Kişisel Bilgiler").Selected(true)
+                  .Content(Html.Partial("Partial/_KisiselBilgilerTab").ToString());
+
+            tab.Add().Text("Şifreler")
+                   .Content(Html.Partial("Partial/_SifrelerTab").ToString());
+            tab.Add().Text("Whatsapp Bağlantı")
+                   .Content(@<text>
+                
+                        <div id="ws_gr_code" class="qr_code_pasif">
+                            <img id="gr_img" src="http://localhost:5510/node-api/whatsapp-grcode" />
+                        </div>
+                        <div id="ws_aktif" class="ws_aktif_pasif" >
+                            <span>Whatsapp Bağlı.</span>
+                        </div>
+                    </text>);
+             })
+        </div>
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+
+      async  function onKaydetClick() {
+
+            var formData = $.ty.utils.serializeObject($('#postForm'));
+
+          console.log("form data : ", formData)
+
+          if (formData.SmsKullaniciAdi != "" && formData.SmsSifre != "" && formData.SmsFirmaId == "") {
+
+              mesaj("Sms Sağlayıcı Seçiniz.", "error")
+              return
+          }
+
+            kendo.ui.progress($('#content_div_id'), true);
+
+          const resp = await $.ajax({
+
+              url: "@Url.Action("KullaniciBilgiGuncelle", "hesap")",
+              method: "POST",
+              dataType: "Json",
+              data: { kullanici: formData }
+          })
+
+          if (resp.IslemDurum == false) {
+
+              kendo.ui.progress($('#content_div_id'), false);
+              mesaj(resp.Mesaj, "error")
+              return
+          }
+
+          mesaj("Kullanıcı Bilgileri Güncellendi.","success")
+
+            kendo.ui.progress($('#content_div_id'), false);
+        }
+
+
+        function whatapp_panel(durum) {
+
+            let panel_html = ""
+
+            if (durum == true) {
+
+                panel_html = '<span>Whatsapp Bağlı.</span>'
+            }
+            else {
+
+                panel_html = '<span>Whatsapp Bağlı Değil</span>'
+            }
+
+            $("#whatsapp").html(panel_html)
+        }
+
+        $(document).ready(async function () {
+
+            var formData = $.ty.utils.serializeObject($('#postForm'));
+
+            if (formData.SmsFirmaId != "" && formData.SmsKullaniciAdi != "" && formData.SmsSifre != "") {
+
+                const req_model = {
+
+                    kullaniciAdi: formData.SmsKullaniciAdi,
+                    apiKey: formData.SmsSifre,
+                    smsFirmaId: formData.SmsFirmaId
+                }
+
+                const sms_servis_base_url = "http://localhost:5503/api/"
+
+                const bas_res = await axios.post(sms_servis_base_url + "sms/baslik-listesi", req_model)
+
+                const kont_res = await axios.post(sms_servis_base_url + "sms/kontor-bilgi", req_model)
+
+                if (bas_res.data != null) {
+
+                    const Baslik = $("#Baslik").data("kendoComboBox")
+
+                    Baslik.setDataSource(bas_res.data.basliklar)
+
+                }
+                if (kont_res.data != null) {
+
+
+                    const tx_kontor = $("#tx_kontor").data("kendoTextBox")
+
+                    tx_kontor.value(kont_res.data.kontorBakiye)
+                }
+
+                
+            }
+
+            socket.on("whats_app_qr_code", () => {
+
+                const d = new Date()
+
+                $("#gr_img").removeAttr("src")
+
+                const src_link = "http://localhost:5510/node-api/whatsapp-grcode" 
+
+                $("#gr_img").attr("src", src_link)
+               
+            })
+            const baglanti_durum = await $.ajax({
+
+                url: "http://localhost:5510/node-api/whats-app-baglanti-kontrol",
+                method : "GET"
+            })
+
+            console.log("baglanti_durum : ", baglanti_durum)
+
+            
+
+            if (baglanti_durum.status == false) {
+
+                await $.ajax({
+
+                    url: "http://localhost:5510/node-api/whats-app-client",
+                    method : "GET"
+                })
+
+                $("#ws_gr_code").removeClass("qr_code_pasif")
+
+                $("#ws_gr_code").addClass("qr_code_aktif")
+            }
+
+            whatapp_panel(baglanti_durum.status)
+
+            console.log("baglanti_durum : ", baglanti_durum)
+
+            socket.on("whats_app_login", function () {
+
+                console.log("whats_app_login")
+
+                $("#ws_gr_code").removeClass("qr_code_aktif")
+                $("#ws_gr_code").addClass("qr_code_pasif")
+
+                $("#ws_aktif").removeClass("qr_code_pasif")
+                $("#ws_aktif").addClass("qr_code_aktif")
+
+                //whatapp_panel(baglanti_durum.status)
+            })
+
+
+            socket.on("whats_app_qr_code", function () {
+
+                //whatapp_panel(baglanti_durum.status)
+
+            })
+
+            socket.on("servis_method", function (args) {
+
+                console.log("servis_method : ", args)
+            })
+        })
+
+         function wa_baglanti_kontrol() {
+
+             const servis_adres = "http://localhost:5510/node-api/whats-app-client";
+
+            $.ajax({
+                method: "GET",
+                url: servis_adres,
+                error: function (err) {
+
+                    console.log("wa_baglanti_kontrol : ", err)
+                }
+            })
+            
+        }
+
+        function whatsapp_panel_olustur(baglanti_durum) {
+
+            console.log("whatsapp_panel_olustur : ", baglanti_durum)
+
+            let panel_html = '<span>Bağlantı Kontrol Ediliyor</span>'
+
+            if (baglanti_durum == false) {
+
+                panel_html = '<div>'
+                + '<span>Whatsapp Qrcode Bekleniyor...</span>'
+                   
+                + '</div>'
+               
+            }
+
+            if (baglanti_durum == true) {
+
+                panel_html = '<span>Whatsapp Bağlı</span>'
+            }
+
+
+            $("#whatsapp").html(panel_html);
+        }
+
+
+    </script>
+
+<style>
+
+    .qr_code_pasif{
+
+        display : none;
+    }
+
+    .qr_code_aktif {
+
+        display : block;
+    }
+
+    .ws_aktif_pasif{
+
+        display : none;
+    }
+
+    .ws_aktif_aktif {
+
+        display : block;
+    }
+
+</style>

@@ -1,0 +1,351 @@
+﻿
+@Html.Hidden("crf_table_id")
+@Html.Hidden("crf_banka_id")
+@Html.Hidden("crf_cari_id")
+
+
+<div class="row">
+    <div class="col-md-12 k-card">
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>İşlem Tarihi</span>
+            </div>
+            <div class="p-2" style="width : 30%;">
+                @(
+
+                    Html.Kendo().DatePicker()
+                    .Name("dt_cari_tarih")
+                    .Format("dd/MM/yyyy")
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new { style="width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Evrak No</span>
+            </div>
+            <div class="p-2" style="width : 30%;">
+                @(
+
+                    Html.Kendo().TextBox()
+                    .Name("tx_cari_fis_no")
+                    .HtmlAttributes(new { style="width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Banka Adı</span>
+            </div>
+            <div class="p-2" style="width : 80%;">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("cm_cari_bankalar")
+                .DataTextField("Tanim")
+                .DataValueField("Id")
+                .Filter("contains")
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                .Events(e=>e.Select("cm_cari_bankalar_select_event"))
+                )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Cari Adı</span>
+            </div>
+            <div class="p-2" style="width : 80%;">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("cm_cari_cariler")
+                .DataTextField("Unvan")
+                .DataValueField("Id")
+                .Filter("contains")
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                .Events(e=>e.Select("cm_cari_cariler_select_event"))
+                )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>İşlem Tutarı</span>
+            </div>
+            <div class="p-2" style="width : 30%;">
+                @(
+
+                    Html.Kendo().NumericTextBox()
+                    .Spinners(false)
+                    .Format("{0:n2}")
+                    .Name("tx_cari_islem_tutari")
+                    .HtmlAttributes(new { style="width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Açıklama</span>
+            </div>
+            <div class="p-2" style="width : 80%;">
+                @(
+
+                    Html.Kendo().TextArea()
+                    .Name("tx_cari_aciklama")
+                    .Rows(3)
+                    .HtmlAttributes(new { style="width : 100%;" })
+                )
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button class="btn btn-warning" id="btn_cari_banka_fis_kayit" onclick="btn_cari_banka_fis_kayit_click_event()">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    KAYDET
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-danger" id="btn_cari_banka_kapat">
+                    <i class="fa-solid fa-rectangle-xmark"></i>
+                    KAPAT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+
+        let tx_cari_fis_no = $("#tx_cari_fis_no").data("kendoTextBox")
+        let cm_cari_bankalar = $("#cm_cari_bankalar").data("kendoComboBox")
+        let cm_cari_cariler = $("#cm_cari_cariler").data("kendoComboBox")
+        let tx_cari_islem_tutari = $("#tx_cari_islem_tutari").data("kendoNumericTextBox")
+        let tx_cari_aciklama = $("#tx_cari_aciklama").data("kendoTextArea")
+
+
+        $("#dt_cari_tarih").keyup(function (e) {
+
+            if (e.keyCode == 13) tx_cari_fis_no.focus()
+        })
+
+        $("#tx_cari_fis_no").keyup(function (e) {
+
+            if (e.keyCode == 13) cm_cari_bankalar.focus()
+        })
+
+        $("#cm_cari_bankalar").keyup(function (e) {
+
+            if (e.keyCode == 13) cm_cari_cariler.focus()
+        })
+
+        $("#cm_cari_cariler").keyup(function (e) {
+
+            if (e.keyCode == 13) tx_cari_islem_tutari.focus()
+        })
+        $("#tx_cari_islem_tutari").keyup(function (e) {
+
+            if (e.keyCode == 13) tx_cari_aciklama.focus()
+        })
+
+        let liste = window.localStorage.getItem("local_listeler")
+
+        if (liste != null) {
+
+            liste = JSON.parse(liste)
+            
+
+            cm_cari_bankalar.setDataSource(liste.BankaListesi)
+            cm_cari_cariler.setDataSource(liste.CariListesi)
+        }
+
+        $("#btn_cari_banka_kapat").click(function () {
+
+            const wn_havale = $("#wn_havale").data("kendoWindow")
+
+            wn_havale.close()
+
+            if (is_data_update == true) {
+                is_data_update = false
+                window.location.reload()
+            }
+        })
+    })
+
+    let cari_banka_model = {
+
+        Id: null,
+        Tarih: null,
+        FisNo: "",
+        KasaId : null,
+        BankaId: null,
+        CariId: null,
+        Aciklama: "",
+        Islem: "",
+        Tutar : 0
+
+    }
+
+    function tarih_func(tarih_value) {
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return yil + "/" + ay + "/" + gun;
+        }
+    }
+
+    function cm_cari_bankalar_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        cari_banka_model.BankaId = dataItem.Id
+       
+    }
+
+    function cm_cari_cariler_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        cari_banka_model.CariId = dataItem.Id
+    }
+
+    function banka_cari_form_temizle() {
+
+       
+        const dt_cari_tarih = $("#dt_cari_tarih").data("kendoDatePicker")
+        const tx_cari_fis_no = $("#tx_cari_fis_no").data("kendoTextBox")
+        const tx_cari_islem_tutari = $("#tx_cari_islem_tutari").data("kendoNumericTextBox")
+        const tx_cari_aciklama = $("#tx_cari_aciklama").data("kendoTextArea")
+
+
+        const cm_cari_bankalar = $("#cm_cari_bankalar").data("kendoComboBox")
+        const cm_cari_cariler = $("#cm_cari_cariler").data("kendoComboBox")
+        dt_cari_tarih.value(new Date())
+        tx_cari_fis_no.value("")
+        tx_cari_islem_tutari.value("")
+        tx_cari_aciklama.value("")
+        cm_cari_bankalar.value("")
+        cm_cari_cariler.value("")
+
+        $("#crf_table_id").val(null)
+        $("#crf_banka_id").val(null)
+        $("#crf_cari_id").val(null)
+    }
+
+    function banka_cari_form_veri_al() {
+
+        const dt_cari_tarih = $("#dt_cari_tarih").data("kendoDatePicker")
+        const tx_cari_fis_no = $("#tx_cari_fis_no").data("kendoTextBox")
+        const tx_cari_islem_tutari = $("#tx_cari_islem_tutari").data("kendoNumericTextBox")
+        const tx_cari_aciklama = $("#tx_cari_aciklama").data("kendoTextArea")
+        const crf_table_id = $("#crf_table_id").val()
+
+        if (dt_cari_tarih.value() != null) cari_banka_model.Tarih = tarih_func(dt_cari_tarih.value())
+
+        if (tx_cari_fis_no.value() != null) cari_banka_model.FisNo = tx_cari_fis_no.value()
+
+        if (tx_cari_islem_tutari.value() != null) cari_banka_model.Tutar = tx_cari_islem_tutari.value()
+
+        if (tx_cari_aciklama.value() != null) cari_banka_model.Aciklama = tx_cari_aciklama.value()
+        if (crf_table_id != null) cari_banka_model.Id = crf_table_id
+
+        if (cari_banka_model.BankaId == null) {
+
+            cari_banka_model.BankaId = $("#crf_banka_id").val()
+        }
+        if (cari_banka_model.CariId == null) {
+
+            cari_banka_model.CariId = $("#crf_cari_id").val()
+        }
+    }
+
+    async function banka_islem_yeni_kayit() {
+
+         const cari_banka_res = await $.ajax({
+
+           url: "@Url.Action("BankaIslemKayit", "banka")",
+           method: "POST",
+           dataType: "Json",
+           data: { clientData: cari_banka_model, islemTur: banka_islem_tur }
+       })
+
+       
+
+       if (cari_banka_res.IslemDurum == false) {
+
+           kendo.ui.progress($('.k-window'), false);
+           alert(cari_banka_res.Mesaj, "error")
+           return
+       }
+
+       if (cari_banka_res.IslemDurum == true) {
+
+           kendo.ui.progress($('.k-window'), false);
+           banka_cari_form_temizle()
+           is_data_update = true
+       }
+    }
+
+    async function banka_islem_guncelle() {
+
+        const result = await $.ajax({
+
+            url: "@Url.Action("BankaIslemGuncelleme", "banka")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientData: cari_banka_model, islemTur: banka_islem_tur }
+        })
+
+        if (result.IslemDurum == false) {
+
+            alert(result.Mesaj)
+        }
+        if (result.IslemDurum == true) {
+
+            const wn_havale = $("#wn_havale").data("kendoWindow")
+            wn_havale.close()
+            window.location.reload();
+        }
+    }
+
+    async function btn_cari_banka_fis_kayit_click_event() {
+
+
+       kendo.ui.progress($('.k-window'), true);
+
+       banka_cari_form_veri_al()
+
+        if (banka_islem_tur == "cari_tahsilat" || banka_islem_tur == "cari_odeme") {
+
+            await banka_islem_guncelle()
+
+        }
+        else {
+
+            await banka_islem_yeni_kayit()
+        }
+
+    }
+
+
+</script>

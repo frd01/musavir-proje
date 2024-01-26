@@ -1,0 +1,62 @@
+﻿using DataIslemler.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Tacmin.Model.Gib;
+using Tacmin.Model.Tebligat;
+
+namespace Tacmin.Service.Sorgulamalar.Tebligat.GelirIdaresi
+{
+    public class SorguDataIslem
+    {
+        private string dataAdi;
+        private List<Firma> firmaListesi;
+        private DataIslemler.Tebligat.GelirIdaresi.DataIslem dataIslem;
+
+        public SorguDataIslem(string _dataAdi,List<Firma> _firmaListesi)
+        {
+            dataAdi = _dataAdi;
+            firmaListesi = _firmaListesi;
+
+            dataIslem = new DataIslemler.Tebligat.GelirIdaresi.DataIslem(dataAdi);
+        }
+
+        public GelirIdaresiResModel TebligatSorguIslem()
+        {
+            var tebligat_listesi = new List<TebligatDataListModel>();
+            var hata_listesi = new List<GibTabloSonuc>();
+
+            foreach (var item in firmaListesi)
+            {
+                var teb_islem = new TebligatIslem(item, dataAdi);
+
+                var result = teb_islem.TebligatSorgula();
+
+                foreach (var hata_item in result.Item2)
+                {
+                    hata_listesi.Add(hata_item);
+                }
+
+                if (result.Item1.Count >0)
+                {
+                    var liste = dataIslem.TebligatKayit(result.Item1,item.Id);
+
+                    foreach (var teb_item in liste)
+                    {
+                        tebligat_listesi.Add(teb_item);
+                    }
+                }
+                
+            }
+
+            var model = new GelirIdaresiResModel();
+            model.HataListesi = hata_listesi;
+            model.TebligatListesi = tebligat_listesi;
+
+            return model;
+        }
+
+    }
+}

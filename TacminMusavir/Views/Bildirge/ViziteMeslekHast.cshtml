@@ -1,0 +1,500 @@
+﻿<div class="row">
+    <div class="col-md-12 k-card">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-1">
+                @Html.Label("Mükellefler")
+            </div>
+            <div class="p-1" style="width : 20%;">
+                @(
+
+                Html.Kendo().MultiSelect()
+                .Name("vz_dt_firmalar")
+                .Filter(FilterType.Contains)
+
+                .TagMode(TagMode.Single)
+                .DataTextField("Unvan")
+                .DataValueField("Id")
+                .Events(e=>e.Select("vz_dt_firmalar_select_event").Deselect("vz_dt_firmalar_deselect_event"))
+                .HtmlAttributes(new { style = "width : 100%;" })
+                )
+            </div>
+            <div class="p-2">
+                @Html.Label("İlk Tarih")
+            </div>
+            <div class="p-2" style="width : 10%;">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("vz_dt_ilkTarih")
+                .Format("dd-MM-yyyy")
+                .Value(DateTime.Now.AddMonths(-1))
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+            <div class="p-2">
+                @Html.Label("Son Tarih")
+            </div>
+            <div class="p-2" style="width : 10%;">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("vz_dt_sonTarih")
+                .Format("dd-MM-yyyy")
+                .Value(DateTime.Now)
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+            <div class="p-2">
+                <button class="btn btn-primary" onclick="sorgulama_test_click_event()">
+                    Sorgula
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-success" onclick="vizite_liste_yukle()">
+                    Listele
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-warning" onclick="detay_ac_click_event()">
+                    Detay Aç
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-danger" onclick="personelim_degil_click_event()">
+                    Personelim Değil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_vizite_onaysiz")
+        .Items(item =>
+        {
+
+            item.Add().Text("Vizite Listesi")
+            .Selected(true)
+            .Content(Html.Partial("OnaysizFormlar/ViziteListesi").ToString());
+
+            item.Add().Text("Hata Listesi")
+            .Content(Html.Partial("OnaysizFormlar/HataListesi").ToString());
+
+        })
+         )
+    </div>
+</div>
+
+<div>
+    @(
+    Html.Kendo().Window()
+    .Name("wn_vz_detay_form")
+    .Visible(false)
+    .Modal(true)
+    .Title("İş Göremezlik Belgesi")
+    .Width(1200)
+    .Height(650)
+    .Content(Html.Partial("ViziteDetayForm").ToString())
+    )
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+    let select_sube = null
+    let select_firma_id = null
+    let select_grid_model = null
+    let sgk_detay_model = null
+
+    let select_firmalar = []
+
+    $(document).ready(function () {
+
+        let liste = window.localStorage.getItem("local_listeler")
+
+        if (liste != null) {
+
+            liste = JSON.parse(liste)
+
+            const vz_dt_firmalar = $("#vz_dt_firmalar").data("kendoMultiSelect")
+
+            vz_dt_firmalar.setDataSource(liste.FirmaListesi)
+        }
+    })
+
+    function vz_dt_firmalar_select_event(e) {
+
+        const model = {
+
+            id: e.dataItem.Id,
+            unvan: e.dataItem.Unvan
+        }
+
+        select_firmalar.push(model)
+    }
+
+    function vz_dt_firmalar_deselect_event(e) {
+
+        for (var i = 0; i < select_firmalar.length; i++) {
+
+            if (select_firmalar[i].id == e.dataItem.Id) {
+
+                select_firmalar.splice(i,1)
+            }
+        }
+    }
+
+    function vizite_select_change(e) {
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        select_detay_data = []
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            select_grid_model = {
+
+                TcNo: item.TcNo,
+                KullaniciKodu: item.KullaniciKodu,
+                IsyeriKodu: item.IsyeriKodu,
+                IsyeriSifresi: item.IsyeriSifresi,
+                MedulaId: item.MedulaId,
+                Vaka : item.Vaka
+            }
+        }
+
+    }
+
+    function get_tarih(tarih_value) {
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return gun + "." + ay + "." + yil
+        }
+    }
+
+
+
+    async function vizite_liste_yukle() {
+
+       const vz_dt_ilkTarih = $("#vz_dt_ilkTarih").data("kendoDatePicker").value()
+        const vz_dt_sonTarih = $("#vz_dt_sonTarih").data("kendoDatePicker").value()
+
+        let ilkTarih = null
+        let sonTarih = null
+
+        ilkTarih = tarih_func_sql(vz_dt_ilkTarih)
+        sonTarih = tarih_func_sql(vz_dt_sonTarih)
+
+         const vizite_data_list = await $.ajax({
+
+            url: "@Url.Action("ViziteListesi", "bildirge")",
+            method: "POST",
+             dataType: "Json",
+             data: { durum: false, ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        // new Date(parseInt(efat_model.Tarih.substr(6)))
+
+        for (var i = 0; i < vizite_data_list.length; i++) {
+
+            if (vizite_data_list[i].RaporBaslamaTarihi) {
+
+                vizite_data_list[i].RaporBaslamaTarihi = new Date(parseInt(vizite_data_list[i].RaporBaslamaTarihi.substr(6)))
+            }
+
+            if (vizite_data_list[i].IsBasiKontrolTarihi) {
+
+                vizite_data_list[i].IsBasiKontrolTarihi = new Date(parseInt(vizite_data_list[i].IsBasiKontrolTarihi.substr(6)))
+            }
+        }
+
+        console.log("ViziteOnaysizlarListesi : ", vizite_data_list)
+
+        const grid = $("#vizite").data("kendoGrid")
+        grid.setDataSource(vizite_data_list)
+    }
+
+    async function sorgulama_test_click_event() {
+
+        const vz_dt_ilkTarih = $("#vz_dt_ilkTarih").data("kendoDatePicker").value()
+        const vz_dt_sonTarih = $("#vz_dt_sonTarih").data("kendoDatePicker").value()
+
+        let ilkTarih = null
+        let sonTarih = null
+
+        if (select_firmalar.length <=0) {
+
+            mesaj("Firma Seçiniz.", "error")
+            return
+        }
+
+        if (vz_dt_ilkTarih != null) {
+
+            ilkTarih = get_tarih(vz_dt_ilkTarih)
+        }
+
+        if (vz_dt_sonTarih != null) {
+
+            sonTarih = get_tarih(vz_dt_sonTarih)
+        }
+
+        if (ilkTarih == null) {
+
+            mesaj("Tarih Seçiniz.", "error")
+            return
+        }
+        if (sonTarih == null) {
+            mesaj("Tarih Seçiniz.", "error")
+        }
+
+
+
+        const _firma_sube_listesi = await $.ajax({
+
+            url: "@Url.Action("FirmaSubeListesi","bildirge")",
+            method : "GET"
+        })
+
+        const vizite_liste = []
+
+        const firma_sube_listesi = []
+
+        const hata_listesi = []
+
+        for (var i = 0; i < select_firmalar.length; i++) {
+
+            const firma = select_firmalar[i]
+
+            const liste = _firma_sube_listesi.filter(x => x.FirmaId == firma.id)
+
+            if (liste.length <= 0) {
+
+                const hata_model = {
+                    Id: i,
+                    Unvan: firma.unvan,
+                    Mesaj : "Firma Sgk Bilgileri Eksik"
+                }
+
+                hata_listesi.push(hata_model)
+            }
+            else {
+
+                for (var l = 0; l < liste.length; l++) {
+
+                    const item = liste[l]
+
+                    firma_sube_listesi.push(item)
+                }
+            }
+        }
+
+        if (firma_sube_listesi.length <= 0) {
+
+            if (hata_listesi.length > 0) {
+
+                const hata_grid = $("#hata").data("kendoGrid")
+                hata_grid.setDataSource(hata_listesi)
+            }
+
+            mesaj("Seçtiğiniz Firmaların Sgk Giriş Bilgileri Eksik Kontrol Ediniz.", "error")
+            return
+        }
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        for (var i = 0; i < firma_sube_listesi.length; i++) {
+
+
+            const item = firma_sube_listesi[i]
+
+            const model = {
+
+                musavir_id: 1,
+                musteri_id: 25,
+                kullanici_kodu: item.KullaniciKodu,
+                isyeri_kodu: item.IsYeriKodu,
+                isyeri_sifresi: item.IsYeriSifresi,
+                tarih_1: ilkTarih,
+                tarih_2: sonTarih
+            }
+
+            console.log("model : ", model)
+
+            const sgk_liste = await vizite_data_list_al(model)
+
+            for (var s = 0; s < sgk_liste.length; s++) {
+
+                const sgk_item = sgk_liste[s]
+
+                const sgk_model = {
+
+                    ...sgk_item,
+                    firmaId: item.FirmaId,
+                    subeId : item.Id
+                }
+
+
+
+                vizite_liste.push(sgk_model)
+            }
+        }
+
+        if (hata_listesi.length >0) {
+
+            const hata_grid = $("#hata").data("kendoGrid")
+            hata_grid.setDataSource(hata_listesi)
+        }
+
+        console.log("giden data : ", vizite_liste)
+
+         const res_model = await $.ajax({
+
+            url: "@Url.Action("ViziteKayitIslem","bildirge")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientList: vizite_liste }
+        })
+
+        if (res_model.IslemDurum == false) {
+
+            mesaj(res_model.Mesaj, "error")
+            return
+        }
+
+        await vizite_liste_yukle()
+
+        kendo.ui.progress($('#content_div_id'), false);
+    }
+
+    async function vizite_data_list_al(model) {
+
+        const servis_url = "http://localhost:5503/api/vizite/onayli-rapor-listesi"
+
+
+       const result = await axios.post(servis_url, model)
+
+
+        const vizite_liste = result.data.rapor_listesi
+
+        return vizite_liste
+    }
+
+    async function detay_ac_click_event() {
+
+        if (select_grid_model == null) {
+
+            mesaj("Kayıt Seçiniz.", "error")
+            return
+        }
+
+        const model = {
+
+            musavir_id: 1,
+            musteri_id: 25,
+            kullanici_kodu: select_grid_model.KullaniciKodu,
+            isyeri_kodu: select_grid_model.IsyeriKodu,
+            isyeri_sifresi: select_grid_model.IsyeriSifresi,
+            tc_kimlik_no: select_grid_model.TcNo,
+            medula_rapor_id: select_grid_model.MedulaId
+
+
+        }
+
+        const servis_url = "http://localhost:5503/api/vizite/onaysiz-rapor-detay"
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const response = await axios.post(servis_url, model)
+
+        const detay_data = response.data
+
+
+        sgk_detay_model = {
+
+            ...detay_data.islem_model.detay_model,
+            ...model
+        }
+
+        console.log("sgk_detay_model : ", sgk_detay_model)
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+        detay_form_veri_temizle()
+        detay_form_veri_doldur()
+
+        const wn_vz_detay_form = $("#wn_vz_detay_form").data("kendoWindow")
+
+        wn_vz_detay_form.center()
+        wn_vz_detay_form.open()
+
+    }
+
+    async function personelim_degil_click_event() {
+
+        if (select_grid_model == null) {
+
+            mesaj("Personel Seçiniz.", "error")
+            return
+        }
+
+        const model = {
+
+            kullanici_kodu: select_grid_model.KullaniciKodu,
+            isyeri_kodu: select_grid_model.IsyeriKodu,
+            tc_kimlik_no: select_grid_model.TcNo,
+            vaka: select_grid_model.Vaka,
+            medula_rapor_id: select_grid_model.MedulaId
+        }
+
+        Swal.fire({
+
+            title: "Personelim Değil Onayı Yapılacak Devam Edilsin mi?",
+            showCancelButton: true,
+            cancelButtonText: "Vazgeç",
+            confirmButtonText: "Onayla",
+            allowOutsideClick: false
+        })
+            .then(async(result) => {
+
+                if (result.isConfirmed) {
+
+                    kendo.ui.progress($('#content_div_id'), true);
+
+                    const servis_url = "http://localhost:5503/api/vizite/rapor-onay/personelim-degil-method"
+
+                    const result = await axios.post(servis_url, model)
+
+                    kendo.ui.progress($('#content_div_id'), false);
+
+                    console.log(result)
+
+                }
+            })
+    }
+
+</script>
+
+
+
+

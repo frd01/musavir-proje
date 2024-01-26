@@ -1,0 +1,506 @@
+﻿<div class="row p-2">
+    <div class="col-md-12">
+        <div class="d-flex flex-row k-card justify-content-end">
+            <div class="p-2" style="width : 15%;">
+                @(Html.Kendo().MultiSelect()
+                  .Name("mlt_firma")
+                  .DataTextField("Unvan")
+                  .DataValueField("Id")
+                  .TagMode(TagMode.Single)
+                  .Filter(FilterType.Contains)
+                  .IgnoreCase(true)
+                  .AutoBind(true)
+                  .ClearButton(true)
+                  .HtmlAttributes(new { style = "width : 100%" } )
+                  .DataSource(source =>
+                  {
+                      source.Read(read =>
+                      {
+                          read.Action("GetFirmaListesi", "gelenfatura");
+                      })
+                      .ServerFiltering(false);
+                  })
+                  .Events(e=>e.Select("mlt_firma_select_event").Deselect("mlt_firma_deSelect_event"))
+                )
+            </div>
+            <div class="p-2" style="width:10%;">
+                @(
+                 Html.Kendo().Button().Name("btn_sorgula")
+                 .Content("Sorgula")
+                 .HtmlAttributes(new { @class="kendoprimary",style="width : 100%" })
+                 .Events(e=>e.Click("btn_sorgula_click_event"))
+                )
+            </div>
+            <div class="p-2">
+                @(
+                 Html.Kendo().Button().Name("btn_okundu_yap")
+                 .Content("Okundu Yap")
+                 .HtmlAttributes(new { @class="kendosuccess",style="width : 100%" })
+                 .Events(e=>e.Click("btn_okundu_yap_click_event"))
+                )
+            </div>
+            <div class="p-2" style="width : 10%;">
+                @(
+                 Html.Kendo().Button().Name("btn_listele")
+                 .Content("Listele")
+                 .HtmlAttributes(new { @class="kendodanger",style="width : 100%" })
+                 .Events(e=>e.Click("btn_listele_click_event"))
+                )
+            </div>
+            <div class="p-2">
+                @(
+                 Html.Kendo().Button().Name("btn_whatsapp")
+                 .Content("Whats App Gönder")
+                 .HtmlAttributes(new { @class="kendowarning",style="width : 100%" })
+                 .Events(e=>e.Click("btn_whatsapp_click_event"))
+                )
+            </div>
+            <div>
+                <button onclick="test_method_event()">
+                    Tets
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @(
+         Html.Kendo().TabStrip().Name("tb_gelir_tebligat")
+         .Animation(animation =>
+            animation.Open(effect =>
+             effect.Fade(FadeDirection.In)
+            )
+         )
+         .Items(item =>
+         {
+
+             item.Add().Text("Tebligatlar")
+             .Selected(true)
+             .Content(@Html.Partial("TebligatGridListe").ToString());
+
+             item.Add().Text("Tebligat Sorgu Detayları")
+            .Content(@Html.Partial("HataGridListe").ToString());
+         })
+        )
+    </div>
+</div>
+
+<script src="~/assets/islemler/tebligat/vergiDenetim.js"></script>
+<script src="~/assets/islemler/dosyaIslem.js"></script>
+
+<script>
+
+    let firma_listesi = []
+
+    async function test_method_event() {
+
+        console.log("test_method_event : ")
+
+        for (var i = 0; i < firma_listesi.length; i++) {
+
+
+            const item = firma_listesi[i]
+
+            const token_islem = await inter_aktif_giris(item.GibKodu, item.GibSifre, item.GibParola)
+
+            const mly_data_list = await vergiDenetimTebligatIslem(token_islem.token, item.Id)
+
+
+
+            for (var m = 0; m < mly_data_list.length; m++) {
+
+                const data_item = mly_data_list[m]
+
+
+
+                const detay_model = await vergi_denetim_tebligat_detay(token_islem.token, data_item.oid)
+
+                console.log("detay_model : ", detay_model)
+            }
+
+
+
+
+        }
+
+    }
+
+    async function btn_whatsapp_click_event() {
+
+        if (select_detay_data.length <=0) {
+
+            mesaj("Tebligat Seçiniz.", "error")
+
+            return
+        }
+
+        const baglanti_durum = await $.ajax({
+
+            url: "http://localhost:5510/node-api/whats-app-baglanti-kontrol",
+            method: "GET"
+        })
+
+
+
+        if (baglanti_durum.status == false) {
+
+            mesaj("Whatsapp Bağlantınızı Hesabım Bölümünde Bağlayınız.")
+
+            return
+        }
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const gonderim_data = await $.ajax({
+
+            url: "@Url.Action("WhatsAppGonderimIcerikOlustur", "vergidenetim")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientList: select_detay_data }
+        })
+
+        console.log("WhatsAppGonderimIcerikOlustur : ", gonderim_data)
+
+        const model_data = {
+
+            gonderim_data: gonderim_data
+        }
+
+         $.ajax({
+
+            url: "http://localhost:5510/node-api/tebligat-whatsapp-islem",
+            method: "POST",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(model_data)
+
+        })
+
+    }
+
+    async function btn_okundu_yap_click_event() {
+
+        if (select_data.length <=0) {
+
+            mesaj("Tebligat Seçiniz.", "error")
+            return
+        }
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        await $.ajax({
+
+            url: "@Url.Action("OkunduDurumGuncelle","vergidenetim")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientList: select_data }
+        })
+
+        kendo.ui.progress($('#content_div_id'), false);
+    }
+
+    let durum = ""
+
+    async function btn_listele_click_event() {
+
+
+
+        Swal.fire({
+
+            title: "Sorgu Türü Seçiniz.",
+            showDenyButton: true,
+            showCancelButton: true,
+            cancelButtonText: "Hepsi",
+            denyButtonText: "Okunmayanlar",
+            confirmButtonText: "Okunanlar",
+            allowOutsideClick: false
+        })
+            .then(async(result) => {
+
+                if (result.isConfirmed) {
+
+                    durum = "Okundu"
+                }
+                else if (result.isDenied) {
+
+                    durum = "Okunmadı"
+                }
+                else {
+
+                    durum = "Hepsi"
+                }
+
+                kendo.ui.progress($('#content_div_id'), true);
+
+                await tebligat_listesi_yukle(durum)
+
+                kendo.ui.progress($('#content_div_id'), false);
+
+            })
+    }
+
+    async function tebligat_listesi_yukle(durum) {
+
+        const data_list = await $.ajax({
+
+            url: "@Url.Action("GetTebligatListesi", "vergidenetim")",
+            method: "POST",
+            dataType: "Json",
+            data: { durum : durum }
+        })
+
+        console.log("tebligat_listesi_yukle : ", data_list)
+
+        for (let i = 0; i < data_list.length; i++) {
+
+            if (data_list[i].GondermeTarihi != null) {
+
+                data_list[i].GondermeTarihi = new Date(parseInt(data_list[i].GondermeTarihi.substr(6)))
+            }
+
+            if (data_list[i].TebligTarihi != null) {
+
+                data_list[i].TebligTarihi = new Date(parseInt(data_list[i].TebligTarihi.substr(6)))
+            }
+        }
+
+        const listedb = $("#listedb").data("kendoGrid")
+
+        listedb.setDataSource(data_list)
+    }
+
+    $(document).ready(async function () {
+
+        masaustu_servis_kontrol()
+
+        socket.on("whats_app_veri_gonder_sonu_event", async (client_data) => {
+
+            kendo.ui.progress($('#content_div_id'), true);
+
+            await $.ajax({
+
+                url: "@Url.Action("WhatsappGonderimDataKayit", "vergidenetim")",
+                method: "POST",
+                dataType: "Json",
+                data: { clientList: client_data }
+            })
+
+            kendo.ui.progress($('#content_div_id'), false);
+        })
+
+        await tebligat_listesi_yukle("Okunmadı")
+    })
+
+    function tarih_func(tarih_value) {
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return yil + "-" + ay + "-" + gun;
+        }
+    }
+
+    function mlt_firma_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        const model = {
+
+            Id: dataItem.Id,
+            Unvan: dataItem.Unvan,
+            Vergi_No: dataItem.Vergi_No,
+            Tc_No: dataItem.Tc_No,
+            Firma_Durum: "",
+            GibSifre: dataItem.GibSifre,
+            GibKodu: dataItem.GibKodu,
+            GibParola: dataItem.GibParola,
+            isGib: true
+        }
+
+        if (model.GibSifre == null || model.GibKodu == null || model.GibParola == null) {
+
+            model.isGib = false
+        }
+
+
+        firma_listesi.push(model)
+    }
+
+    function mlt_firma_deSelect_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        for (let i = 0; i < firma_listesi.length; i++) {
+
+            if (dataItem.Id == firma_listesi[i].Id) {
+
+                firma_listesi.splice(i, 1)
+            }
+        }
+    }
+
+    async function btn_sorgula_click_event() {
+
+        if (firma_listesi.length <= 0) {
+
+            mesaj("Firma Seçiniz.","error")
+        }
+
+        const hata_listesi = []
+        const tebligat_listesi = []
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        for (let i = 0; i < firma_listesi.length; i++) {
+
+            const item = firma_listesi[i]
+
+            if (item.GibKodu == null || item.GibSifre == null || item.GibParola == null) {
+
+                item.GibParola = ""
+                item.GibSifre = ""
+                item.GibParola = ""
+
+                const hata_model = {
+
+                    Id: item.Id,
+                    Unvan: item.Unvan,
+                    Mesaj : "Gib Bilgileri Eksik Kontrol Ediniz."
+
+                }
+
+                hata_listesi.push(hata_model)
+            }
+
+            if (item.GibKodu != null || item.GibSifre != null || item.GibParola != null) {
+
+
+                const token_islem = await inter_aktif_giris(item.GibKodu, item.GibSifre, item.GibParola)
+
+                if (token_islem.islemDurum == false) {
+
+                    const hata_model = {
+
+                        Id: item.Id,
+                        Unvan: item.Unvan,
+                        Mesaj: token_islem.mesaj
+
+                    }
+
+                    hata_listesi.push(hata_model)
+                }
+
+                if (token_islem.islemDurum == true ) {
+
+                    const mly_data_list = await vergiDenetimTebligatIslem(token_islem.token,item.Id)
+
+                    if (mly_data_list.length <= 0) {
+
+                        const hata_model = {
+
+                            Id: item.Id,
+                            Unvan: item.Unvan,
+                            Mesaj: "Tebligat Bulunamadı"
+
+                        }
+
+                        hata_listesi.push(hata_model)
+                    }
+
+                    else {
+
+
+                        const data_list = await $.ajax({
+
+                            url: "@Url.Action("MaliyeListeKayitKontrolIslem", "vergidenetim")",
+                            method: "POST",
+                            dataType: "Json",
+                            data: { clientList: mly_data_list }
+                        })
+
+                        console.log("data_list : ", data_list)
+
+                        for (let d = 0; d < data_list.length; d++) {
+
+                            const data_item = data_list[d]
+
+                            const detay = await vergi_denetim_tebligat_detay(token_islem.token, data_item.oid)
+
+                            const model = {
+
+                                ...data_item,
+                                ustYaziBaseStr: detay.ustYaziBaseStr,
+                                ekListesi: detay.eklistesi
+                            }
+
+                            tebligat_listesi.push(model)
+
+                            console.log("detay model : ", detay)
+                        }
+                    }
+                }
+
+                await inter_aktif_cikis(token_islem.token)
+
+
+
+            }
+        }
+
+        console.log("tebligat_listesi : ", tebligat_listesi)
+
+        const data_tebligat_liste = await $.ajax({
+
+            url: "@Url.Action("TebligatKayitIslem","vergidenetim")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientList: tebligat_listesi }
+        })
+
+        for (var i = 0; i < data_tebligat_liste.length; i++) {
+
+            if (data_tebligat_liste[i].GondermeTarihi != null) {
+
+                data_tebligat_liste[i].GondermeTarihi = new Date(parseInt(data_tebligat_liste[i].GondermeTarihi.substr(6)))
+            }
+
+            if (data_tebligat_liste[i].TebligTarihi != null) {
+
+                data_tebligat_liste[i].TebligTarihi = new Date(parseInt(data_tebligat_liste[i].TebligTarihi.substr(6)))
+            }
+
+        }
+
+        try {
+
+            const listedb = $("#listedb").data("kendoGrid")
+
+            listedb.setDataSource(data_tebligat_liste)
+
+        } catch  {
+
+            console.log("")
+        }
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+
+
+
+    }
+
+</script>
+
+
+

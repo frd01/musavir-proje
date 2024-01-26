@@ -1,0 +1,23 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.HataGridModel>()
+    .Name("hatads")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.HataGridModel>().Name("hata")
+        .Columns(c=>
+        {
+            c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).Width(400);
+            c.Bound(m => m.Mesaj).Filterable(ftb => ftb.Multi(true).Search(true));
+            
+        })
+        .Height(500)
+        .Selectable(select => select.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+            .Events(e => e.Change("vizite_select_change"))
+        )
+    </div>
+</div>

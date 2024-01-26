@@ -1,0 +1,59 @@
+﻿@model MukellefKayitModel
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-3">
+            <fieldset class="groupbox">
+                <legend>GİB Bilgileri</legend>
+
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.GIB_KODU, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.Kendo().TextBoxFor(x => x.GIB_KODU).HtmlAttributes(new { style = "width: 100%;" })
+                        @Html.ValidationMessageFor(x => x.GIB_KODU)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.GIB_PAROLA, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.Kendo().TextBoxFor(x => x.GIB_PAROLA).HtmlAttributes(new { style = "width: 100%;" })
+                        @Html.ValidationMessageFor(x => x.GIB_PAROLA)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.GIB_SIFRE, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.Kendo().TextBoxFor(x => x.GIB_SIFRE).HtmlAttributes(new { style = "width: 100%;" })
+                        @Html.ValidationMessageFor(x => x.GIB_SIFRE)
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <fieldset class="groupbox">
+                <legend>E-Devlet Bilgileri</legend>
+
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.EDEVLET_KODU, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.Kendo().TextBoxFor(x => x.EDEVLET_KODU).HtmlAttributes(new { style = "width: 100%;" })
+                        @Html.ValidationMessageFor(x => x.EDEVLET_KODU)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(x => x.EDEVLET_SIFRE, new { @class = "col-md-3 col-form-label" })
+                    <div class="col-md-9">
+                        @Html.Kendo().TextBoxFor(x => x.EDEVLET_SIFRE).HtmlAttributes(new { style = "width: 100%;" })
+                        @Html.ValidationMessageFor(x => x.EDEVLET_SIFRE)
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

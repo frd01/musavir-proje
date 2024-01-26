@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{579D78FB-048F-4EFB-991D-CF8061EEE368}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tacmin.Model</RootNamespace>
+    <AssemblyName>Tacmin.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Banka\BankaBakiyeRaporModel.cs" />
+    <Compile Include="Banka\BankaEkstraParamsModel.cs" />
+    <Compile Include="Banka\BankaEsktraModel.cs" />
+    <Compile Include="Banka\BankaIslemListeModel.cs" />
+    <Compile Include="Banka\BankaIslemModel.cs" />
+    <Compile Include="Banka\BankaKartListeModel.cs" />
+    <Compile Include="Banka\BankaKartModel.cs" />
+    <Compile Include="Banka\BankaResponseModel.cs" />
+    <Compile Include="Bildirge\IseGirisListeModel.cs" />
+    <Compile Include="Bildirge\IseGirisResModel.cs" />
+    <Compile Include="Bildirge\ViziteFirmaSubeModel.cs" />
+    <Compile Include="Bildirge\ViziteListeModel.cs" />
+    <Compile Include="Bildirge\ViziteResponseModel.cs" />
+    <Compile Include="Cari\CariHareketDetay.cs" />
+    <Compile Include="Cari\CariListeModel.cs" />
+    <Compile Include="Cari\CariModulEnums.cs" />
+    <Compile Include="DigitalVd\CapctModel.cs" />
+    <Compile Include="DigitalVd\LoginRequest.cs" />
+    <Compile Include="DosyaModel.cs" />
+    <Compile Include="EArsiv\ArsivFaturaModel.cs" />
+    <Compile Include="EArsiv\FaturaDosyaModel.cs" />
+    <Compile Include="EArsiv\FaturaHtmlData.cs" />
+    <Compile Include="EArsiv\TokenModel.cs" />
+    <Compile Include="Genel\BirimModel.cs" />
+    <Compile Include="Genel\KartModel.cs" />
+    <Compile Include="Gib\AyModel.cs" />
+    <Compile Include="Gib\GelenFaturaResponseModel.cs" />
+    <Compile Include="Gib\GibFaturaModel.cs" />
+    <Compile Include="Gib\GibLoginResponseModel.cs" />
+    <Compile Include="Gib\GibTabloListe.cs" />
+    <Compile Include="Gib\GibTabloSonuc.cs" />
+    <Compile Include="Gib\TarihListModel.cs" />
+    <Compile Include="Gib\YilModel.cs" />
+    <Compile Include="HataGridModel.cs" />
+    <Compile Include="Hesap\KullaniciKayitModel.cs" />
+    <Compile Include="Hesap\KullaniciModel.cs" />
+    <Compile Include="IslemResponse.cs" />
+    <Compile Include="Kasa\KartListeModel.cs" />
+    <Compile Include="Kasa\KartModel.cs" />
+    <Compile Include="Kasa\KasaBakiyeModel.cs" />
+    <Compile Include="Kasa\KasaEkstraModel.cs" />
+    <Compile Include="Kasa\KasaEkstraParamsModel.cs" />
+    <Compile Include="Kasa\KasaIslemListeModel.cs" />
+    <Compile Include="Kasa\KasaIslemModel.cs" />
+    <Compile Include="Kasa\KasaTakipEnum.cs" />
+    <Compile Include="Kasa\KasaTakipModel.cs" />
+    <Compile Include="KayitResModel.cs" />
+    <Compile Include="KontrolIslem\FirmaKontrolModel.cs" />
+    <Compile Include="KullaniciModel.cs" />
+    <Compile Include="LocalData\FirmaModel.cs" />
+    <Compile Include="LocalData\LocalDataModel.cs" />
+    <Compile Include="Login\UserLoginModel.cs" />
+    <Compile Include="Login\UserModel.cs" />
+    <Compile Include="Mail\MailKullaniciModel.cs" />
+    <Compile Include="Mail\MailResModel.cs" />
+    <Compile Include="Mail\MailTurEnums.cs" />
+    <Compile Include="Main\SorguOzetModel.cs" />
+    <Compile Include="MaliyeIslemleri\Beyanname\BeyannameAraModel.cs" />
+    <Compile Include="MaliyeIslemleri\Beyanname\BeyannameDataRequestModel.cs" />
+    <Compile Include="MaliyeIslemleri\Beyanname\BeyannameListeleModel.cs" />
+    <Compile Include="MaliyeIslemleri\Beyanname\BeyannameOzetModel.cs" />
+    <Compile Include="MaliyeIslemleri\Beyanname\BeyannameRequestModel.cs" />
+    <Compile Include="MaliyeIslemleri\Beyanname\BeyannameTurModel.cs" />
+    <Compile Include="MaliyeIslemleri\Faturalar\GelenFaturaModel.cs" />
+    <Compile Include="MaliyeIslemleri\GibResultModels\BeyannameResultModel.cs" />
+    <Compile Include="MaliyeIslemleri\GibResultModels\GibLoginResultModel.cs" />
+    <Compile Include="MaliyeIslemleri\SorguSonucModel.cs" />
+    <Compile Include="MaliyeIslemleri\VergiDairesiModel.cs" />
+    <Compile Include="MaliyeIslemleri\VergiTurModel.cs" />
+    <Compile Include="Maliye\AracHacizModel.cs" />
+    <Compile Include="Maliye\AracModel.cs" />
+    <Compile Include="Maliye\BankaHacizModel.cs" />
+    <Compile Include="Maliye\GelenFaturaModel.cs" />
+    <Compile Include="Maliye\GibExcelModel.cs" />
+    <Compile Include="Maliye\MaliyeGelenFaturaListeModel.cs" />
+    <Compile Include="Maliye\TarihListeModel.cs" />
+    <Compile Include="MappingProfile.cs" />
+    <Compile Include="ModulEnums.cs" />
+    <Compile Include="Mukellef\BeyannameDonemModel.cs" />
+    <Compile Include="Mukellef\BeyannameTakipModel.cs" />
+    <Compile Include="Mukellef\BeyannameTakipTabloModel.cs" />
+    <Compile Include="Mukellef\BildirgeTakipModel.cs" />
+    <Compile Include="Mukellef\FaaliyetKoduAraModel.cs" />
+    <Compile Include="Mukellef\FirmaGibModel.cs" />
+    <Compile Include="Mukellef\FirmaSubeKayitModel.cs" />
+    <Compile Include="Mukellef\MaliyeBilgiModel.cs" />
+    <Compile Include="Mukellef\MukellefAraModel.cs" />
+    <Compile Include="Mukellef\MukellefKayitModel.cs" />
+    <Compile Include="Mukellef\SgkListeModel.cs" />
+    <Compile Include="Musavir\FirmaIntModel.cs" />
+    <Compile Include="Musavir\MukellefBorcDetayModel.cs" />
+    <Compile Include="Musavir\MukellefBorcOzetModel.cs" />
+    <Compile Include="Musavir\SozlesmeModel.cs" />
+    <Compile Include="Musavir\VergiTurModel.cs" />
+    <Compile Include="Ortak\BeyannameBelgeModel.cs" />
+    <Compile Include="Ortak\BildirgeBelgeModel.cs" />
+    <Compile Include="Ortak\IlceModel.cs" />
+    <Compile Include="Ortak\ListeModel.cs" />
+    <Compile Include="Ortak\SehirModel.cs" />
+    <Compile Include="Ortak\TarihModel.cs" />
+    <Compile Include="Ortak\VergiDaireModel.cs" />
+    <Compile Include="PaylasimEnums.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RaporParamsModel.cs" />
+    <Compile Include="RaporRequestModel.cs" />
+    <Compile Include="Rapor\GunlukIslemModel.cs" />
+    <Compile Include="Rapor\RaporFirmaModel.cs" />
+    <Compile Include="SigortaIslemleri\BildirgeAraModel.cs" />
+    <Compile Include="Sms\SmsBilgiModel.cs" />
+    <Compile Include="Sms\SmsFirmaEnums.cs" />
+    <Compile Include="Sms\SmsFirmaModel.cs" />
+    <Compile Include="Sms\SmsResModel.cs" />
+    <Compile Include="Tebligat\GelirIdaresiResModel.cs" />
+    <Compile Include="Tebligat\GelirMlyResponseModel.cs" />
+    <Compile Include="Tebligat\GelirTebligatListe.cs" />
+    <Compile Include="Tebligat\IcisleriResModel.cs" />
+    <Compile Include="Tebligat\IcisleriResponseModel.cs" />
+    <Compile Include="Tebligat\ListeleRequestModel.cs" />
+    <Compile Include="Tebligat\TebligatDataList.cs" />
+    <Compile Include="Tebligat\TebligatDataListModel.cs" />
+    <Compile Include="Tebligat\TebligatDosyaModel.cs" />
+    <Compile Include="Tebligat\TebligatEklistModel.cs" />
+    <Compile Include="Tebligat\TebligatListeModel.cs" />
+    <Compile Include="Tebligat\TebligatModulEnums.cs" />
+    <Compile Include="Tebligat\TebligatRequestListeModel.cs" />
+    <Compile Include="Tebligat\TebligatResponseModel.cs" />
+    <Compile Include="Tebligat\TebligatZarfModel.cs" />
+    <Compile Include="Tebligat\TicaretEkResModel.cs" />
+    <Compile Include="Tebligat\TicaretMlyDosyaModel.cs" />
+    <Compile Include="Tebligat\TicaretMlyResponseModel.cs" />
+    <Compile Include="Tebligat\TicaretResModel.cs" />
+    <Compile Include="Tebligat\VergiDenetimMDosyaModel.cs" />
+    <Compile Include="Tebligat\VergiDenetimMlyListeModel.cs" />
+    <Compile Include="Tebligat\VergiDenetimResModel.cs" />
+    <Compile Include="Whatsapp\BelgeModel.cs" />
+    <Compile Include="Whatsapp\EvrakTurEnum.cs" />
+    <Compile Include="Whatsapp\FirmaModel.cs" />
+    <Compile Include="Whatsapp\GonderimBilgi.cs" />
+    <Compile Include="Whatsapp\KisiModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tacmin.Core\Tacmin.Core.csproj">
+      <Project>{e6e68c69-109d-4bdf-bfd6-9594537c96c6}</Project>
+      <Name>Tacmin.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tacmin.Data\Tacmin.Data.csproj">
+      <Project>{190b62a1-9b65-4c2f-8814-d20d7f970a04}</Project>
+      <Name>Tacmin.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

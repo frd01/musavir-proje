@@ -1,0 +1,347 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                @Html.Label("Mükellef Listesi")
+            </div>
+            <div class="p-2" style="width : 20%;">
+                @(
+                Html.Kendo().MultiSelect()
+                .Name("isg_cm_firmalar")
+                .Filter(FilterType.Contains)
+                .TagMode(TagMode.Single)
+                .DataTextField("Unvan")
+                .DataValueField("Id")
+                .HtmlAttributes(new { style = "width : 100%;"  })
+                .Events(e => e.Select("isg_cm_firmalar_select_event").Deselect("isg_cm_firmalar_deselect_event"))
+                )
+            </div>
+            <div class="p-2" style="width : 10%;">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("isg_dt_ilkTarih")
+                .Format("dd-MM-yyyy")
+                .Value(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+            <div class="p-2">
+                @Html.Label("Son Tarih")
+            </div>
+            <div class="p-2" style="width : 10%;">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("isg_dt_sonTarih")
+                .Format("dd-MM-yyyy")
+                .Value(DateTime.Now)
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+            <div class="p-2">
+                <button class="btn btn-primary" onclick="ise_giris_sorgula_click_event()">
+                    Sorgula
+                </button>
+                <button class="btn btn-success" onclick="ise_giris_liste_yukle()">
+                    Listele
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_ise_giris")
+        .Items(item =>
+        {
+
+            item.Add().Text("İşe Giriş Çıkış Listesi")
+            .Selected(true)
+            .Content(Html.Partial("IseGirisFormlar/IseGirisDataListe").ToString());
+
+            item.Add().Text("Hata Listesi")
+            .Content(Html.Partial("IseGirisFormlar/IseGirisHataListe").ToString());
+        })
+         )
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+
+        let liste = window.localStorage.getItem("local_listeler")
+
+        if (liste != null) {
+
+            liste = JSON.parse(liste)
+
+            const isg_cm_firmalar = $("#isg_cm_firmalar").data("kendoMultiSelect")
+
+            isg_cm_firmalar.setDataSource(liste.FirmaListesi)
+        }
+    })
+
+    let select_firmalar = []
+
+    function isg_cm_firmalar_select_event(e) {
+
+        const dataItem = e.dataItem
+
+        const model = {
+
+            id: dataItem.Id,
+            unvan : dataItem.Unvan
+        }
+
+        select_firmalar.push(model)
+    }
+
+    function isg_cm_firmalar_deselect_event(e) {
+
+        const id = e.dataItem.Id
+
+        for (var i = 0; i < select_firmalar.length; i++) {
+
+            if (select_firmalar[i].id == id) {
+
+                select_firmalar.splice(i,1)
+            }
+        }
+    }
+
+    async function ise_giris_sorgula_click_event() {
+
+        if (select_firmalar.length <=0) {
+
+            mesaj("Firma Seçiniz.", "error")
+            return
+        }
+
+        const isg_dt_ilkTarih = $("#isg_dt_ilkTarih").data("kendoDatePicker").value()
+        const isg_dt_sonTarih = $("#isg_dt_sonTarih").data("kendoDatePicker").value()
+
+        if (isg_dt_ilkTarih == null) {
+
+            mesaj("İlk Tarihi Seçiniz.", "error")
+            return
+        }
+        if (isg_dt_sonTarih == null) {
+
+            mesaj("Son Tarihi Seçiniz.", "error")
+            return
+        }
+
+        const ilkTarih = tarih_func_sql(isg_dt_ilkTarih)
+        const sonTarih = tarih_func_sql(isg_dt_sonTarih)
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const tarih_listesi = await $.ajax({
+
+            url: "@Url.Action("IseGirisTarihAralikListesi","bildirge")",
+            method: "POST",
+            dataType: "Json",
+            data: { ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        const _firma_sube_listesi = await $.ajax({
+
+            url: "@Url.Action("FirmaSubeListesi","bildirge")",
+            method : "GET"
+        })
+
+        const hata_listesi = []
+
+        const firma_sube_listesi = []
+
+        const servis_url = "http://localhost:5501/node-api/sgk/ise-giris-cikis-islem"
+
+        for (var i = 0; i < select_firmalar.length; i++) {
+
+            const firma = select_firmalar[i]
+
+            const liste = _firma_sube_listesi.filter(x => x.FirmaId == firma.id)
+
+            if (liste.length <=0) {
+
+                const hata_model = {
+                    Id: i,
+                    Unvan: firma.unvan,
+                    Mesaj: "Firma Sgk Bilgileri Eksik"
+                }
+
+                hata_listesi.push(hata_model)
+            }
+
+            if (liste.length>0) {
+
+                for (var i = 0; i < liste.length; i++) {
+
+                    const item = liste[i]
+
+                    firma_sube_listesi.push(item)
+                }
+            }
+        }
+
+        if (firma_sube_listesi.length <=0) {
+
+            kendo.ui.progress($('#content_div_id'), false);
+            hata_grid_listesi_yukle(hata_listesi)
+            mesaj("Seçtiğiniz Firmaların Sgk Bilgileri Eksik Hata Listesinden Kontrol Ediniz.", "error")
+            return
+        }
+
+
+        const firma_kayit_list = []
+
+        if (firma_sube_listesi.length >0) {
+
+            for (var i = 0; i < firma_sube_listesi.length; i++) {
+
+                const item = firma_sube_listesi[i]
+
+                const req_model = {
+
+                    tarih_liste: tarih_listesi,
+                    kullanici_adi_1: item.KullaniciKodu,
+                    kullanici_adi_2: item.IsYeriKodu,
+                    sistem_sifresi: item.SistemSifresi,
+                    isyeri_sifresi: item.IsYeriSifresi,
+                    isci_liste: [],
+                    musavir_id: 1,
+                    id: 5,
+                    is_kullanici: true,
+                    hata_mesaj : ""
+                }
+
+                console.log("req_model : ", req_model)
+
+                const res_data = await axios.post(servis_url, { user_data: req_model })
+
+                const node_list = res_data.data.isci_listesi
+
+                for (var i = 0; i < node_list.length; i++) {
+
+                    const data_item = node_list[i]
+
+                    const data_model = {
+
+                        ...data_item,
+                        firmaId: item.FirmaId,
+                        subeId: item.Id
+                    }
+
+                    firma_kayit_list.push(data_model)
+
+
+                }
+
+
+
+
+
+            }
+        }
+
+        hata_grid_listesi_yukle(hata_listesi)
+
+        console.log("hata listesi")
+
+        if (firma_kayit_list.length >0) {
+
+            const res_result = await $.ajax({
+
+                url: "@Url.Action("IseGirisCikisKaydet","bildirge")",
+                method: "POST",
+                dataType: "Json",
+                data: { clientList: firma_kayit_list }
+            })
+
+            if (res_result.IslemDurum == false) {
+
+                mesaj(res_result.Mesaj, "error")
+                return
+            }
+
+            await ise_giris_liste_yukle()
+
+            select_firmalar = []
+
+        }
+
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+    }
+
+    async function ise_giris_liste_yukle() {
+
+        const isg_dt_ilkTarih = $("#isg_dt_ilkTarih").data("kendoDatePicker").value()
+        const isg_dt_sonTarih = $("#isg_dt_sonTarih").data("kendoDatePicker").value()
+
+        const ilkTarih = tarih_func_sql(isg_dt_ilkTarih)
+        const sonTarih = tarih_func_sql(isg_dt_sonTarih)
+
+        const data_list = await $.ajax({
+
+            url: "@Url.Action("IseGirisCikisListesi","bildirge")",
+            method: "POST",
+            dataType: "Json",
+            data: { ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        console.log("ise_giris_liste_yukle : ", data_list)
+
+        for (var i = 0; i < data_list.length; i++) {
+
+            if (data_list[i].IslemTarihi) {
+
+                data_list[i].IslemTarihi = new Date(parseInt(data_list[i].IslemTarihi.substr(6)))
+            }
+
+            if (data_list[i].Tarih) {
+
+                data_list[i].Tarih = new Date(parseInt(data_list[i].Tarih.substr(6)))
+            }
+        }
+
+        try {
+
+            const listeGrid = $("#listeGrid").data("kendoGrid")
+
+            listeGrid.setDataSource(data_list)
+
+        } catch  {
+
+            console.log("")
+        }
+    }
+
+    function hata_grid_listesi_yukle(liste) {
+
+        if (liste.length > 0) {
+
+
+            try {
+
+                const hataGrid = $("#hataGrid").data("kendoGrid")
+
+                hataGrid.setDataSource(liste)
+
+            } catch {
+
+                console.log("")
+            }
+        }
+    }
+
+</script>
+
+

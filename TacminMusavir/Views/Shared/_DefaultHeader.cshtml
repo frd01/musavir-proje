@@ -1,0 +1,19 @@
+﻿<link rel="apple-touch-icon" href="~/assets/img/ico/apple-icon-120.png">
+<link rel="shortcut icon" type="image/x-icon" href="~/assets/img/ico/favicon.ico">
+
+<script src="https://kit.fontawesome.com/b5b24f8108.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="~/assets/lib/fontawesome/css/all.min.css">
+@Styles.Render("~/bundles/main/css")
+@Styles.Render("~/bundles/kendo/css")
+@Styles.Render("~/bundles/tacmin/css")
+@Styles.Render("~/bundles/libs/css")
+@Scripts.Render("~/bundles/main/js")
+@Scripts.Render("~/bundles/kendo/js")
+@Scripts.Render("~/bundles/libs/js")
+
+<script>
+    kendo.culture('tr-TR');
+</script>
+
+@Scripts.Render("~/bundles/tacmin/js")

@@ -1,0 +1,18 @@
+{
+  "production": false,
+
+  "key": "1qaz2wsx3edc4rfv5tgb6yhn7ujm8iko",
+
+  "oturum_cookie_adi": "tacmin_session",
+
+  "oturum_timeout_suresi": 24,
+
+  "oturum_remember_cookie_adi": "tacmin_remember",
+
+  "db": {
+    "server": ".",
+    "name": "Yonetim_Musavir_Db",
+    "username": "sa",
+    "password": "1"
+  }
+}

@@ -1,0 +1,1083 @@
+﻿@model BeyannameAraModel
+
+@{
+    Title = "Beyanname Listesi";
+}
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @Html.Ty().TyToolBar().Items(items =>
+   {
+
+       //items.Add().Request(Html.Partial("Partial/BeyannameDataArama"), label: "Filtrele",id : "data_request_form");
+       items.Add().Btn_Custom(id: "btn_bey_listele", label: "Listele", clickEvent: "beyanname_listele_click_event", icon: "fa-list")
+       .HtmlAttributes(new { @class = "kendowarning" });
+       items.Add().Print(Url.RouteUrl(new { controller = "beyanname", action = "BeyannameTopluPdf" })).MenuButtons(btn =>
+       {
+           btn.Add().Text("Beyanname").Id("beyanname");
+           btn.Add().Text("Ünvan").Id("down_unvan");
+           btn.Add().Text("Beyanname Tür").Id("down_beyanname");
+       })
+       .HtmlAttributes(new { @class = "kendodark" });
+       items.Add().Request(Html.Partial("Partial/BeyannameRequest"), label: "Beyanname Sorgula")
+       .HtmlAttributes(new { @class = "kendoprimary" });
+       items.Add().Download_Split(clickEvent: "zip_indir_click_event", id: "byn_zip_indir").MenuButtons(btn =>
+       {
+
+           btn.Add().Text("Ünvan").Id("down_unvan");
+           btn.Add().Text("Beyanname Tür").Id("down_beyanname");
+       })
+   .HtmlAttributes(new { @class = "kendodark" });
+       items.Add().SilBtn().HtmlAttributes(new { @class = "kendodanger" });
+
+       items.Add().Share(clickEvent: "byn_evrak_gonder_click_event").HtmlAttributes(new { @class = "kendowarning" });
+
+   })
+    </div>
+</div>
+
+
+
+@(Html.Kendo().DataSource<BeyannameAraModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+
+    .Aggregates(ag => {
+
+        ag.Add(p => p.GONDERIM_TARIHI).Count();
+    })
+
+    )
+)
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @(Html.Ty().TyGrid<BeyannameAraModel>().Name("master")
+            .Columns(c => {
+                c.Select().Width(50);
+                c.Bound(m => m.UNVAN).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.PanelGonderim).ClientTemplate(
+
+                    "<div class='row'>"
+                    + "<div class='col-md-12'> "
+                    + "<div class='d-flex flex-row'>"
+                    + "<div class='p-1'>"
+                    + "<a title='#=Whats_App_Gonderim_Baslik#' class='#=Whats_App_Css#'>"
+                    + "<i class='fa-brands fa-whatsapp fa-xl' style='color : green;'></i>"
+                    + "</a>"
+                    + "</div>"
+
+                     + "<div class='p-1'>"
+                    + "<a title='#=Mail_Gonderim_Baslik#' class='#=Mail_Css#'>"
+                    + "<i class='fa-solid fa-envelope fa-xl' style='color : blue;'></i>"
+                    + "</a>"
+                    + "</div>"
+
+                     + "<div class='p-1'>"
+                    + "<a title='#=Sms_Baslik#' class='#=Sms_Css#'>"
+                    + "<i class='fa-solid fa-comment-sms fa-xl' style='color : red;'></i>"
+                    + "</a>"
+                    + "</div>"
+
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    );
+                c.Bound(m => m.KODU).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.VERGI_DAIRESI).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.TCKN).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.GONDERIM_TARIHI).Format("{0:dd/MM/yyyy}").Filterable(ftb => ftb.Multi(true).Search(true))
+                .ClientFooterTemplate("<div id='gr_say_id'></div>");
+                c.Bound(m => m.DONEM).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.TAH_FIS_NO).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.TAH_VADE).Format("{0:dd/MM/yyyy}").Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Bound(m => m.TAH_TUTAR).Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Filterable(ftb => ftb.Multi(true).Search(true));
+                c.Detay(Url.RouteUrl(new { controller = "beyanname", action = "beyannamepdfgor", id = "#=ID#" }), "_blank", "beyanIcon");
+                c.Detay(Url.RouteUrl(new { controller = "beyanname", action = "tahakkukpdfgor", id = "#=ID#" }), "_blank", "tahakIcon");
+            })
+            .Selectable(select => select.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+            .Pageable()
+            .Events(e => e.Change("beyannname_select_change"))
+            .Height(550)
+
+        )
+    </div>
+</div>
+<div>
+    @(
+     Html.Kendo().Window().Name("beyannameWindow")
+     .Title("Beyanname Listele")
+     .Visible(false)
+     .Height(300)
+     .Width(600)
+     .Content(Html.Partial("Partial/BeyannameDataArama",new Tacmin.Model.MaliyeIslemleri.Beyanname.BeyannameListeleModel()).ToHtmlString())
+    )
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+<script src="../../assets/lib/mail.js"></script>>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+@section scripts{
+    <script>
+        let secilen_beyannameler = []
+        let detay_secilen_beyannameler = []
+        const check_model = {
+
+            is_vergi: false,
+            is_beyan_tur: false,
+            is_vergi_daire: false
+
+        }
+
+        $(document).ready(async function () {
+
+            masaustu_servis_kontrol()
+
+            socket.on("whats_app_veri_gonder_sonu_event", async(client_data) => {
+
+                console.log("whats_app_veri_gonder_sonu_event")
+               const data_list =  await $.ajax({
+
+                    url: "@Url.Action("GonderimDataKayit","beyanname")",
+                    method: "POST",
+                    dataType: "Json",
+                    data: { clientList: client_data, beyannameListesi: detay_secilen_beyannameler }
+                })
+
+                var grid = $("#master").data("kendoGrid");
+                const liste = grid.dataSource._pristineData;
+
+                for (var i = 0; i < data_list.length; i++) {
+
+                    const item = data_list[i]
+
+                    for (var g = 0; g < liste.length; g++) {
+
+                        if (liste[g].ID == item.ID) {
+                            liste[g].Whats_App_Css = "whats_app_aktif"
+                            liste[g].Whats_App_Gonderim_Baslik = item.Whats_App_Gonderim_Baslik
+                        }
+                    }
+                }
+
+                try {
+                    grid.setDataSource(liste)
+                } catch (e) {
+
+                    console.log("")
+                }
+
+                kendo.ui.progress($('#content_div_id'), false);
+
+
+
+            })
+        })
+
+        async function whatsapp_belge_gonder_click_event(belgeTur) {
+
+
+            const baglanti_durum = await $.ajax({
+
+                url: "http://localhost:5510/node-api/whats-app-baglanti-kontrol",
+                method: "GET"
+            })
+
+
+
+            if (baglanti_durum.status == false) {
+
+                mesaj("Whatsapp Bağlantınızı Hesabım Bölümünde Bağlayınız.")
+
+                return
+            }
+
+            kendo.ui.progress($('#content_div_id'), true);
+
+            const gonderim_data = await $.ajax({
+
+                url: "@Url.Action("GonderimIcerikOlustur", "beyanname")",
+                method: "POST",
+                dataType: "Json",
+                data: { clientList: detay_secilen_beyannameler, gonderimTur: belgeTur }
+            })
+
+
+            const model_data = {
+
+                gonderim_data: gonderim_data
+            }
+
+            $.ajax({
+
+                url: "http://localhost:5510/node-api/beyanname-whatsapp-islem",
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(model_data)
+
+            })
+
+        }
+
+        function beyanname_listele_click_event() {
+
+            const test_data = {
+                id: 1,
+                name: "x"
+            }
+
+            socket.emit("test_socket_method", test_data)
+
+            const window = $("#beyannameWindow").data("kendoWindow")
+            window.center()
+            window.open()
+
+
+        }
+
+        function tarih_func(tarih_value) {
+
+            if (tarih_value) {
+
+                let yil = tarih_value.getFullYear().toString();
+                let ay = (tarih_value.getMonth() + 1).toString();
+                let gun = tarih_value.getDate().toString();
+
+                if (gun.length === 1) {
+                    gun = "0" + gun;
+                }
+                if (ay.length == 1) {
+                    ay = "0" + ay;
+                }
+                return yil + "/" + ay + "/" + gun;
+            }
+        }
+
+        function mesaj(mesaj, icon) {
+
+            Swal.fire({
+                icon: icon,
+                title: 'İşlem Sonucu',
+                text: mesaj,
+                confirmButtonText: "Tamam"
+            })
+        }
+
+        let vergi_no = null
+
+        let daire_kodu = null
+
+        function Vergi_Daire_Id_change_event() {
+            daire_kodu = null
+            var model = $("#Vergi_Daire_Id").data('kendoComboBox').dataItem()
+
+            daire_kodu = model.Kodu
+        }
+
+
+        function Firma_Id_change_event() {
+            vergi_no = null
+            var model = $("#Firma_Id").data('kendoComboBox').dataItem()
+
+            if (model.Tc_No == null) {
+                vergi_no = model.Vergi_No
+                return
+            }
+            if (model.Tc_No.toString().length > 0) {
+
+                vergi_no = model.Tc_No
+                return
+            }
+
+            vergi_no = model.Vergi_No
+        }
+
+        document.querySelector("#Is_Vergi_No").onchange = function (e) {
+
+            check_model.is_vergi = e.target.checked;
+        }
+        document.querySelector("#Is_Vergi_Dairesi").onchange = function (e) {
+
+            check_model.is_vergi_daire = e.target.checked;
+        }
+
+        document.querySelector("#Is_Vergi_Tur").onchange = function (e) {
+
+            check_model.is_beyan_tur = e.target.checked;
+        }
+
+        document.querySelector("#beyanname").click = function () {
+
+            mesaj("beyanname click event","success")
+        }
+
+        function test_event() {
+
+            alert("test_event")
+        }
+
+        function test_click() {
+
+            var formData = $.ty.utils.serializeObject($('#form_RequestModal'));
+
+
+
+
+        }
+
+        function beyanname_ozet_tablo(data) {
+
+            Swal.fire({
+
+                title: "Beyanname Sorgulama Özeti",
+                html: '<p class="text-left text-danger text-bold"  >' + '* ' + data.MukellefSayisi  + ' Yeni Mükellef Kaydı Yapıldı.' + '</p>'
+                    + '<p class="text-left text-success text-bold">' + '* ' + data.BeyannameSayisi + ' Yeni Beyanname İndirildi.' + '</p>'
+                    + '<p class="text-left text-primary text-bold">' + '* ' + data.BildirgeSayisi + ' Yeni Bildirge İndirildi.' + '</p>',
+
+                confirmButtonText: "Tamam",
+                allowOutsideClick : false
+            })
+                .then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        window.location.reload()
+                    }
+                })
+        }
+
+        function beyanname_sorgula_click_event() {
+            $('#RequestModal').data('kendoWindow').close();
+
+            let is_aktif_cari = false
+
+            var ch_aktif_cari = $("#ch_is_cari:checked").val()
+
+
+
+            if (ch_aktif_cari == "true") {
+
+                is_aktif_cari = true
+            }
+
+
+
+
+            var formData = $.ty.utils.serializeObject($('#form_RequestModal'));
+
+            if (check_model.is_vergi == true) {
+
+                if (vergi_no == null) {
+                    alert("Vergi No/Tckn'yi Doğru biçimde yazınız.")
+                    return
+                }
+
+                formData.Vergi_No = vergi_no
+            }
+
+            if (check_model.is_vergi_daire == true) {
+
+                if (daire_kodu == null) {
+
+                    alert("Vergi Dairesi Seçiniz.")
+                    return
+                }
+            }
+
+            formData.Is_Vergi_No = check_model.is_vergi
+            formData.Is_Vergi_Tur = check_model.is_beyan_tur
+            formData.Is_Vergi_Tur = check_model.is_vergi_daire
+            formData.Vergi_Daire_Kodu = ""
+
+            if (daire_kodu != null) {
+
+                formData.Vergi_Daire_Kodu = daire_kodu
+            }
+
+
+            kendo.ui.progress($('#content_div_id'), true);
+
+
+            const girisResponse = $.ajax({
+
+                url: '@Url.RouteUrl(new { controller = "beyanname", action = "GetToken" })',
+                method: "GET"
+
+            })
+
+            girisResponse.done(function (data) {
+
+
+
+                if (data.messages != null) {
+
+                    kendo.ui.progress($('#content_div_id'), false);
+                    mesaj(data.messages[0].text, "error")
+                    return
+                }
+                if (data.messages == null) {
+
+                    $.ajax({
+                    url: '@Url.RouteUrl(new { controller = "beyanname", action = "GibBeyannameSorgula" })',
+                    method: 'POST',
+                    dataType : "Json",
+                        data: { client_veri: formData, token: data.Token, is_aktif_cari: is_aktif_cari },
+                    success: function (data) {
+                        kendo.ui.progress($('#content_div_id'), false);
+
+
+                        if (data.IslemDurum == true) {
+
+                            beyanname_ozet_tablo(data)
+                        }
+
+                        if (data.IslemDurum == false) {
+
+                            mesaj(data.Mesaj,"error")
+                        }
+
+
+                        },
+                        error: function (err) {
+                            kendo.ui.progress($('#content_div_id'), false);
+                            console.log(err)
+                            alert(err.message);
+
+                        }
+                    });
+
+                    }
+
+
+            })
+
+
+        }
+
+        $(document).on('submit', '#form_RequestModal', function (e) {
+            $('#RequestModal').data('kendoWindow').close();
+            var formData = $.ty.utils.serializeObject($('#form_RequestModal'));
+
+
+            if (check_model.is_vergi == true) {
+
+                if (vergi_no == null) {
+                    alert("Vergi No/Tckn'yi Doğru biçimde yazınız.")
+                    return
+                }
+
+                formData.Vergi_No = vergi_no
+            }
+
+            if (check_model.is_vergi_daire == true) {
+
+                if (daire_kodu == null) {
+
+                    alert("Vergi Dairesi Seçiniz.")
+                    return
+                }
+            }
+
+            formData.Is_Vergi_No = check_model.is_vergi
+            formData.Is_Vergi_Tur = check_model.is_beyan_tur
+            formData.Is_Vergi_Tur = check_model.is_vergi_daire
+            formData.Vergi_Daire_Kodu = ""
+
+            if (daire_kodu != null) {
+
+                formData.Vergi_Daire_Kodu = daire_kodu
+            }
+
+            kendo.ui.progress($('#content_div_id'), true);
+
+            var req = $.ajax({
+                url: '@Url.RouteUrl(new { controller = "beyanname", action = "GibBeyannameSorgula" })',
+                method: 'POST',
+                data: formData,
+                success: function () {
+
+                    window.location.reload()
+                },
+                error: function (err) {
+                    alert(err.message);
+                }
+            });
+
+
+
+            req.done(function (res) {
+                console.log(res);
+            });
+
+            req.always(function () {
+                kendo.ui.progress($('#content_div_id'), false);
+            });
+
+            e.preventDefault();
+        });
+
+
+
+        function beyannname_select_change(e) {
+
+            secilen_beyannameler = []
+            detay_secilen_beyannameler = []
+            var selectedRows = this.select();
+            var selectedDataItems = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                var dataItem = this.dataItem(selectedRows[i]);
+                selectedDataItems.push(dataItem);
+            }
+
+            for (let i = 0; i < selectedDataItems.length; i++) {
+
+                const item = selectedDataItems[i]
+
+                console.log("Grid İtem : ", item)
+
+                let tutar = 0
+
+                if (item.TAH_TUTAR != null) {
+                    tutar = item.TAH_TUTAR.toString().replace(".", ",")
+                }
+
+                const model = {
+
+                    DONEM: item.DONEM,
+                    DONEM_BAS: item.DONEM_BAS,
+                    DONEM_SON: item.DONEM_SON,
+                    FILE_ID: item.FILE_ID,
+                    GONDERIM_TARIHI: tarih_func(item.GONDERIM_TARIHI),
+                    ID: item.ID,
+                    KODU: item.KODU,
+                    TAH_FILE_ID: item.TAH_FILE_ID,
+                    TAH_FIS_NO: item.TAH_FIS_NO,
+                    TAH_TUTAR: tutar,
+                    TAH_VADE: tarih_func(item.TAH_VADE),
+                    TCKN: item.TCKN,
+                    TUR: item.TUR,
+                    UNVAN: item.UNVAN,
+                    VERGI_DAIRESI: item.VERGI_DAIRESI,
+                    FIRMA_ID: item.FIRMA_ID,
+                    OID: item.OID,
+                    TAH_OID: item.TAH_OID,
+                    Mail_Css: item.Mail_Css,
+                    Mail_Gonderim_Baslik: item.Mail_Gonderim_Baslik,
+                    PanelGonderim: item.PanelGonderim,
+                    Sms_Baslik: item.Sms_Baslik,
+                    Sms_Css: item.Sms_Css
+
+                }
+
+                detay_secilen_beyannameler.push(model)
+
+
+                secilen_beyannameler.push(item.ID)
+            }
+
+
+
+        }
+
+        function btn_sil_event() {
+
+            if (secilen_beyannameler.length <= 0) {
+
+                alert("Henüz Beyanname Seçmediniz.")
+                return
+            }
+
+            kendo.ui.progress($('#content_div_id'), true);
+
+            var data_list = new Array();
+
+            for (let i = 0; i<secilen_beyannameler.length; i++) {
+
+                const item = secilen_beyannameler[i]
+
+
+
+                const model = {
+                    id : item
+                }
+                data_list.push(item)
+            }
+
+            const client_data = {
+
+                Beyannameler: data_list
+            }
+
+
+
+            var req = $.ajax({
+                url: '@Url.RouteUrl(new { controller = "beyanname", action = "BeyannameSilme" })',
+                method: 'POST',
+                //contentType: "application/json; charset=utf-8",
+
+                //dataType: "json",
+                data: client_data,
+                success: function (data) {
+
+                    var grid = $("#master").data("kendoGrid");
+                    const liste = grid.dataSource._pristineData;
+
+                    for (let i = 0; i < liste.length; i++) {
+
+                        for (let k = 0; k < data_list.length; k++) {
+
+                            if (data_list[k] == liste[i].ID) {
+                                liste.splice(i,1)
+                            }
+                        }
+                    }
+
+                    try {
+                        grid.setDataSource(liste);
+                    }
+                    catch {}
+
+                    kendo.ui.progress($('#content_div_id'), false);
+                }
+            });
+
+
+        }
+
+       async function mail_gonderme_islem(mailHesap) {
+
+
+            Swal.fire({
+
+                title: "Belge Seçimi Yapınız.",
+                showDenyButton: true,
+                showCancelButton: true,
+                cancelButtonText: "Beyanname&Tahakkuh",
+                denyButtonText: "Tahakkuh",
+                confirmButtonText: "Beyanname",
+                allowOutsideClick: false
+            })
+                .then(async(result) => {
+
+                    let belgeTur = ""
+                    if (result.isConfirmed) {
+
+                        belgeTur = "beyanname"
+                    }
+                    else if (result.isDenied) {
+
+                        belgeTur = "tahakkuk"
+                    }
+                    else {
+
+                        belgeTur = "hepsi"
+                    }
+
+                    console.log("belge tür : ", belgeTur)
+
+                    kendo.ui.progress($('#content_div_id'), true);
+
+                    const gonderim_list = await $.ajax({
+
+                        url: "@Url.Action("MailBeyannaneGonderimIcerikOlustur", "gonderim")",
+                        method: "POST",
+                        dataType: "Json",
+                        data: { clientList: detay_secilen_beyannameler, gonderimTur: belgeTur }
+                    })
+
+                    console.log("gonderim içerik listesi : ", gonderim_list)
+
+                    const req_model = {
+
+                        gonderim_listesi: gonderim_list,
+                        mail_hesap: mailHesap
+                    }
+
+                    const mailServisUrl = "http://localhost:5503/api/tacmin-soft/mail-gonder-islem"
+
+                    const mail_islem = await axios.post(mailServisUrl, req_model)
+
+                    const gonderim_data = mail_islem.data
+
+                    const kayit_listesi = []
+
+                    if (gonderim_data != null) {
+
+                        for (var i = 0; i < gonderim_data.length; i++) {
+
+                            const firma = gonderim_data[i]
+
+                            for (var e = 0; e < firma.kisi.BelgeListesi.length; e++) {
+
+                                const evrak = firma.kisi.BelgeListesi[e]
+
+                                const model = {
+
+                                    FirmaId: firma.firmaId,
+                                    KisiId: firma.kisi.Id,
+                                    EvrakTur: evrak.EvrakTur,
+                                    EvrakId : evrak.Id
+                                }
+
+                                kayit_listesi.push(model)
+                            }
+                        }
+                    }
+
+                    console.log("Mail Gönderim Data : ", mail_islem.data)
+
+                    console.log("Kayıt Listesi : ", kayit_listesi)
+
+                    const kayit_list = await $.ajax({
+
+                        url: "@Url.Action("MailDataKayitIslem","gonderim")",
+                        method: "POST",
+                        dataType: "Json",
+                        data: { islemListesi: kayit_listesi, modul: 1, clientList: detay_secilen_beyannameler }
+                    })
+
+                    var grid = $("#master").data("kendoGrid");
+                    const gridListe = grid.dataSource._pristineData;
+
+                    for (var i = 0; i < kayit_list.length; i++) {
+
+                        const item = kayit_list[i]
+
+                        for (var g = 0; g < gridListe.length; g++) {
+
+                            if (gridListe[g].ID == item.ID) {
+
+                                gridListe[g].Mail_Css = "sms_aktif"
+                                gridListe[g].Mail_Gonderim_Baslik = item.Mail_Gonderim_Baslik
+                            }
+                        }
+                    }
+
+                    try {
+
+                        grid.setDataSource(gridListe)
+
+                    } catch  {
+
+                        console.log("")
+                    }
+
+
+
+                    mesaj("Mail Gönderim Kaydı Oluşturuldu.","success")
+                   // window.location.reload()
+
+                    kendo.ui.progress($('#content_div_id'), false);
+                })
+        }
+
+        async function sms_evrak_gonder_islem(sms_hesap) {
+
+            Swal.fire({
+
+                title: "Belge Seçimi Yapınız.",
+                showDenyButton: true,
+                showCancelButton: true,
+                cancelButtonText: "Beyanname&Tahakkuh",
+                denyButtonText: "Tahakkuh",
+                confirmButtonText: "Beyanname",
+                allowOutsideClick: false
+            })
+                .then(async(result) => {
+
+                    let belgeTur = "hepsi";
+
+                    if (result.isConfirmed) {
+
+                        belgeTur = "beyanname"
+                    }
+                    if (result.isDenied) {
+
+                        belgeTur = "tahakkuk"
+                    }
+                    kendo.ui.progress($('#content_div_id'), true);
+                    const gonderim_data = await $.ajax({
+
+                        url: "@Url.Action("BeyannaneGonderimIcerikOlustur", "gonderim")",
+                        method: "POST",
+                        dataType: "Json",
+                        data: { clientList: detay_secilen_beyannameler, gonderimTur: belgeTur }
+                    })
+
+                    console.log("gonderim_data : ", gonderim_data)
+
+                    const sms_req_model = {
+
+                        gonderim_listesi: gonderim_data,
+                        sms_hesap: sms_hesap
+                    }
+
+                    const sms_islem_res = await axios.post("http://localhost:5503/api/sms/sms-gonder-islem", sms_req_model)
+
+                    console.log("Sms Gönderim Gelen Data : ", sms_islem_res.data)
+
+
+
+                    if (sms_islem_res.data != null) {
+
+                        const kayit_list = await $.ajax({
+
+                            url: "@Url.Action("SmsDataKayitIslem", "gonderim")",
+                            method: "POST",
+                            dataType: "Json",
+                            data: { islemListesi: sms_islem_res.data, modul: 1, clientList: detay_secilen_beyannameler }
+                        })
+
+                        var grid = $("#master").data("kendoGrid");
+                        const gridListe = grid.dataSource._pristineData;
+
+                        for (var i = 0; i < kayit_list.length; i++) {
+
+                            const item = kayit_list[i]
+
+                            for (var g = 0; g < gridListe.length; g++) {
+
+                                if (gridListe[g].ID == item.ID) {
+
+                                    gridListe[g].Sms_Css = "sms_aktif"
+                                    gridListe[g].Sms_Baslik = item.Sms_Baslik
+                                }
+                            }
+                        }
+
+                        try {
+                            grid.setDataSource(gridListe)
+                        } catch {
+
+                            console.log("")
+                        }
+
+                        mesaj("Sms Gönderim İşlemi Tamamlandı.","success")
+
+                        kendo.ui.progress($('#content_div_id'), false);
+                    }
+                })
+        }
+
+
+
+        async function byn_evrak_gonder_click_event(e) {
+
+            if (detay_secilen_beyannameler.length <= 0) {
+
+                mesaj("Beyanname Seçiniz.", "error")
+                return
+            }
+
+
+            const id = e.id
+
+            console.log("id : ", id)
+
+            if (id == "sms") {
+
+                const sms_hesap = await $.ajax({
+
+                    url: "@Url.Action("SmsBilgi","gonderim")",
+                    method : "GET"
+                })
+
+                if (sms_hesap == null) {
+
+                    mesaj("Sms Sağlayıcı Bilgilerin Eksik Kullanıcı Ayar Bölümünde Kontrol Ediniz.", "error")
+
+                    return
+                }
+
+                await sms_evrak_gonder_islem(sms_hesap)
+            }
+
+
+
+
+            if (id == "mail") {
+
+                const mailHesap = await $.ajax({
+
+                    url: "@Url.Action("MailBilgi", "gonderim")",
+                    method : "GET"
+                })
+
+                if (mailHesap == null) {
+
+                    mesaj("Ayarlarından Mail Bilgilerinizi Giriniz.", "error")
+                    return
+                }
+
+                console.log("Mail Bilgi : ", mailHesap)
+
+                await mail_gonderme_islem(mailHesap)
+            }
+
+
+
+            if (id == "whats_app") {
+
+                Swal.fire({
+
+                    title: "Belge Seçimi Yapınız.",
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    cancelButtonText: "Beyanname&Tahakkuh",
+                    denyButtonText: "Tahakkuh",
+                    confirmButtonText: "Beyanname",
+                    allowOutsideClick: false
+                })
+                    .then(async(result) => {
+
+                        let belge_tur = ""
+                        if (result.isConfirmed) {
+
+                            belge_tur = "beyanname"
+                        }
+                        else if (result.isDenied) {
+                            belge_tur = "tahakkuk"
+                        }
+                        else {
+
+                            belge_tur = "hepsi"
+                        }
+
+                        await whatsapp_belge_gonder_click_event(belge_tur)
+                    })
+
+            }
+
+
+        }
+
+        function zip_indir_click_event(e) {
+
+
+            if (detay_secilen_beyannameler.length <= 0) {
+
+                mesaj("Beyanname Seçiniz.", "error")
+                return
+            }
+
+
+            const id = e.id;
+
+
+
+            const model = {
+
+                isKod: false,
+                isBeyanname: true,
+                isTahakkuh : true
+            }
+
+
+
+            if (id == "down_beyanname") {
+
+                model.isKod = true
+            }
+
+            Swal.fire({
+
+                title: "Belge Seçimi Yapınız.",
+                showDenyButton: true,
+                showCancelButton: true,
+                cancelButtonText: "Beyanname&Tahakkuh",
+                denyButtonText: "Tahakkuh",
+                confirmButtonText: "Beyanname",
+                allowOutsideClick : false
+            })
+                .then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        model.isTahakkuh = false
+                        model.isBeyanname = true
+                    }
+                    else if (result.isDenied) {
+
+                        model.isTahakkuh = true
+                        model.isBeyanname = false
+                    }
+                    else {
+                        model.isBeyanname = true
+                        model.isTahakkuh = true
+                    }
+
+                    zip_dosya_indir(model)
+                })
+        }
+
+        function zip_dosya_indir(belgeModel) {
+            kendo.ui.progress($('#content_div_id'), true);
+           const req =  $.ajax({
+
+                url: '@Url.RouteUrl(new { controller = "beyanname", action = "BeyannameZipDownload" })',
+               method: "POST",
+               data: { beyanname_listesi: detay_secilen_beyannameler, belgeModel: belgeModel },
+                xhrFields: { responseType: 'blob'}
+           })
+
+            req.done(function (res) {
+
+                kendo.ui.progress($('#content_div_id'), false);
+                const blob = new Blob([res], { type: 'application/zip' })
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                document.body.appendChild(a);
+                a.click();
+            })
+
+
+        }
+
+
+
+    </script>
+
+    <style>
+        .k-filter-menu-container span {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .beyannameWindow {
+            display: none !important;
+        }
+
+        .whats_app_pasif {
+            display: none;
+        }
+
+        .whats_app_aktif {
+            display: block;
+        }
+
+        .mail_pasif {
+            display: none;
+        }
+
+        .mail_aktif {
+            display: block;
+        }
+
+
+        .sms_pasif {
+            display: none;
+        }
+
+        .sms_aktif {
+            display: block;
+        }
+    </style>
+}
+

@@ -1,0 +1,320 @@
+﻿<div class="row p-2">
+    <div class="col-md-12">
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <fieldset>
+                    <legend>1.Değer</legend>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color : red;">
+                            @Html.Label("Kasa")
+                        </div>
+                        <div class="p-2" style="width : 80%;">
+                            @(
+                            Html.Kendo().ComboBox()
+                            .Name("ks_rp_eks_cm_kasalar_1")
+                            .DataTextField("OzelTanim")
+                            .DataValueField("Id")
+                            .Filter("contains")
+                            .Suggest(true)
+                            .HtmlAttributes(new { style = "width : 100%;",@class="form-control form-control-sm" })
+                            .Events(e=>e.Select("ks_rp_bak_cm_kasalar_1_select_event"))
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color : red;">
+                            @Html.Label("Tarih")
+                        </div>
+                        <div class="p-2" style="width: 50%;">
+                            @(
+                                Html.Kendo().DatePicker()
+                                .Name("ks_rp_eks_dt_tarih_1")
+                                .Value(new DateTime(DateTime.Now.Year,1,1))
+                                .Format("dd.MM.yyyy")
+                                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                                )
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Borç Bakiyesi Olanlar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("ks_rp_eks_borc_bakiyesi")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Alacak Bakiyesi Olanlar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("ks_rp_eks_ch_alacak_bakiyesi")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Bakiyesiz Olanlar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("ks_rp_eks_ch_bakiyesiz")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="col-md-6">
+
+                <fieldset>
+                    <legend>2.Değer</legend>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color:red;">
+                            @Html.Label("Kasa")
+                        </div>
+                        <div class="p-2" style="width : 80%;">
+                            @(
+                            Html.Kendo().ComboBox()
+                            .Name("ks_rp_eks_cm_kasalar_2")
+                            .DataTextField("OzelTanim")
+                            .DataValueField("Id")
+                            .Suggest(true)
+                            .HtmlAttributes(new { style = "width : 100%;",@class="form-control form-control-sm" })
+                            .Events(e=>e.Select("ks_rp_bak_cm_kasalar_2_select_event"))
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color:red;">
+                            @Html.Label("Tarih")
+                        </div>
+                        <div class="p-2" style="width: 50%;">
+                            @(
+                                Html.Kendo().DatePicker()
+                                .Name("ks_rp_eks_dt_tarih_2")
+                                .Value(DateTime.Now)
+                                .Format("dd.MM.yyyy")
+                                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Her Kart Yeni Sayfaya")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("ks_rp_eks_ch_yeni_sayfa")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Nakli Yekün")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("ks_rp_eks_ch_nakli_yekun")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Aktif Olmayan Kasalar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("ks_rp_eks_ch_kasa_aktif")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+
+                </fieldset>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <div class="d-flex flex-row justify-content-end">
+                <div class="p-2">
+                    <button class="btn btn-success" id="ks_rp_eks_btn_gonder" onclick="ks_rp_eks_btn_gonder_click_event()">
+                        <i class="fa-solid fa-desktop fa-lg"></i>
+                        Listele
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-danger" id="ks_rp_eks_btn_kapat" onclick="ks_rp_eks_btn_kapat_click_event()">
+                        <i class="fa-solid fa-rectangle-xmark fa-lg"></i>
+                        Kapat
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<script>
+
+    const kasa_eks_model = {
+
+        IlkCariId: null,
+        SonCariId: null,
+        IlkTarih: null,
+        SonTarih: null,
+        IsBorcBakiyesi: true,
+        IsAlacakBakiyesi: true,
+        IsBakiyesiz: true,
+        IsYeniSayfa: true,
+        IsNakliYekun: true,
+        IsAktif: true
+    }
+
+    function kasa_ekstra_rapor_liste_al() {
+
+        let local_listeler = window.localStorage.getItem("local_listeler")
+
+        if (local_listeler != null) {
+
+            local_listeler = JSON.parse(local_listeler)
+
+            try {
+
+                const ks_rp_eks_cm_kasalar_1 = $("#ks_rp_eks_cm_kasalar_1").data("kendoComboBox")
+                ks_rp_eks_cm_kasalar_1.setDataSource(local_listeler.KasaListesi)
+
+            } catch {
+
+                console.log("")
+            }
+
+            try {
+
+                const ks_rp_eks_cm_kasalar_2 = $("#ks_rp_eks_cm_kasalar_2").data("kendoComboBox")
+                ks_rp_eks_cm_kasalar_2.setDataSource(local_listeler.KasaListesi)
+
+            } catch {
+
+                console.log("")
+            }
+        }
+    }
+
+    function kasa_ekstra_rapor_form_veri_al() {
+
+        const ks_rp_eks_dt_tarih_1 = $("#ks_rp_eks_dt_tarih_1").data("kendoDatePicker")
+        const ks_rp_eks_dt_tarih_2 = $("#ks_rp_eks_dt_tarih_2").data("kendoDatePicker")
+
+        const ks_rp_eks_borc_bakiyesi = $("#ks_rp_eks_borc_bakiyesi").prop("checked")
+        const ks_rp_eks_ch_alacak_bakiyesi = $("#ks_rp_eks_ch_alacak_bakiyesi").prop("checked")
+        const ks_rp_eks_ch_bakiyesiz = $("#ks_rp_eks_ch_bakiyesiz").prop("checked")
+        const ks_rp_eks_ch_yeni_sayfa = $("#ks_rp_eks_ch_yeni_sayfa").prop("checked")
+        const ks_rp_eks_ch_nakli_yekun = $("#ks_rp_eks_ch_nakli_yekun").prop("checked")
+        const ks_rp_eks_ch_cari_aktif = $("#ks_rp_eks_ch_cari_aktif").prop("checked")
+
+        if (ks_rp_eks_dt_tarih_1.value() != null) kasa_eks_model.IlkTarih = tarih_func_sql(ks_rp_eks_dt_tarih_1.value())
+        if (ks_rp_eks_dt_tarih_2.value() != null) kasa_eks_model.SonTarih = tarih_func_sql(ks_rp_eks_dt_tarih_2.value())
+
+        kasa_eks_model.IsBorcBakiyesi = ks_rp_eks_borc_bakiyesi
+        kasa_eks_model.IsAlacakBakiyesi = ks_rp_eks_ch_alacak_bakiyesi
+        kasa_eks_model.IsBakiyesiz = ks_rp_eks_ch_bakiyesiz
+        kasa_eks_model.IsYeniSayfa = ks_rp_eks_ch_yeni_sayfa
+        kasa_eks_model.IsNakliYekun = ks_rp_eks_ch_nakli_yekun
+        kasa_eks_model.IsAktif = ks_rp_eks_ch_cari_aktif
+    }
+
+    function kasa_ekstra_rapor_form_temizle() {
+
+        const ks_rp_eks_dt_tarih_1 = $("#ks_rp_eks_dt_tarih_1").data("kendoDatePicker")
+        const ks_rp_eks_dt_tarih_2 = $("#ks_rp_eks_dt_tarih_2").data("kendoDatePicker")
+
+        //ks_rp_eks_dt_tarih_1.value(new Date())
+        //ks_rp_eks_dt_tarih_2.value(new Date())
+
+        $("#ks_rp_eks_borc_bakiyesi").prop("checked", true)
+        $("#ks_rp_eks_ch_alacak_bakiyesi").prop("checked", true)
+        $("#ks_rp_eks_ch_bakiyesiz").prop("checked", true)
+        $("#ks_rp_eks_ch_yeni_sayfa").prop("checked", true)
+        $("#ks_rp_eks_ch_nakli_yekun").prop("checked", true)
+        $("#ks_rp_eks_ch_cari_aktif").prop("checked", true)
+    }
+
+    async function ks_rp_eks_btn_gonder_click_event() {
+
+        kasa_ekstra_rapor_form_veri_al()
+
+        const result = await $.ajax({
+
+            url: "@Url.Action("KasaEsktraListesi", "kasa")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientData: kasa_eks_model }
+        })
+
+        
+        if (result!= null) {
+
+            window.localStorage.setItem("kasa_ekstra_raporu", JSON.stringify(result))
+
+            const rapor_url = "@Url.Action("KasaEkstraRaporu", "raporlar")"
+
+            window.open(rapor_url,"_self")
+        }
+    }
+
+    function ks_rp_eks_btn_kapat_click_event(){
+
+        const wn_kasa_rapor_ekstra = $("#wn_kasa_rapor_ekstra").data("kendoWindow")
+        wn_kasa_rapor_ekstra.close()
+    }
+
+    function ks_rp_eks_cm_kasalar_1_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        kasa_eks_model.IlkCariId = dataItem.Id
+        kasa_eks_model.SonCariId = dataItem.Id
+
+        $("#ks_rp_eks_cm_kasalar_2").data("kendoComboBox").value(dataItem.Id)
+
+    }
+
+    function ks_rp_eks_cm_kasalar_2_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        kasa_eks_model.SonCariId = dataItem.Id
+    }
+
+</script>
+
+

@@ -1,0 +1,300 @@
+﻿@Html.Hidden("ksf_table_id")
+@Html.Hidden("ksf_kasa_id")
+@Html.Hidden("ksf_banka_id")
+
+<div class="row">
+    <div class="col-md-12 k-card">
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>İşlem Tarihi</span>
+            </div>
+            <div class="p-2" style="width : 30%;">
+                @(
+
+                    Html.Kendo().DatePicker()
+                    .Name("dt_banka_tarih")
+                    .Format("dd/MM/yyyy")
+                    .Value(DateTime.Now)
+                    .HtmlAttributes(new { style="width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Evrak No</span>
+            </div>
+            <div class="p-2" style="width : 30%;">
+                @(
+
+                    Html.Kendo().TextBox()
+                    .Name("tx_banka_fis_no")
+                    .HtmlAttributes(new { style="width : 100%;", @class = "form-control form-control-sm" })
+                )
+            </div>
+        </div>
+
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Banka Adı</span>
+            </div>
+            <div class="p-2" style="width : 80%;">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("cm_banka_bankalar")
+                .DataTextField("Tanim")
+                .DataValueField("Id")
+                .Filter("contains")
+                .DataSource(dt =>
+                {
+
+                    dt.Read("GetBankaKartListesi", "banka");
+                })
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                .Events(e=>e.Select("cm_banka_bankalar_select_event"))
+                )
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Kasa Adı</span>
+            </div>
+            <div class="p-2" style="width : 80%;">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("cm_banka_cariler")
+                .DataTextField("Tanim")
+                .Filter("contains")
+                .DataValueField("Id")
+                .DataSource(dt =>
+                {
+
+                    dt.Read("GetKasaListesi", "banka");
+                })
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                .Events(e=>e.Select("cm_banka_cariler_select_event"))
+                )
+            </div>
+        </div>
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>İşlem Tutarı</span>
+            </div>
+            <div class="p-2" style="width : 30%;">
+                @(
+
+                    Html.Kendo().NumericTextBox()
+                    .Spinners(false)
+                    .Format("{0:n2}")
+                    .Name("tx_banka_islem_tutari")
+                    .HtmlAttributes(new { style="width : 100%;", @class = "form-control form-control-sm text-right" })
+                )
+            </div>
+        </div>
+
+        <div class="d-flex flex-row">
+            <div class="p-2 text-right mt-1" style="width : 20%;">
+                <span>Açıklama</span>
+            </div>
+            <div class="p-2" style="width : 80%;">
+                @(
+
+                    Html.Kendo().TextArea()
+                    .Name("tx_banka_aciklama")
+                    .Rows(3)
+                    .HtmlAttributes(new { style="width : 100%;" })
+                )
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button class="btn btn-warning" id="btn_banka_banka_fis_kayit" onclick="btn_banka_banka_fis_kayit_click_event()">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    KAYDET
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-danger" id="btn_banka_banka_kapat" onclick="btn_banka_banka_kapat_click_event()">
+                    <i class="fa-solid fa-rectangle-xmark"></i>
+                    KAPAT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let banka_kasa_model = {
+
+        Id: null,
+        Tarih: null,
+        FisNo: "",
+        KasaId : null,
+        BankaId: null,
+        CariId: null,
+        Aciklama: "",
+        Islem: "",
+        Tutar : 0
+
+    }
+
+    function cm_banka_bankalar_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        banka_kasa_model.BankaId = dataItem.Id
+    }
+
+    function cm_banka_cariler_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        banka_kasa_model.KasaId = dataItem.Id
+
+        
+    }
+
+    function banka_kasa_form_temizle() {
+
+      
+        const dt_banka_tarih = $("#dt_banka_tarih").data("kendoDatePicker")
+        const tx_banka_fis_no = $("#tx_banka_fis_no").data("kendoTextBox")
+        const tx_banka_islem_tutari = $("#tx_banka_islem_tutari").data("kendoNumericTextBox")
+        const tx_banka_aciklama = $("#tx_banka_aciklama").data("kendoTextArea")
+
+
+        const cm_banka_bankalar = $("#cm_banka_bankalar").data("kendoComboBox")
+        const cm_banka_cariler = $("#cm_banka_cariler").data("kendoComboBox")
+
+        
+        dt_banka_tarih.value(new Date())
+        tx_banka_fis_no.value("")
+        tx_banka_islem_tutari.value("")
+        tx_banka_aciklama.value("")
+        cm_banka_bankalar.value("")
+        cm_banka_cariler.value("")
+        $("#ksf_table_id").val(null)
+        $("#ksf_kasa_id").val(null)
+        $("#ksf_banka_id").val(null)
+    }
+
+    function banka_kasa_form_veri_al() {
+
+        const dt_banka_tarih = $("#dt_banka_tarih").data("kendoDatePicker")
+        const tx_banka_fis_no = $("#tx_banka_fis_no").data("kendoTextBox")
+        const tx_banka_islem_tutari = $("#tx_banka_islem_tutari").data("kendoNumericTextBox")
+        const tx_banka_aciklama = $("#tx_banka_aciklama").data("kendoTextArea")
+        const ksf_table_id = $("#ksf_table_id").val()
+
+
+        if (dt_banka_tarih.value() != null) banka_kasa_model.Tarih = tarih_func_sql(dt_banka_tarih.value())
+
+        if (tx_banka_fis_no.value() != null) banka_kasa_model.FisNo = tx_banka_fis_no.value()
+
+        if (tx_banka_islem_tutari.value() != null) banka_kasa_model.Tutar = tx_banka_islem_tutari.value()
+
+        if (tx_banka_aciklama.value() != null) banka_kasa_model.Aciklama = tx_banka_aciklama.value()
+
+        if (ksf_table_id != null) banka_kasa_model.Id = ksf_table_id
+
+        if (banka_kasa_model.KasaId == null) {
+
+            banka_kasa_model.KasaId = $("#ksf_kasa_id").val()
+        }
+
+        if (banka_kasa_model.BankaId == null) {
+
+            banka_kasa_model.BankaId = $("#ksf_banka_id").val()
+        }
+    }
+
+   async function btn_banka_banka_fis_kayit_click_event() {
+
+        kendo.ui.progress($('.k-window'), true);
+
+       banka_kasa_form_veri_al()
+
+
+
+       const cari_banka_res = await $.ajax({
+
+           url: "@Url.Action("BankaIslemKayit", "banka")",
+           method: "POST",
+           dataType: "Json",
+           data: { clientData: banka_kasa_model, islemTur: banka_islem_tur }
+       })
+
+       if (cari_banka_res.IslemDurum == false) {
+
+           kendo.ui.progress($('.k-window'), false);
+           alert(cari_banka_res.Mesaj, "error")
+           return
+       }
+
+       if (cari_banka_res.IslemDurum == true) {
+
+           kendo.ui.progress($('.k-window'), false);
+           banka_kasa_form_temizle()
+           is_data_update = true
+       }
+    }
+
+    function btn_banka_banka_kapat_click_event() {
+
+        const wn_kasa = $("#wn_kasa").data("kendoWindow")
+
+        wn_kasa.close()
+
+        if (is_data_update == true) {
+
+            is_data_update = false
+            window.location.reload()
+        }
+    }
+
+    $(document).ready(function () {
+
+        let tx_banka_fis_no = $("#tx_banka_fis_no").data("kendoTextBox")
+
+        let cm_banka_bankalar = $("#cm_banka_bankalar").data("kendoComboBox")
+
+        let cm_banka_cariler = $("#cm_banka_cariler").data("kendoComboBox")
+
+        let tx_banka_islem_tutari = $("#tx_banka_islem_tutari").data("kendoNumericTextBox")
+
+        let tx_banka_aciklama = $("#tx_banka_aciklama").data("kendoTextArea")
+
+        $("#dt_banka_tarih").keyup(function (e) {
+
+            if (e.keyCode == 13) tx_banka_fis_no.focus()
+        })
+
+        $("#tx_banka_fis_no").keyup(function (e) {
+
+            if (e.keyCode == 13) cm_banka_bankalar.focus()
+        })
+
+        $("#cm_banka_bankalar").keyup(function (e) {
+
+            if (e.keyCode == 13) cm_banka_cariler.focus()
+        })
+
+        $("#cm_banka_cariler").keyup(function (e) {
+
+            if (e.keyCode == 13) tx_banka_islem_tutari.focus()
+        })
+
+        $("#tx_banka_islem_tutari").keyup(function (e) {
+
+            if (e.keyCode == 13) tx_banka_aciklama.focus()
+        })
+    })
+
+</script>
+

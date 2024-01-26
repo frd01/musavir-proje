@@ -1,0 +1,32 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Bildirge.ViziteListeModel>()
+    .Name("viziteds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Bildirge.ViziteListeModel>().Name("vizite")
+        .Columns(c=>
+        {
+            c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).Width(250);
+            c.Bound(m => m.SubeAdi).Filterable(ftb => ftb.Multi(true).Search(true)).Width(150);
+            c.Bound(m => m.TcNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(130);
+            c.Bound(m => m.AdSoyAd).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.VakaAdi).Filterable(ftb => ftb.Multi(true).Search(true)).Width(90);
+            c.Bound(m => m.RaporTakipNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(150);
+            c.Bound(m => m.RaporSiraNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(130);
+            c.Bound(m => m.RaporBaslamaTarihi).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:dd-MM-yyyy}").Width(200);
+            c.Bound(m => m.IsBasiKontrolTarihi).Filterable(ftb => ftb.Multi(true).Search(true))
+             .Format("{0:dd-MM-yyyy}").Width(220);
+        })
+        .Height(500)
+        .Selectable(select => select.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+            .Events(e => e.Change("vizite_select_change"))
+        )
+    </div>
+</div>
+

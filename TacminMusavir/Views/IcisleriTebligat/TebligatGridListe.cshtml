@@ -1,0 +1,67 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Tebligat.TebligatDataList>()
+    .Name("listedbds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+@(Html.Ty().TyGrid<Tacmin.Model.Tebligat.TebligatDataList>().Name("listedb")
+            .Columns(c => {
+                c.Select().Width(50);
+                c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).HtmlAttributes(new { @class= "#=durumCss#" });
+                c.Bound(m => m.Gonderim_Whats_App).ClientTemplate(
+
+                    "<div class='row'>"
+                    + "<div class='col-md-12'> "
+                    + "<div class='d-flex flex-row'>"
+                    + "<div class='p-1'>"
+                    + "<a title='#=Whats_App_Gonderim_Baslik#' class='#=Whats_App_Css#'>"
+                    + "<i class='fa-brands fa-whatsapp fa-2xl' style='color : green;'></i>"
+                    + "</a>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    );
+                c.Bound(m => m.BirimAdi).Filterable(ftb => ftb.Multi(true).Search(true)).Width(140).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.BelgeTuru).Filterable(ftb => ftb.Multi(true).Search(true)).Width(270).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.BelgeNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(120).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.GondermeTarihi).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(120).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.TebligTarihi).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(120).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Template(t => { }).Title(String.Empty)
+                .ClientTemplate(@"
+                  <div class='ml-2'>
+                  <a onclick='pdfDokumanEvent(#=Id#)'>
+                    <i class='tahakIcon' ></i>
+                  </a>
+                 
+                    </div>
+                   ").Width(70);
+                //c.Detay(Url.RouteUrl(new { controller = "icisleritebligat", action = "PdfDokumanGetir", id = "#=Id#" }), "_blank", "beyanIcon");
+                c.Template(t => { }).Title(String.Empty)
+
+                .ClientTemplate(@"<button id='btn_ek'  class='#=cssClass# btn-sm' onclick='btn_ek_click_event(#=Id#,#=EkSayisi#)' >
+
+                <span class='k-badge btn-sm'>(#=EkSayisi#) Ek</span>
+                </button>").Width(80);
+                c.Bound(m => m.Durum).Filterable(ftb => ftb.Multi(true).Search(true)).Width(100).HtmlAttributes(new { @class = "#=durumCss#" });
+
+            })
+            .Height(500)
+            .Groupable(gr => gr.ShowFooter(true))
+            .Selectable(select => select.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+            .Events(e => e.Change("tebligat_select_change"))
+
+            )
+        
+
+<style>
+    .whats_app_pasif {
+        display: none;
+    }
+
+    .whats_app_aktif {
+        display: block;
+    }
+
+</style>

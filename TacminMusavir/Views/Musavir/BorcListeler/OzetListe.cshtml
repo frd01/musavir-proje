@@ -1,0 +1,28 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Musavir.MukellefBorcOzetModel>()
+    .Name("ozetGridds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+       Html.Ty().TyGrid<Tacmin.Model.Musavir.MukellefBorcOzetModel>().Name("ozetGrid")
+       .Columns(c=>
+       {
+
+           c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+           c.Bound(m => m.VadesiGecmisBorc).Filterable(false)
+           .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+           c.Bound(m => m.VadesiGelmemisBorc).Filterable(false)
+           .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+           c.Bound(m => m.ToplamBorc).Filterable(false)
+           .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+       })
+       .Height(500)
+
+       .Events(events => events.DataBound("dataBound"))
+       )
+    </div>
+</div>

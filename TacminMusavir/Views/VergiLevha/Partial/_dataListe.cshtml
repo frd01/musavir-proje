@@ -1,0 +1,45 @@
+﻿
+
+
+@Html.Ty().TyToolBar().Items(items =>
+{
+items.Add().Filter(
+@<text>
+    @(Html.Ty().TyFilter<BeyannameAraModel>()
+                .Fields(f =>
+                {
+                    f.Add(p => p.DONEM_BAS).Label("İlk Dönem");
+                    f.Add(p => p.DONEM_SON).Label("Son Dönem");
+                    f.Add(p => p.GONDERIM_TARIHI).Label("Gönd. Tarihi");
+                    f.Add(p => p.UNVAN);
+                })
+                .FilterExpression(f =>
+                {
+                    f.Add(p => p.GONDERIM_TARIHI).IsGreaterThanOrEqualTo(DateTime.Now.FirstDayOfMonth());
+                    f.Add(p => p.GONDERIM_TARIHI).IsLessThanOrEqualTo(DateTime.Now.LastDayOfMonth());
+                })
+            )
+</text>
+);
+
+items.Add().Share();
+items.Add().Download(Url.RouteUrl(new { controller = "beyanname", action = "BeyannameZipDownload" }));
+//items.Add().Request(Html.Partial("Partial/_FaturaSorgula"));
+})
+
+@(Html.Kendo().DataSource<DataIslemler.Models.Mukellef.VergiLevhaListeModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20))
+)
+@(Html.Ty().TyGrid<DataIslemler.Models.Mukellef.VergiLevhaListeModel>().Name("master")
+    .Columns(c => {
+
+        c.Bound(m => m.UNVAN);
+        c.Bound(m => m.VERGI_DAIRESI);
+        c.Bound(m => m.VERGI_NO);
+        c.Bound(m => m.Yil);
+        c.Bound(m => m.Beyan);
+        c.Bound(m => m.Matrah);
+
+    })
+)

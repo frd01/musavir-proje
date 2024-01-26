@@ -1,0 +1,189 @@
+﻿<div class="row p-2">
+    <div class="col-md-12 k-card">
+        <div class="d-flex flex-row justify-content-end">
+            <div id="banka_hcz_baslik" class="p-2">
+                <span>Banka Haciz Listesi</span>
+            </div>
+            <div class="p-2 mt-1">
+                @Html.Label("Mükellefler")
+            </div>
+            <div class="p-2">
+                @(
+
+                    Html.Kendo().ComboBox()
+                    .Name("bnk_hcz_cm_firmalar")
+                    .Filter("contains")
+                    .DataTextField("Unvan")
+                    .DataValueField("Id")
+                    .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                    .Events(e=>e.Select("bnk_hcz_cm_firmalar_select_event"))
+
+                )
+            </div>
+            <div class="p-2">
+                <button class="btn btn-warning btn-sm" onclick="banka_haciz_liste_sorgu_click_event()">
+                    Sorgula
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@(Html.Kendo().DataSource<Tacmin.Model.Maliye.BankaHacizModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Maliye.BankaHacizModel>().Name("master")
+        .Columns(c =>
+        {
+
+            c.Bound(m => m.vergiDairesi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.hbno).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.htutar).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+            c.Bound(m => m.durum).Filterable(ftb => ftb.Multi(true).Search(true));
+        })
+        .Height(600)
+        )
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        let local_listeler = window.localStorage.getItem("local_listeler")
+
+        if (local_listeler != null) {
+
+            local_listeler = JSON.parse(local_listeler)
+
+            const bnk_hcz_cm_firmalar = $("#bnk_hcz_cm_firmalar").data("kendoComboBox")
+
+            bnk_hcz_cm_firmalar.setDataSource(local_listeler.FirmaListesi)
+        }
+    })
+
+    const model = {
+
+        gib_kodu: null,
+        gib_sifre: null,
+        gib_parola : null
+    }
+
+    function bnk_hcz_cm_firmalar_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        model.gib_kodu = dataItem.GibKodu
+        model.gib_parola = dataItem.GibParola
+        model.gib_sifre = dataItem.GibSifre
+    }
+
+    async function banka_haciz_liste_al(token) {
+
+        const data_str = "cmd=ehacizSorgulamaService_EhacizSorgulamaSonuc&callid=918e377b8fa89-26&pageName=P_INTVRG_INTVD_EHACIZ_BANKA_SRG&token=" + token
+            + "&jp=%7B%22secim%22%3A%221%22%7D"
+
+        const url = "https://ivd.gib.gov.tr/tvd_server/dispatch"
+
+        const maliye_res = await $.ajax({
+
+            url: url,
+            method: "POST",
+            data: data_str
+        })
+
+        console.log("banka_haciz_liste_al : ", maliye_res)
+
+        if (maliye_res.data.length <=0) {
+
+            mesaj("Banka Haciz Listesi Bulunamadı.", "success")
+
+            return
+        }
+
+        const liste = []
+
+        for (var i = 0; i < maliye_res.data.length; i++) {
+
+            const item = maliye_res.data[i]
+
+            item.htutar = item.htutar.replace(".",",")
+
+            const model = {
+
+                ...item,
+                vergiDairesi : ""
+            }
+
+            liste.push(model)
+        }
+
+
+        const banka_borc_list = await $.ajax({
+
+            url: "@Url.Action("BankaHacizListeVergiDairesiGuncelle", "mukellef")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientList: liste}
+        })
+
+       
+
+        const grid = $("#master").data("kendoGrid")
+
+        try {
+            grid.setDataSource(banka_borc_list)
+        } catch {
+
+            console.log("")
+        }
+    }
+
+    async function banka_haciz_liste_sorgu_click_event() {
+
+        if (model.gib_kodu == null || model.gib_parola == null || model.gib_sifre == null) {
+
+            mesaj("Gib Bilgileri Eksik Kontrol Ediniz.")
+            return
+        }
+
+        kendo.ui.progress($('.content'), true);
+
+        const token_islem = await inter_aktif_giris(model.gib_kodu, model.gib_sifre, model.gib_parola)
+
+        if (token_islem.islemDurum == false) {
+
+            mesaj(token_islem.mesaj, "error")
+            return
+        }
+
+        await banka_haciz_liste_al(token_islem.token)
+
+        kendo.ui.progress($('.content'), false);
+
+        await inter_aktif_cikis(token_islem.token)
+
+    }
+
+</script>
+
+<style>
+
+    #banka_hcz_baslik {
+        color: red;
+        font-weight: bold;
+        font-size: 16px;
+        margin-right : 300px;
+    }
+</style>
+

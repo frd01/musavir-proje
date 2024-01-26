@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://gbs.nps.tnb.org.tr/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://gbs.nps.tnb.org.tr/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://gbs.nps.tnb.org.tr/">
+      <s:element name="TuzelSahisMukellefMerkezBilgiSorgu">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="vkn" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TuzelSahisMukellefMerkezBilgiSorguResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="TuzelSahisMukellefMerkezBilgiSorguResult" type="tns:MerkezBilgiSorguSonuc" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MerkezBilgiSorguSonuc">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BilgiSorguSonuc">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Adi" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Soyadi" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="BabaAdi" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="VergiDairesiAdi" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="VergiDairesiKodu" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="VKN" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Unvan" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="IsAdresi" type="tns:Adres" />
+              <s:element minOccurs="0" maxOccurs="1" name="IkametgahAdresi" type="tns:Adres" />
+              <s:element minOccurs="0" maxOccurs="1" name="MeslekListesi" type="tns:ArrayOfMeslek" />
+              <s:element minOccurs="1" maxOccurs="1" name="FaalTerkBilgisi" type="tns:GIBFaalKodlari" />
+              <s:element minOccurs="1" maxOccurs="1" name="SirketTuru" type="tns:GIBSirketTurleri" />
+              <s:element minOccurs="1" maxOccurs="1" name="SorguKimlikNOTipi" type="tns:KimlikNOTipi" />
+              <s:element minOccurs="0" maxOccurs="1" name="SorguKimlikNO" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BilgiSorguSonuc">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:ServisSonuc">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="SonucReferansNO" type="s:long" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ServisSonuc">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SonucKod" type="s:short" />
+          <s:element minOccurs="0" maxOccurs="1" name="SonucAciklama" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Adres">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MahalleSemt" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CaddeSokak" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="KapiNO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DaireNO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IlceAdi" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IlKodu" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IlAdi" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfMeslek">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Meslek" nillable="true" type="tns:Meslek" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Meslek">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="MeslekAdi" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MeslekKodu" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="GIBFaalKodlari">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="Faal" />
+          <s:enumeration value="Tanimsiz" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="GIBSirketTurleri">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="Gercek" />
+          <s:enumeration value="Adi" />
+          <s:enumeration value="Kollektif" />
+          <s:enumeration value="AdiKomandit" />
+          <s:enumeration value="ESHKomandit" />
+          <s:enumeration value="LTD" />
+          <s:enumeration value="Anonim" />
+          <s:enumeration value="Koop" />
+          <s:enumeration value="Diger" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="KimlikNOTipi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="TCKN" />
+          <s:enumeration value="VKN" />
+          <s:enumeration value="MTKN" />
+          <s:enumeration value="TCSN" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="BilgiServisHeader" type="tns:BilgiServisHeader" />
+      <s:complexType name="BilgiServisHeader">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IslemTipi" type="tns:NPSIslemTipi" />
+          <s:element minOccurs="1" maxOccurs="1" name="Program" type="tns:ProgramAdi" />
+          <s:element minOccurs="1" maxOccurs="1" name="NPSBelgeNO" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="Sifre" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:simpleType name="NPSIslemTipi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="AracSatisi" />
+          <s:enumeration value="DefterOnayi" />
+          <s:enumeration value="SendikaUyelik" />
+          <s:enumeration value="BelgeOnayi" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ProgramAdi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="Vezne" />
+          <s:enumeration value="YazimNet" />
+          <s:enumeration value="VezneNet" />
+          <s:enumeration value="TNBOnline" />
+          <s:enumeration value="NBS" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="NoterlikKimlikHeader" type="tns:NoterlikKimlikHeader" />
+      <s:complexType name="NoterlikKimlikHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="NoterlikKimlik" type="tns:NoterlikKimlik" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:complexType name="NoterlikKimlik">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Kayit">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="NoterlikKodu" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="NoterTCKN" type="s:long" />
+              <s:element minOccurs="1" maxOccurs="1" name="ImzaYetkiliTCKN" type="s:long" />
+              <s:element minOccurs="0" maxOccurs="1" name="SertifikaID" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="KullaniciAdi" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ProgramAdi" type="tns:ProgramAdi" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Kayit" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="KayitDurumu" type="tns:DataRowState" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="DataRowState">
+        <s:list>
+          <s:simpleType>
+            <s:restriction base="s:string">
+              <s:enumeration value="Detached" />
+              <s:enumeration value="Unchanged" />
+              <s:enumeration value="Added" />
+              <s:enumeration value="Deleted" />
+              <s:enumeration value="Modified" />
+            </s:restriction>
+          </s:simpleType>
+        </s:list>
+      </s:simpleType>
+      <s:element name="ServisHataHeader" type="tns:ServisHataHeader" />
+      <s:complexType name="ServisHataHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServisHata" type="tns:ServisHata" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:complexType name="ServisHata">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Mesaj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Kod" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GercekSahisMukellefMerkezBilgiSorgu">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="tckn" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GercekSahisMukellefMerkezBilgiSorguResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GercekSahisMukellefMerkezBilgiSorguResult" type="tns:MerkezBilgiSorguSonuc" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BaglantiTesti">
+        <s:complexType />
+      </s:element>
+      <s:element name="BaglantiTestiResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="BaglantiTestiResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="TuzelSahisMukellefMerkezBilgiSorguSoapIn">
+    <wsdl:part name="parameters" element="tns:TuzelSahisMukellefMerkezBilgiSorgu" />
+  </wsdl:message>
+  <wsdl:message name="TuzelSahisMukellefMerkezBilgiSorguSoapOut">
+    <wsdl:part name="parameters" element="tns:TuzelSahisMukellefMerkezBilgiSorguResponse" />
+  </wsdl:message>
+  <wsdl:message name="TuzelSahisMukellefMerkezBilgiSorguBilgiServisHeader">
+    <wsdl:part name="BilgiServisHeader" element="tns:BilgiServisHeader" />
+  </wsdl:message>
+  <wsdl:message name="TuzelSahisMukellefMerkezBilgiSorguNoterlikKimlikHeader">
+    <wsdl:part name="NoterlikKimlikHeader" element="tns:NoterlikKimlikHeader" />
+  </wsdl:message>
+  <wsdl:message name="TuzelSahisMukellefMerkezBilgiSorguServisHataHeader">
+    <wsdl:part name="ServisHataHeader" element="tns:ServisHataHeader" />
+  </wsdl:message>
+  <wsdl:message name="GercekSahisMukellefMerkezBilgiSorguSoapIn">
+    <wsdl:part name="parameters" element="tns:GercekSahisMukellefMerkezBilgiSorgu" />
+  </wsdl:message>
+  <wsdl:message name="GercekSahisMukellefMerkezBilgiSorguSoapOut">
+    <wsdl:part name="parameters" element="tns:GercekSahisMukellefMerkezBilgiSorguResponse" />
+  </wsdl:message>
+  <wsdl:message name="GercekSahisMukellefMerkezBilgiSorguBilgiServisHeader">
+    <wsdl:part name="BilgiServisHeader" element="tns:BilgiServisHeader" />
+  </wsdl:message>
+  <wsdl:message name="GercekSahisMukellefMerkezBilgiSorguNoterlikKimlikHeader">
+    <wsdl:part name="NoterlikKimlikHeader" element="tns:NoterlikKimlikHeader" />
+  </wsdl:message>
+  <wsdl:message name="GercekSahisMukellefMerkezBilgiSorguServisHataHeader">
+    <wsdl:part name="ServisHataHeader" element="tns:ServisHataHeader" />
+  </wsdl:message>
+  <wsdl:message name="BaglantiTestiSoapIn">
+    <wsdl:part name="parameters" element="tns:BaglantiTesti" />
+  </wsdl:message>
+  <wsdl:message name="BaglantiTestiSoapOut">
+    <wsdl:part name="parameters" element="tns:BaglantiTestiResponse" />
+  </wsdl:message>
+  <wsdl:message name="BaglantiTestiServisHataHeader">
+    <wsdl:part name="ServisHataHeader" element="tns:ServisHataHeader" />
+  </wsdl:message>
+  <wsdl:portType name="GIBBilgiServisiSoap">
+    <wsdl:operation name="TuzelSahisMukellefMerkezBilgiSorgu">
+      <wsdl:input message="tns:TuzelSahisMukellefMerkezBilgiSorguSoapIn" />
+      <wsdl:output message="tns:TuzelSahisMukellefMerkezBilgiSorguSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GercekSahisMukellefMerkezBilgiSorgu">
+      <wsdl:input message="tns:GercekSahisMukellefMerkezBilgiSorguSoapIn" />
+      <wsdl:output message="tns:GercekSahisMukellefMerkezBilgiSorguSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BaglantiTesti">
+      <wsdl:input message="tns:BaglantiTestiSoapIn" />
+      <wsdl:output message="tns:BaglantiTestiSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GIBBilgiServisiSoap" type="tns:GIBBilgiServisiSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TuzelSahisMukellefMerkezBilgiSorgu">
+      <soap:operation soapAction="http://gbs.nps.tnb.org.tr/TuzelSahisMukellefMerkezBilgiSorgu" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:TuzelSahisMukellefMerkezBilgiSorguBilgiServisHeader" part="BilgiServisHeader" use="literal" />
+        <soap:header message="tns:TuzelSahisMukellefMerkezBilgiSorguNoterlikKimlikHeader" part="NoterlikKimlikHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:TuzelSahisMukellefMerkezBilgiSorguServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GercekSahisMukellefMerkezBilgiSorgu">
+      <soap:operation soapAction="http://gbs.nps.tnb.org.tr/GercekSahisMukellefMerkezBilgiSorgu" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:GercekSahisMukellefMerkezBilgiSorguBilgiServisHeader" part="BilgiServisHeader" use="literal" />
+        <soap:header message="tns:GercekSahisMukellefMerkezBilgiSorguNoterlikKimlikHeader" part="NoterlikKimlikHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:GercekSahisMukellefMerkezBilgiSorguServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BaglantiTesti">
+      <soap:operation soapAction="http://gbs.nps.tnb.org.tr/BaglantiTesti" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:BaglantiTestiServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GIBBilgiServisiSoap12" type="tns:GIBBilgiServisiSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="TuzelSahisMukellefMerkezBilgiSorgu">
+      <soap12:operation soapAction="http://gbs.nps.tnb.org.tr/TuzelSahisMukellefMerkezBilgiSorgu" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:TuzelSahisMukellefMerkezBilgiSorguBilgiServisHeader" part="BilgiServisHeader" use="literal" />
+        <soap12:header message="tns:TuzelSahisMukellefMerkezBilgiSorguNoterlikKimlikHeader" part="NoterlikKimlikHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:TuzelSahisMukellefMerkezBilgiSorguServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GercekSahisMukellefMerkezBilgiSorgu">
+      <soap12:operation soapAction="http://gbs.nps.tnb.org.tr/GercekSahisMukellefMerkezBilgiSorgu" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GercekSahisMukellefMerkezBilgiSorguBilgiServisHeader" part="BilgiServisHeader" use="literal" />
+        <soap12:header message="tns:GercekSahisMukellefMerkezBilgiSorguNoterlikKimlikHeader" part="NoterlikKimlikHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:GercekSahisMukellefMerkezBilgiSorguServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BaglantiTesti">
+      <soap12:operation soapAction="http://gbs.nps.tnb.org.tr/BaglantiTesti" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:BaglantiTestiServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GIBBilgiServisi">
+    <wsdl:port name="GIBBilgiServisiSoap" binding="tns:GIBBilgiServisiSoap">
+      <soap:address location="http://smmmservis.tnb.org.tr/GIBBilgiServisi/GBS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="GIBBilgiServisiSoap12" binding="tns:GIBBilgiServisiSoap12">
+      <soap12:address location="http://smmmservis.tnb.org.tr/GIBBilgiServisi/GBS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

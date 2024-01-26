@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="DisKullaniciKimlikDogrula">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="disKullaniciKimlik" type="tns:DisKullaniciKimlik" />
+            <s:element minOccurs="1" maxOccurs="1" name="islemTipi" type="tns:NPSIslemTipi" />
+            <s:element minOccurs="1" maxOccurs="1" name="istemciTarihi" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DisKullaniciKimlik">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Kayit">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="ProgramAdi" type="tns:ProgramAdi" />
+              <s:element minOccurs="0" maxOccurs="1" name="KimlikNO" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="KimlikNOTipi" type="tns:KimlikNOTipi" />
+              <s:element minOccurs="0" maxOccurs="1" name="NoterlikKodu" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="NoterlikKullaniciAdi" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="DisKullaniciTipi" type="tns:DisKullaniciTipi" />
+              <s:element minOccurs="0" maxOccurs="1" name="Sifre" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Kayit" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="KayitDurumu" type="tns:DataRowState" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="DataRowState">
+        <s:list>
+          <s:simpleType>
+            <s:restriction base="s:string">
+              <s:enumeration value="Detached" />
+              <s:enumeration value="Unchanged" />
+              <s:enumeration value="Added" />
+              <s:enumeration value="Deleted" />
+              <s:enumeration value="Modified" />
+            </s:restriction>
+          </s:simpleType>
+        </s:list>
+      </s:simpleType>
+      <s:simpleType name="ProgramAdi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="Vezne" />
+          <s:enumeration value="YazimNet" />
+          <s:enumeration value="VezneNet" />
+          <s:enumeration value="TNBOnline" />
+          <s:enumeration value="NBS" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="KimlikNOTipi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="TCKN" />
+          <s:enumeration value="VKN" />
+          <s:enumeration value="MTKN" />
+          <s:enumeration value="TCSN" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DisKullaniciTipi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="NoterlikKullanicisi" />
+          <s:enumeration value="MaliMusavir" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="NPSIslemTipi">
+        <s:restriction base="s:string">
+          <s:enumeration value="Belirtilmemis" />
+          <s:enumeration value="AracSatisi" />
+          <s:enumeration value="DefterOnayi" />
+          <s:enumeration value="SendikaUyelik" />
+          <s:enumeration value="BelgeOnayi" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="DisKullaniciKimlikDogrulaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DisKullaniciKimlikDogrulaResult" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ServisHataHeader" type="tns:ServisHataHeader" />
+      <s:complexType name="ServisHataHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServisHata" type="tns:ServisHata" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:complexType name="ServisHata">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Mesaj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Kod" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DisKullaniciKimlikDogrula2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="disKullaniciKimlik" type="tns:DisKullaniciKimlik" />
+            <s:element minOccurs="1" maxOccurs="1" name="islemTipi" type="tns:NPSIslemTipi" />
+            <s:element minOccurs="0" maxOccurs="1" name="istemciZamani" type="tns:Zaman" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Zaman">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Yil" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Ay" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Gun" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Saat" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Dakika" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Saniye" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="DisKullaniciKimlikDogrula2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DisKullaniciKimlikDogrula2Result" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BaglantiTesti">
+        <s:complexType />
+      </s:element>
+      <s:element name="BaglantiTestiResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="BaglantiTestiResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="DisKullaniciKimlikDogrulaSoapIn">
+    <wsdl:part name="parameters" element="tns:DisKullaniciKimlikDogrula" />
+  </wsdl:message>
+  <wsdl:message name="DisKullaniciKimlikDogrulaSoapOut">
+    <wsdl:part name="parameters" element="tns:DisKullaniciKimlikDogrulaResponse" />
+  </wsdl:message>
+  <wsdl:message name="DisKullaniciKimlikDogrulaServisHataHeader">
+    <wsdl:part name="ServisHataHeader" element="tns:ServisHataHeader" />
+  </wsdl:message>
+  <wsdl:message name="DisKullaniciKimlikDogrula2SoapIn">
+    <wsdl:part name="parameters" element="tns:DisKullaniciKimlikDogrula2" />
+  </wsdl:message>
+  <wsdl:message name="DisKullaniciKimlikDogrula2SoapOut">
+    <wsdl:part name="parameters" element="tns:DisKullaniciKimlikDogrula2Response" />
+  </wsdl:message>
+  <wsdl:message name="DisKullaniciKimlikDogrula2ServisHataHeader">
+    <wsdl:part name="ServisHataHeader" element="tns:ServisHataHeader" />
+  </wsdl:message>
+  <wsdl:message name="BaglantiTestiSoapIn">
+    <wsdl:part name="parameters" element="tns:BaglantiTesti" />
+  </wsdl:message>
+  <wsdl:message name="BaglantiTestiSoapOut">
+    <wsdl:part name="parameters" element="tns:BaglantiTestiResponse" />
+  </wsdl:message>
+  <wsdl:message name="BaglantiTestiServisHataHeader">
+    <wsdl:part name="ServisHataHeader" element="tns:ServisHataHeader" />
+  </wsdl:message>
+  <wsdl:portType name="ServiceSoap">
+    <wsdl:operation name="DisKullaniciKimlikDogrula">
+      <wsdl:input message="tns:DisKullaniciKimlikDogrulaSoapIn" />
+      <wsdl:output message="tns:DisKullaniciKimlikDogrulaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DisKullaniciKimlikDogrula2">
+      <wsdl:input message="tns:DisKullaniciKimlikDogrula2SoapIn" />
+      <wsdl:output message="tns:DisKullaniciKimlikDogrula2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BaglantiTesti">
+      <wsdl:input message="tns:BaglantiTestiSoapIn" />
+      <wsdl:output message="tns:BaglantiTestiSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceSoap" type="tns:ServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DisKullaniciKimlikDogrula">
+      <soap:operation soapAction="http://tempuri.org/DisKullaniciKimlikDogrula" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:DisKullaniciKimlikDogrulaServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisKullaniciKimlikDogrula2">
+      <soap:operation soapAction="http://tempuri.org/DisKullaniciKimlikDogrula2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:DisKullaniciKimlikDogrula2ServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BaglantiTesti">
+      <soap:operation soapAction="http://tempuri.org/BaglantiTesti" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+        <soap:header message="tns:BaglantiTestiServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ServiceSoap12" type="tns:ServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DisKullaniciKimlikDogrula">
+      <soap12:operation soapAction="http://tempuri.org/DisKullaniciKimlikDogrula" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:DisKullaniciKimlikDogrulaServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DisKullaniciKimlikDogrula2">
+      <soap12:operation soapAction="http://tempuri.org/DisKullaniciKimlikDogrula2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:DisKullaniciKimlikDogrula2ServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BaglantiTesti">
+      <soap12:operation soapAction="http://tempuri.org/BaglantiTesti" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:BaglantiTestiServisHataHeader" part="ServisHataHeader" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service">
+    <wsdl:port name="ServiceSoap" binding="tns:ServiceSoap">
+      <soap:address location="http://smmmservis.tnb.org.tr/NPSKimlikDogrulamaServisi/Service.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ServiceSoap12" binding="tns:ServiceSoap12">
+      <soap12:address location="http://smmmservis.tnb.org.tr/NPSKimlikDogrulamaServisi/Service.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

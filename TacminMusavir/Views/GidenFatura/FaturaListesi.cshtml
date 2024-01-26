@@ -1,0 +1,534 @@
+﻿@model Tacmin.Model.Ortak.TarihModel
+
+<div class="row p-2">
+    <div class="col-md-12">
+        <div class="d-flex flex-row k-card justify-content-end">
+
+            <div class="p-2" style="width : 20%;">
+                @(Html.Kendo().MultiSelect()
+                  .Name("mlt_firma")
+                  .DataTextField("Unvan")
+                  .DataValueField("Id")
+                  .TagMode(TagMode.Single)
+                  .Filter(FilterType.Contains)
+                  .IgnoreCase(true)
+                  .AutoBind(true)
+                  .ClearButton(false)
+                  
+                  .Events(e=>e.Select("mlt_firma_select_event").Deselect("mlt_firma_deSelect_event"))
+                )
+            </div>
+
+            <div class="p-2" style="width : 10%">
+                @(
+                 Html.Kendo().DatePickerFor(x=>x.IlkTarih).Name("dt_ilkTarih")
+                 .Format("dd/MM/yyyy")
+                 .Value(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1).AddMonths(-1))
+                 .HtmlAttributes(new { style = "width : 100%" })
+                  )
+            </div>
+
+            <div class="p-2" style="width : 10%">
+                @(
+                 Html.Kendo().DatePickerFor(x=>x.SonTarih).Name("dt_sonTarih")
+                 .Format("dd/MM/yyyy")
+                 .Value(DateTime.Now.AddMonths(-1))
+                 .HtmlAttributes(new { style = "width : 100%" })
+                  )
+            </div>
+
+            <div class="p-2" style="width : 10%;">
+                @(
+                  Html.Kendo().Button().Name("btn_sorgula")
+                  .Content("Sorgula")
+                  .HtmlAttributes(new { @class = "kendoprimary", style = "width : 100%" })
+                  .Events(e=>e.Click("btn_sorgula_click_event"))
+                )
+            </div>
+            <div class="p-2" style="width : 10%;">
+                @(
+                Html.Kendo().Button().Name("btn_listele").Content("Listele")
+
+                .HtmlAttributes(new {style = "width : 100%", @class="kendowarning" })
+                .Events(e=>e.Click("btn_listele_click_event"))
+                )
+            </div>
+            <div class="p-2" style="width: 10%;">
+                @(
+                Html.Kendo().Button().Name("btn_pdf_indir").Content("Fatura İndir (Pdf)")
+
+                .HtmlAttributes(new {style = "width : 100%", @class="kendodanger" })
+                .Events(e=>e.Click("pdf_zip_indir_event"))
+                )
+            </div>
+            <div class="p-2" style="width: 12%;">
+                @(
+                Html.Kendo().Button().Name("btn_html_indir").Content("Fatura İndir (Html)")
+
+                .HtmlAttributes(new {style = "width : 100%", @class="kendosuccess" })
+                .Events(e=>e.Click("html_zip_indir_event"))
+                )
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @(
+         Html.Kendo().TabStrip().Name("tb_giden")
+         .Animation(animation =>
+            animation.Open(effect =>
+             effect.Fade(FadeDirection.In)
+            )
+         )
+         .Items(item =>
+         {
+             item.Add().Text("Faturalar")
+            .Selected(true)
+            .Content(@Html.Partial("FaturaGridOzet").ToString());
+
+             item.Add().Text("Faturalar (Detay)")
+             .Content(@Html.Partial("FaturaGridListe").ToString());
+
+             item.Add().Text("Fatura Sorgu Detayları")
+            .Content(@Html.Partial("HataGridListe").ToString());
+         })
+        )
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="../../assets/islemler/gidenFatura/token.js"></script>
+<script src="../../assets/islemler/earsiv.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+    function mesaj(mesaj, icon) {
+
+        Swal.fire({
+            icon: icon,
+            title: 'İşlem Sonucu',
+            text: mesaj,
+            confirmButtonText: "Tamam"
+        })
+    }
+
+    let firma_listesi = []
+
+    let ilkTarih = null
+    let sonTarih = null
+
+    let secilen_faturalar = []
+
+    $(document).ready(function () {
+
+        let liste = window.localStorage.getItem("local_listeler")
+
+        if (liste != null) {
+
+            liste = JSON.parse(liste)
+
+           
+
+            const mlt_firma = $("#mlt_firma").data("kendoMultiSelect")
+
+            mlt_firma.setDataSource(liste.FirmaListesi)
+        }
+    })
+
+    function ch_ay_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        console.log(dataItem)
+        
+
+        ilkTarih = new Date(parseInt(dataItem.IlkTarih.substr(6)))
+        sonTarih = new Date(parseInt(dataItem.SonTarih.substr(6)))
+
+        $("#dt_ilkTarih").data("kendoDatePicker").value(ilkTarih)
+        $("#dt_sonTarih").data("kendoDatePicker").value(sonTarih)
+
+    }
+
+
+    function fatura_select_change(e) {
+
+        secilen_faturalar = []
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            const model = {
+
+                Id: item.Id,
+                firmaId: item.firmaId,
+                Unvan: item.Unvan,
+                aliciUnvan: item.aliciUnvan,
+                aliciVergiNo: item.aliciVergiNo,
+                belgeNo: item.belgeNo,
+                belgeTuru: item.belgeTuru,
+                ettn: item.ettn,
+                htmlText: "",
+                malHizmetToplam: item.malHizmetToplam,
+                odenecek: item.odenecek,
+                onayDurumu: item.onayDurumu,
+                paraBirimi: item.paraBirimi,
+                senaryo: item.senaryo,
+                tarih: tarih_func(item.tarih),
+                tip: item.tip,
+                vergidahilToplam: item.vergidahilToplam,
+                hesaplananKdv_0: item.hesaplananKdv_0,
+                hesaplananKdv_1: item.hesaplananKdv_1,
+                hesaplananKdv_8: item.hesaplananKdv_8,
+                hesaplananKdv_10: item.hesaplananKdv_10,
+                hesaplananKdv_18: item.hesaplananKdv_18,
+                hesaplananKdv_20: item.hesaplananKdv_20,
+                kdvMatrah_0: item.kdvMatrah_0,
+                kdvMatrah_1: item.kdvMatrah_1,
+                kdvMatrah_8: item.kdvMatrah_8,
+                kdvMatrah_10: item.kdvMatrah_10,
+                kdvMatrah_18: item.kdvMatrah_18,
+                kdvMatrah_20: item.kdvMatrah_20,
+                iskontoToplam: item.iskontoToplam,
+                tevfikatKdvTutar: item.tevfikatKdvTutar
+            }
+
+            secilen_faturalar.push(model)
+
+
+        }
+
+        console.log("secilen faturalar : ", secilen_faturalar)
+
+    }
+
+
+    function tarih_func(tarih_value) {
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return yil + "-" + ay + "-" + gun;
+        }
+    }
+
+    function mlt_firma_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        const model = {
+
+            Id: dataItem.Id,
+            Unvan: dataItem.Unvan,
+            Vergi_No: dataItem.Vergi_No,
+            Tc_No: dataItem.Tc_No,
+            Firma_Durum: "",
+            GibSifre: dataItem.GibSifre,
+            GibKodu: dataItem.GibKodu,
+            GibParola: dataItem.GibParola,
+            isGib: true
+        }
+
+        if (model.GibSifre == null || model.GibKodu == null || model.GibParola == null) {
+
+            model.isGib = false
+        }
+
+
+        firma_listesi.push(model)
+    }
+
+    function mlt_firma_deSelect_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        for (let i = 0; i < firma_listesi.length; i++) {
+
+            if (dataItem.Id == firma_listesi[i].Id) {
+
+                firma_listesi.splice(i, 1)
+            }
+        }
+    }
+
+    async function faturaSorgula() {
+
+        const dt_ilkTarih = $("#dt_ilkTarih").data("kendoDatePicker")
+        const dt_sonTarih = $("#dt_sonTarih").data("kendoDatePicker")
+
+        ilkTarih = dt_ilkTarih.value()
+        sonTarih = dt_sonTarih.value()
+
+        if (ilkTarih == null || sonTarih == null) {
+
+            mesaj("Lütfen Tarih Seçimini Yapınız.", "error")
+            return
+        }
+
+        if (firma_listesi.length <= 0) {
+
+            mesaj("Lütfen Firma Seçimini Yapınız.", "error")
+
+            return
+        }
+
+        const fatura_listesi = []
+        const hata_grid_listesi = []
+
+        const bas_tarih = tarih_func(ilkTarih).split("-")
+        const son_tarih = tarih_func(sonTarih).split("-")
+
+        
+
+        for (let i = 0; i < firma_listesi.length; i++) {
+
+            const item = firma_listesi[i]
+
+            const sorguModel = {
+
+                gibKodu: item.GibKodu,
+                gibSifre: item.GibSifre,
+                bastGun: bas_tarih[2],
+                bastAy: bas_tarih[1],
+                bastYil: bas_tarih[0],
+                btGun: son_tarih[2],
+                btAy: son_tarih[1],
+                btYil: son_tarih[0],
+                cari_id: item.Id,
+                unvan : item.Unvan
+            }
+
+            
+
+            if (sorguModel.gibKodu == null || sorguModel.gibSifre == null) {
+
+                const hata_model = {
+
+                    Id: item.Id,
+                    Unvan: item.Unvan,
+                    Mesaj: "Gib Bilgileri Eksik Tamamlayınız."
+                }
+
+                hata_grid_listesi.push(hata_model)
+            }
+
+            if (sorguModel.gibKodu != null && sorguModel.gibSifre != null) {
+                console.log("işlem bloğu")
+                const result = await faturaIslem(sorguModel)
+
+                console.log("result : ", result)
+
+                if (result.isHata == true) {
+
+                    const hata_model = {
+
+                        Id: item.Id,
+                        Unvan: item.Unvan,
+                        Mesaj: result.mesaj
+                    }
+
+                    hata_grid_listesi.push(hata_model)
+                }
+
+                if (result.isHata == false) {
+
+                    for (let k = 0; k < result.faturaListesi.length; k++) {
+
+                        const fatura = result.faturaListesi[k]
+
+                        fatura_listesi.push(fatura)
+                    }
+                }
+            }
+
+        }
+
+        const sonuc_model = {
+
+            fatura_listesi: fatura_listesi,
+            hata_grid_listesi: hata_grid_listesi
+        }
+
+        return sonuc_model
+    }
+
+    async function btn_sorgula_click_event() {
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const result = await faturaSorgula()
+
+      const result_data = await $.ajax({
+
+           url: '@Url.RouteUrl(new { controller = "gidenfatura", action = "FaturaKayitIslem" })',
+           method: "POST",
+           dataType: "Json",
+           data: { clientFaturaListesi: result.fatura_listesi }
+      })
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+        var fatura_grid = $("#faturadb").data("kendoGrid");
+        var hata_grid = $("#hatadb").data("kendoGrid");
+        var ozet_grid = $("#ozetdb").data("kendoGrid");
+
+        const liste = []
+
+        for (let i = 0; i < result_data.length; i++) {
+
+            const item = result_data[i]
+
+            item.tarih = new Date(parseInt(item.tarih.substr(6)))
+
+            liste.push(item)
+        }
+
+        ilkTarih = null
+        sonTarih = null
+        ozet_grid.setDataSource(liste)
+        fatura_grid.setDataSource(liste)
+        hata_grid.setDataSource(result.hata_grid_listesi)
+    }
+
+    function btn_listele_click_event() {
+
+        const dt_ilkTarih = $("#dt_ilkTarih").data("kendoDatePicker")
+        const dt_sonTarih = $("#dt_sonTarih").data("kendoDatePicker")
+
+        ilkTarih = dt_ilkTarih.value()
+        sonTarih = dt_sonTarih.value()
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        $.ajax({
+
+            url: '@Url.RouteUrl(new { controller = "gidenfatura", action = "GetFaturaListesi" })',
+            method: "POST",
+            dataType: "Json",
+            data: { firmaListesi: firma_listesi, ilkTarih: ilkTarih, sonTarih: sonTarih },
+            success: function (data) {
+
+                const grid_liste = []
+
+                var fatura_grid = $("#faturadb").data("kendoGrid");
+                var hata_grid = $("#hatadb").data("kendoGrid");
+                var ozet_grid = $("#ozetdb").data("kendoGrid");
+
+                kendo.ui.progress($('#content_div_id'), false);
+
+                for (let i = 0; i < data.length; i++) {
+
+                    const item = data[i]
+                    item.tarih = new Date(parseInt(item.tarih.substr(6)))
+
+                    grid_liste.push(item)
+                }
+
+                fatura_grid.setDataSource(grid_liste)
+                ozet_grid.setDataSource(grid_liste)
+
+                const liste = []
+                hata_grid.setDataSource(liste)
+
+            },
+            error: function () {
+
+                kendo.ui.progress($('#content_div_id'), false);
+
+                console.log("error")
+            }
+        })
+    }
+
+    function pdf_zip_indir_event() {
+
+        zip_indir_event("pdf")
+    }
+
+    function html_zip_indir_event() {
+
+        zip_indir_event("html")
+    }
+
+    function zip_indir_event(tur) {
+
+       
+
+        if (secilen_faturalar.length <= 0) {
+
+            mesaj("Fatura Seçiniz.", "error")
+            return
+        }
+
+        
+
+        let link_method = "/gidenfatura/getpdffatura?id="
+
+        if (tur == "html") {
+           
+            link_method = "/gidenfatura/gethtmlfatura?id="
+        }
+
+        if (secilen_faturalar.length == 1) {
+
+            const link = window.location.hostname;
+
+            if (link == "localhost") {
+                url = "http://localhost:62457"
+            }
+            else {
+                url = "https://test.emusavirim.com"
+            }
+            url = url + link_method + secilen_faturalar[0].Id
+
+            window.open(url, "_blank")
+        }
+
+        if (secilen_faturalar.length > 1) {
+
+            kendo.ui.progress($('.content'), true);
+
+             const req =  $.ajax({
+
+                url: '@Url.RouteUrl(new { controller = "gidenfatura", action = "FaturaZipDownload" })',
+                 method: "POST",
+                 data: { faturaListesi: secilen_faturalar, tur : tur },
+                xhrFields: { responseType: 'blob'}
+           })
+
+            req.done(function (res) {
+
+                kendo.ui.progress($('.content'), false);
+                const blob = new Blob([res], { type: 'application/zip' })
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                document.body.appendChild(a);
+                a.click();
+            })
+        }
+
+
+    }
+
+</script>

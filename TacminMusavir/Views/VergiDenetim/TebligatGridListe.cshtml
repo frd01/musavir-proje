@@ -1,0 +1,202 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Gib.GibFaturaModel>()
+    .Name("listedbds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+@(Html.Ty().TyGrid<Tacmin.Model.Tebligat.TebligatDataListModel>().Name("listedb")
+            .Columns(c => {
+                c.Select().Width(50);
+                c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.Gonderim_Whats_App).ClientTemplate(
+
+                    "<div class='row'>"
+                    + "<div class='col-md-12'> "
+                    + "<div class='d-flex flex-row'>"
+                    + "<div class='p-1'>"
+                    + "<a title='#=Whats_App_Gonderim_Baslik#' class='#=Whats_App_Css#'>"
+                    + "<i class='fa-brands fa-whatsapp fa-2xl' style='color : green;'></i>"
+                    + "</a>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    + "</div>"
+                    );
+                c.Bound(m => m.BirimAdi).Filterable(ftb => ftb.Multi(true).Search(true)).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.BelgeTuru).Filterable(ftb => ftb.Multi(true).Search(true)).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.BelgeNo).Filterable(ftb => ftb.Multi(true).Search(true)).HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.GondermeTarihi).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Bound(m => m.TebligTarihi).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").HtmlAttributes(new { @class = "#=durumCss#" });
+                c.Template(t => { }).Title(String.Empty)
+                 .ClientTemplate(@"
+                  <div class='ml-2'>
+                  <a onclick='pdfDokumanEvent(#=Id#)'>
+                    <i class='tahakIcon' ></i>
+                  </a>
+                 
+                    </div>
+                   ").Width(70);
+                c.Template(t => { }).Title(String.Empty)
+
+               .ClientTemplate(@"<button id='btn_ek'  class='#=cssClass# btn-sm' onclick='btn_ek_click_event(#=Id#,#=EkSayisi#)' >
+
+                <span class='k-badge btn-sm'>(#=EkSayisi#) Ek</span>
+                </button>").Width(80);
+                c.Bound(m => m.Durum).Filterable(ftb => ftb.Multi(true).Search(true)).Width(100).HtmlAttributes(new { @class = "#=durumCss#" });
+
+            })
+            .Height(500)
+            .Selectable(select => select.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+            .Events(e => e.Change("tebligat_select_change"))
+
+            )
+
+<script>
+
+    let select_data = []
+
+    let select_detay_data = []
+
+    function tebligat_select_change(e) {
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+
+        select_detay_data = []
+
+
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            const model = {
+
+                BelgeNo: item.BelgeNo,
+                BelgeTuru: item.BelgeTuru,
+                BirimAdi: item.BirimAdi,
+                Dosyalar: item.Dosyalar,
+                Durum: item.Durum,
+                EkSayisi: item.EkSayisi,
+                FirmaId: item.FirmaId,
+                GondermeTarihi: tarih_func_sql(item.GondermeTarihi),
+                Id: item.Id,
+                TebligTarihi: tarih_func_sql(item.TebligTarihi),
+                Unvan: item.Unvan,
+                VergiDairesi: item.VergiDairesi,
+                cssClass: item.cssClass,
+                durumCss: item.durumCss
+            }
+
+            select_detay_data.push(model)
+
+            if (select_data.length > 0) {
+
+                const kontrol = select_data.find(x => x == item.Id)
+
+                if (kontrol == null) {
+
+                    select_data.push(item.Id)
+
+                }
+            }
+
+            if (select_data.length <= 0) {
+
+                select_data.push(item.Id)
+            }
+        }
+
+    }
+
+    function pdfDokumanEvent(id) {
+
+        const host = window.location.host
+
+        let link = ""
+
+        if (host.indexOf("localhost") != -1) {
+
+            link = "http://"
+        }
+        else {
+
+            link = "https://"
+        }
+
+        var grid = $("#listedb").data("kendoGrid");
+        const grid_liste = grid.dataSource._pristineData;
+
+
+
+        for (let i = 0; i < grid_liste.length; i++) {
+
+            if (grid_liste[i].Id == id) {
+
+                grid_liste[i].durumCss = "okundu_css"
+                grid_liste[i].Durum = "Okundu"
+            }
+        }
+
+        grid.setDataSource(grid_liste)
+
+        link = link + host + "/vergidenetim/PdfDokumanGoster?tebligatId=" + id
+
+        window.open(link, "_blank")
+    }
+
+    function btn_ek_click_event(tebligatId, ekSayisi) {
+
+        if (ekSayisi <=0) return
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const req =  $.ajax({
+
+                url: '@Url.RouteUrl(new { controller = "vergidenetim", action = "EkZipIndir" })',
+            method: "POST",
+            data: { tebligatId: tebligatId, tur: "ek" },
+                xhrFields: { responseType: 'blob'}
+           })
+
+            req.done(function (res) {
+
+                kendo.ui.progress($('#content_div_id'), false);
+                const blob = new Blob([res], { type: 'application/zip' })
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                document.body.appendChild(a);
+                a.click();
+            })
+    }
+
+</script>
+
+
+<style>
+
+    .okunmadi_css {
+        font-size: 13px;
+        font-weight: bold;
+        color: red;
+    }
+
+    .okundu_css {
+        font-size: 13px;
+        font-weight: bold;
+        color: blue;
+    }
+
+    .whats_app_pasif {
+        display: none;
+    }
+
+    .whats_app_aktif {
+        display: block;
+    }
+</style>

@@ -1,0 +1,326 @@
+﻿<div class="row p-2">
+    <div class="col-md-12">
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <fieldset>
+                    <legend>1.Değer</legend>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color : red;">
+                            @Html.Label("Banka")
+                        </div>
+                        <div class="p-2" style="width : 80%;">
+                            @(
+                            Html.Kendo().ComboBox()
+                            .Name("bn_rp_bak_cm_bankalar_1")
+                            .DataTextField("Tanim")
+                            .DataValueField("Id")
+                            .Suggest(true)
+                            .HtmlAttributes(new { style = "width : 100%;",@class="form-control form-control-sm" })
+                            .Events(e=>e.Select("bn_rp_bak_cm_bankalar_1_select_event"))
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color : red;">
+                            @Html.Label("Tarih")
+                        </div>
+                        <div class="p-2" style="width: 50%;">
+                            @(
+                                Html.Kendo().DatePicker()
+                                .Name("bn_rp_bak_dt_tarih_1")
+                                .Value(new DateTime(DateTime.Now.Year,1,1))
+                                .Format("dd.MM.yyyy")
+                                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                                )
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Borç Bakiyesi Olanlar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("bn_rp_bak_borc_bakiyesi")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Alacak Bakiyesi Olanlar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("bn_rp_bak_ch_alacak_bakiyesi")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Bakiyesiz Olanlar")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("bn_rp_bak_ch_bakiyesiz")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="col-md-6">
+
+                <fieldset>
+                    <legend>2.Değer</legend>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color:red;">
+                            @Html.Label("Banka")
+                        </div>
+                        <div class="p-2" style="width : 80%;">
+                            @(
+                            Html.Kendo().ComboBox()
+                            .Name("bn_rp_bak_cm_bankalar_2")
+                            .DataTextField("Tanim")
+                            .DataValueField("Id")
+                            .Suggest(true)
+                            .HtmlAttributes(new { style = "width : 100%;",@class="form-control form-control-sm" })
+                            .Events(e=>e.Select("bn_rp_bak_bankalar_2_select_event"))
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2" style="width : 20%;color:red;">
+                            @Html.Label("Tarih")
+                        </div>
+                        <div class="p-2" style="width: 50%;">
+                            @(
+                                Html.Kendo().DatePicker()
+                                .Name("bn_rp_bak_dt_tarih_2")
+                                .Value(DateTime.Now)
+                                .Format("dd.MM.yyyy")
+                                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Her Kart Yeni Sayfaya")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("bn_rp_bak_ch_yeni_sayfa")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Nakli Yekün")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("bn_rp_bak_ch_nakli_yekun")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-2 text-right" style="width : 50%;">
+                            @Html.Label("Aktif Olmayan Cariler")
+                        </div>
+                        <div class="p-2">
+                            @(
+                                Html.Kendo().CheckBox()
+                                .Name("bn_rp_bak_ch_cari_aktif")
+                                .Checked(true)
+                                .Label("")
+                                )
+                        </div>
+                    </div>
+
+                </fieldset>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <div class="d-flex flex-row justify-content-end">
+                <div class="p-2">
+                    <button class="btn btn-success" id="btn_banka_bakiye_gonder" onclick="banka_bakiye_rapor_al_click_event()">
+                        <i class="fa-solid fa-desktop fa-lg"></i>
+                        Listele
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-danger" id="btn_banka_bakiye_kapat" onclick="banka_bakiye_rapor_kapat_click_event()">
+                        <i class="fa-solid fa-rectangle-xmark fa-lg"></i>
+                        Kapat
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<script>
+
+    const banka_bak_model = {
+
+        IlkCariId: null,
+        SonCariId: null,
+        IlkTarih: null,
+        SonTarih: null,
+        IsBorcBakiyesi: true,
+        IsAlacakBakiyesi: true,
+        IsBakiyesiz: true,
+        IsYeniSayfa: true,
+        IsNakliYekun: true,
+        IsAktif: true
+    }
+
+
+    function banka_bakiye_rapor_liste_al() {
+
+        let local_listeler = window.localStorage.getItem("local_listeler")
+
+        if (local_listeler != null) {
+
+            local_listeler = JSON.parse(local_listeler)
+
+            try {
+
+                const bn_rp_bak_cm_bankalar_1 = $("#bn_rp_bak_cm_bankalar_1").data("kendoComboBox")
+                bn_rp_bak_cm_bankalar_1.setDataSource(local_listeler.BankaListesi)
+
+            } catch {
+
+                console.log("")
+            }
+
+            try {
+
+                const bn_rp_bak_cm_bankalar_2 = $("#bn_rp_bak_cm_bankalar_2").data("kendoComboBox")
+                bn_rp_bak_cm_bankalar_2.setDataSource(local_listeler.BankaListesi)
+
+            } catch {
+
+                console.log("")
+            }
+        }
+    }
+    
+    function banka_bakiye_rapor_kapat_click_event() {
+
+        const wn_banka_rapor_bakiye = $("#wn_banka_rapor_bakiye").data("kendoWindow")
+
+        wn_banka_rapor_bakiye.close()
+    }
+
+    function bakiye_rapor_form_veri_al() {
+
+        const bn_rp_bak_dt_tarih_1 = $("#bn_rp_bak_dt_tarih_1").data("kendoDatePicker")
+        const bn_rp_bak_dt_tarih_2 = $("#bn_rp_bak_dt_tarih_2").data("kendoDatePicker")
+
+        const bn_rp_bak_borc_bakiyesi = $("#bn_rp_bak_borc_bakiyesi").prop("checked")
+        const bn_rp_bak_ch_alacak_bakiyesi = $("#bn_rp_bak_ch_alacak_bakiyesi").prop("checked")
+        const bn_rp_bak_ch_bakiyesiz = $("#bn_rp_bak_ch_bakiyesiz").prop("checked")
+        const bn_rp_bak_ch_yeni_sayfa = $("#bn_rp_bak_ch_yeni_sayfa").prop("checked")
+        const bn_rp_bak_ch_nakli_yekun = $("#bn_rp_bak_ch_nakli_yekun").prop("checked")
+        const bn_rp_bak_ch_cari_aktif = $("#bn_rp_bak_ch_cari_aktif").prop("checked")
+
+        if (bn_rp_bak_dt_tarih_1.value() != null) banka_bak_model.IlkTarih = tarih_func_sql(bn_rp_bak_dt_tarih_1.value())
+        if (bn_rp_bak_dt_tarih_2.value() != null) banka_bak_model.SonTarih = tarih_func_sql(bn_rp_bak_dt_tarih_2.value())
+
+        banka_bak_model.IsBorcBakiyesi = bn_rp_bak_borc_bakiyesi
+        banka_bak_model.IsAlacakBakiyesi = bn_rp_bak_ch_alacak_bakiyesi
+        banka_bak_model.IsBakiyesiz = bn_rp_bak_ch_bakiyesiz
+        banka_bak_model.IsYeniSayfa = bn_rp_bak_ch_yeni_sayfa
+        banka_bak_model.IsNakliYekun = bn_rp_bak_ch_nakli_yekun
+        banka_bak_model.IsAktif = bn_rp_bak_ch_cari_aktif
+    }
+
+    function bakiye_rapor_form_temizle() {
+
+        const bn_rp_bak_dt_tarih_1 = $("#bn_rp_bak_dt_tarih_1").data("kendoDatePicker")
+        const bn_rp_bak_dt_tarih_2 = $("#bn_rp_bak_dt_tarih_2").data("kendoDatePicker")
+
+        //bn_rp_bak_dt_tarih_1.value(new Date())
+        //bn_rp_bak_dt_tarih_2.value(new Date())
+
+        $("#bn_rp_bak_borc_bakiyesi").prop("checked",true)
+        $("#bn_rp_bak_ch_alacak_bakiyesi").prop("checked",true)
+        $("#bn_rp_bak_ch_bakiyesiz").prop("checked",true)
+        $("#bn_rp_bak_ch_yeni_sayfa").prop("checked",true)
+        $("#bn_rp_bak_ch_nakli_yekun").prop("checked",true)
+        $("#bn_rp_bak_ch_cari_aktif").prop("checked",true)
+    }
+
+    async function banka_bakiye_rapor_al_click_event() {
+
+        bakiye_rapor_form_veri_al()
+
+        const result = await $.ajax({
+
+            url: "@Url.Action("BankaBakiyeRaporu", "banka")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientData: banka_bak_model }
+        })
+
+       
+
+        if (result!= null) {
+
+            window.localStorage.setItem("banka_bakiye_raporu", JSON.stringify(result))
+
+            const rapor_url = "@Url.Action("BankaBakiyeRaporu", "raporlar")"
+
+            window.open(rapor_url,"_self")
+        }
+    }
+
+
+
+    function bn_rp_bak_cm_bankalar_1_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        banka_bak_model.IlkCariId = dataItem.Id
+        banka_bak_model.SonCariId = dataItem.Id
+        $("#bn_rp_bak_cm_bankalar_2").data("kendoComboBox").value(dataItem.Id)
+    }
+
+    function bn_rp_bak_bankalar_2_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        banka_bak_model.SonCariId = dataItem.Id
+    }
+
+</script>
+<style>
+    legend {
+        color: red;
+        font-weight: bold;
+    }
+</style>

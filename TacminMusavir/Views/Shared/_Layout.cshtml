@@ -1,0 +1,672 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - Tacmin Müşavir</title>
+    @Html.Partial("_DefaultHeader")
+    @RenderSection("styles", required: false)
+
+    <link rel="stylesheet" href="~/assets/menu/mbcsmbmcp.css" type="text/css" />
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed text-sm">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="mbmcpebul_wrapper">
+                    <ul id="mbmcpebul_table" class="mbmcpebul_menulist css_menu">
+                        <li class="first_button">
+                            <div class="buttonbg gradient_button gradient43" style="width: 50px !important;">
+                                <a href="@Url.Action("index","main")" class="button_1">
+                                    <i class="fa-solid fa-house"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 108px;"><div class="arrow"><a>Mükellef</a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("MukellefListesi","mukellef")" title="Mükellef Listesi">Mükellef Kartı</a></li>
+                                <li><a href="@Url.Action("BankaHacizSorgulama","mukellef")" title="">Banka E-Haciz</a></li>
+                                <li><a href="@Url.Action("AracHacizSorgulama","mukellef")" title="">Araç E-Haciz</a></li>
+                                
+                                <li><a title="">Vergi Levhası</a></li>
+                                <li><a title="">Denetim Yoklama</a></li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 93px;"><div class="arrow"><a>Maliye<br /></a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("BeyannameListesi","beyanname")" title="Beyanname Listesi">E-Beyannameler</a></li>
+                                <li class="separator"><div></div></li>
+                                <li><a title="">Beyanname Takip</a></li>
+                                <li><a title="">Pos Sorgulama</a></li>
+                                <li><a title="">Tahsilatlar</a></li>
+                                <li>
+                                    <a class="with_arrow" title="">Araçlar</a>
+                                    <ul>
+                                        <li><a href="@Url.Action("MevcutAracListesi","beyanname")" title="">Mevcut Araçlar</a></li>
+                                        <li><a href="@Url.Action("EskiAracListesi","beyanname")" title="">Eski Araçlar</a></li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 75px;"><div class="arrow"><a>Sgk<br /><br /></a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("BildirgeListesi","bildirge")" title="Bildirge Listesi">E-Bildirgeler</a></li>
+                                <li><a title="">Bildirge Takip</a></li>
+                                <li><a href="@Url.Action("IseGirisCikislar","bildirge")" title="">İşe Giriş Çıkışlar</a></li>
+
+                                <li>
+                                    <a class="with_arrow" title="">E-Vizite</a>
+                                    <ul>
+                                        <li><a href="@Url.Action("ViziteOnaysizListe","bildirge")" title="">Onaysızlar</a></li>
+                                        <li><a href="@Url.Action("ViziteOnayliListe","bildirge")" title="">Onaylılar</a></li>
+                                    </ul>
+                                </li>
+                                <li><a title="">E-Borcu Yoktur</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 140px;"><div class="arrow"><a>E-Tebligatlar<br /><br /></a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("TebligatListesi","gelirtebligat")" title="">Gelir İdaresi</a></li>
+                                <li><a href="@Url.Action("TebligatListesi","vergidenetim")" title="">Vergi Denetim</a></li>
+                                <li><a href="@Url.Action("TebligatListesi","ticarettebligat")" title="">Ticaret Bakanlığı</a></li>
+                                <li><a href="@Url.Action("TebligatListesi","IcisleriTebligat")" title="">İç İşleri Bakanlığı</a></li>
+                                <li><a title="">Sgk</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 100px;"><div class="arrow"><a>E-Arşiv<br /></a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("GelenFaturaListesi","gelenfatura")" title="">Gelen E-Arşiv Faturalar</a></li>
+                                <li><a href="@Url.Action("FaturaListesi","gidenfatura")" title="">Giden E-Arşiv Faturalar</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 150px;"><div class="arrow"><a>Gön. Raporları</a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("GonderimRaporu","rapor")" title="">Whatapp Raporları</a></li>
+                                <li><a href="@Url.Action("MailGonderimRaporu","rapor")" title="">Mail Raproları</a></li>
+                                <li><a href="@Url.Action("SmsGonderimRaporu","rapor")" title="">Sms Raporları</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 119px;"><div class="arrow"><a>Cari/Kasa</a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("CariListesi","cari")" title="">Cari Kartı</a></li>
+                                <li><a title="">Personel Kartı</a></li>
+                                <li>
+                                    <a class="with_arrow" title="">Kasa</a>
+                                    <ul>
+                                        <li><a href="@Url.Action("KasaKartListesi","kasa")" title="">Kasa Kartı</a></li>
+                                        <li>
+                                            <a class="with_arrow" title="">Cari İşlemler</a>
+                                            <ul>
+                                                <li><a onclick="kasa_tahsilat_click_event()" title="">Nakit Tahsilat</a></li>
+                                                <li><a onclick="kasa_odeme_click_event()" title="">Nakit Ödeme</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a class="with_arrow" title="">Banka İşlemleri</a>
+                                            <ul>
+                                                <li><a onclick="para_yatirma_click_event()" title="">Bankaya Yatan</a></li>
+                                                <li><a onclick="para_cekme_click_event()" title="">Bankadan Çekilen</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a class="with_arrow" title="">Raporlar</a>
+                                            <ul>
+                                                <li><a onclick="kasa_bakiye_raporu_ac()" title="">Kasa Bakiye Durum Raporu</a></li>
+                                                <li><a onclick="kasa_ekstra_raporu_ac()" title="">Kasa Defteri</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="with_arrow" title="">Banka</a>
+                                    <ul>
+                                        <li><a href="@Url.Action("BankaKartListesi","banka")" title="">Banka Kartları</a></li>
+                                        <li><a onclick="para_yatirma_click_event()" title="">Bankaya Yatırılan</a></li>
+                                        <li><a onclick="para_cekme_click_event()" title="">Bankadan Çekilen</a></li>
+                                        <li><a class="k-state-disabled" title="">Bankalar Arası Eft</a></li>
+                                        <li><a onclick="havale_giris_click_event()" title="">Gelen Havale</a></li>
+                                        <li><a onclick="havale_gonder_click_event()" title="">Giden Havale</a></li>
+                                        <li><a class="k-state-disabled" title="">Maaş Ödemesi</a></li>
+                                        <li>
+                                            <a class="with_arrow" title="">Raporlar</a>
+                                            <ul>
+                                                <li><a onclick="banka_bakiye_raporu_ac()" title="">Banka Bakiye Durum Raporu</a></li>
+                                                <li><a onclick="banka_ekstra_raporu_ac()" title="">Banka Ekstra Raporu</a></li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><a title="">Gelirler</a></li>
+                                <li><a title="">Giderler</a></li>
+                                <li><a title="">Kasa</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 136px;"><div class="arrow"><a>Hızlı Girişler</a></div></div>
+                            <ul>
+                                <li><a onclick="digital_vd_sayfa_click_event()" title="">Digital Vergi Dairesi</a></li>
+                                <li><a onclick="earsiv_giris_click_event()" title="">E-Arşiv</a></li>
+                                <li><a onclick="interaktif_giris_click_event()" title="">İnteraktif V.D.</a></li>
+                                <li><a onclick="internet_vd_sayfa_click_event()" title="">İnternet V.D.</a></li>
+                                <li><a title="">E-Beyanname</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="buttonbg gradient_button gradient43" style="width: 100px;"><div class="arrow"><a>Müşavir</a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("GunlukIslemRaporu","rapor")" title="">Evrak İndirme Raporları</a></li>
+                                <li><a href="@Url.Action("FirmaGibKontrolListesi","kontrolislem")" title="">Gib Şifreleri Kontrol</a></li>
+                                <li><a href="@Url.Action("Sozlesmeler","musavir")" title="">Sözleşmeler</a></li>
+                                <li><a href="@Url.Action("MukellefBorcSorgula","musavir")" title="">Mükellef Borç Sorgula</a></li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="d-flex flex-row">
+                                        <div class="p-2">
+                                            @(
+                                             Html.Kendo().ComboBox()
+                                             .Name("layout_cm_firmalar")
+                                             .DataTextField("Unvan")
+                                             .DataValueField("Id")
+                                             .Suggest(true)
+                                             .Filter("contains")
+                                             .HtmlAttributes(new { style = "width : 100%;",@class="form-control form-control-sm" })
+                                             .Events(e=>e.Select("layout_cm_firmalar_select_event"))
+                                             )
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="last_button" style="margin-left:90px;">
+                            <div class="buttonbg gradient_button gradient43"><div class="arrow"><a>Yönetim<br /></a></div></div>
+                            <ul>
+                                <li><a href="@Url.Action("Hesabim","hesap")" title="Kullanıcı Bilgileri">Kullanıcı Bilgileri</a></li>
+                                <li><a title="">Ayarlar</a></li>
+                                <li><a href="@Url.Action("KurulumDosyaIndir","dosya")" target="_blank" title="">Masaüstü Servis İndir</a></li>
+                                <li><a href="@Url.Action("CikisYap","login")" title="">Çıkış</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="content_div_id" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_hzl_gr_inter_aktif")
+        .Visible(false)
+        .Modal(true)
+        .Width(450)
+        .Height(200)
+        .Content(Html.Partial("../Shared/HizliGirisler/InterAktifGiris").ToString())
+        )
+    </div>
+
+    <div>
+        @(
+    Html.Kendo().Window()
+    .Name("wn_fis")
+    .Modal(true)
+    .Visible(false)
+    .Height(470)
+    .Width(600)
+
+    .Content(Html.Partial("../Kasa/KasaTahsilat").ToString())
+    )
+    </div>
+
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_kasa_rapor_bakiye")
+        .Visible(false)
+        .Modal(true)
+        .Width(800)
+        .Height(500)
+        .Content(Html.Partial("../Kasa/Raporlar/KasaBakiyeRaporu").ToString())
+        )
+    </div>
+
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_kasa_rapor_ekstra")
+        .Visible(false)
+        .Modal(true)
+        .Width(800)
+        .Height(500)
+        .Content(Html.Partial("../Kasa/Raporlar/KasaEkstraRaporu").ToString())
+        )
+    </div>
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_havale")
+        .Content(Html.Partial("../Banka/BankaCariFis").ToString())
+        .Modal(true)
+        .Visible(false)
+        .Width(650)
+        .Height(440)
+        )
+    </div>
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_banka_rapor_bakiye")
+        .Visible(false)
+        .Modal(true)
+        .Width(800)
+        .Height(500)
+        .Content(Html.Partial("../Banka/Raporlar/BankaBakiyeRaporu").ToString())
+        )
+    </div>
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_banka_rapor_ekstra")
+        .Visible(false)
+        .Modal(true)
+        .Width(800)
+        .Height(500)
+        .Content(Html.Partial("../Banka/Raporlar/BankaEkstraRaporu").ToString())
+        )
+    </div>
+
+    <div>
+        @(
+        Html.Kendo().Window()
+        .Name("wn_kasa")
+        .Content(Html.Partial("../Banka/BankaKasaFis").ToString())
+        .Modal(true)
+        .Visible(false)
+        .Width(650)
+        .Height(440)
+        )
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/write-excel-file@1.x/bundle/write-excel-file.min.js"></script>
+    <script src="~/assets/islemler/kontrolIslemler.js"></script>
+    <script src="~/assets/islemler/localIslemler.js"></script>
+    <script src="~/assets/islemler/maliyeGirisler.js"></script>
+    <script src="~/assets/islemler/dosyaIslem.js"></script>
+    <script src="~/assets/islemler/tebligat/gelirIdaresi.js"></script>
+    <script src="~/assets/islemler/tebligat/icisleri.js"></script>
+    <script src="~/assets/islemler/tebligat/ticaretBakanligi.js"></script>
+    <script src="~/assets/islemler/tebligat/vergiDenetim.js"></script>
+
+    <script src="~/assets/islemler/bankaIslemler.js"></script>
+
+    <script>
+
+        let select_banka_kart_id = null
+        let select_kasa_kart_id = null
+
+        function mesaj(mesaj, icon) {
+
+            Swal.fire({
+                icon: icon,
+                title: 'İşlem Sonucu',
+                text: mesaj,
+                confirmButtonText: "Tamam"
+            })
+        }
+
+        function layout_cm_firmalar_select_event(e) {
+
+            const dataItem = this.dataItem(e.item.index())
+
+            let link = window.location.host
+
+            if (link.indexOf("localhost:62457") != -1) {
+
+                link = "http://" + link
+            }
+            else {
+
+                link = "https://" + link
+            }
+
+            const firma_link = link + "/mukellef/mukellefkayit?id=" + dataItem.Id
+
+            window.open(firma_link,"_blank")
+        }
+
+        function tarih_func_sql(tarih_value) {
+
+            if (tarih_value) {
+
+                let yil = tarih_value.getFullYear().toString();
+                let ay = (tarih_value.getMonth() + 1).toString();
+                let gun = tarih_value.getDate().toString();
+
+                if (gun.length === 1) {
+                    gun = "0" + gun;
+                }
+                if (ay.length == 1) {
+                    ay = "0" + ay;
+                }
+                return yil + "/" + ay + "/" + gun;
+            }
+        }
+
+        function kasa_tahsilat_click_event() {
+
+            const wn_fis = $("#wn_fis").data("kendoWindow")
+
+            kasa_fis_form_temizle()
+
+
+            kasa_islem_tur = "tahsilat"
+
+            wn_fis.title("Tahsilat Girişi")
+            wn_fis.center()
+            wn_fis.open()
+        }
+
+        function kasa_odeme_click_event() {
+
+            const wn_fis = $("#wn_fis").data("kendoWindow")
+            kasa_fis_form_temizle()
+
+            kasa_islem_tur = "odeme"
+
+            wn_fis.title("Ödeme Girişi")
+            wn_fis.center()
+            wn_fis.open()
+        }
+
+        function kasa_bakiye_raporu_ac() {
+
+            //wn_kasa_rapor_bakiye
+            const wn_kasa_rapor_bakiye = $("#wn_kasa_rapor_bakiye").data("kendoWindow")
+            kasa_bakiye_rapor_form_temizle()
+
+            kasa_bakiye_rapor_liste_al()
+            wn_kasa_rapor_bakiye.title("Kasa Bakiye Raporu")
+            wn_kasa_rapor_bakiye.center()
+            wn_kasa_rapor_bakiye.open()
+        }
+
+
+        function kasa_ekstra_raporu_ac() {
+
+            // wn_kasa_rapor_ekstra
+
+            const wn_kasa_rapor_ekstra = $("#wn_kasa_rapor_ekstra").data("kendoWindow")
+            kasa_ekstra_rapor_form_temizle()
+
+            kasa_ekstra_rapor_liste_al()
+            wn_kasa_rapor_ekstra.title("Kasa Ekstra Raporu")
+            wn_kasa_rapor_ekstra.center()
+            wn_kasa_rapor_ekstra.open()
+        }
+
+        function para_yatirma_click_event() {
+
+            banka_islem_tur = "para-yatirma"
+
+            //banka_kasa_form_temizle()
+
+            if (select_kasa_kart_id != null) {
+
+                $("#cm_banka_cariler").data("kendoComboBox").value(select_kasa_kart_id)
+            }
+
+            const wn_kasa = $("#wn_kasa").data("kendoWindow")
+
+            console.log("wn_kasa : ", wn_kasa)
+
+
+            wn_kasa.title("Bankaya Para Yatirma")
+            wn_kasa.center()
+            wn_kasa.open()
+        }
+
+        function para_cekme_click_event() {
+
+            banka_islem_tur = "para-cekme"
+
+            banka_kasa_form_temizle()
+
+            if (select_kasa_kart_id != null) {
+
+                $("#cm_banka_cariler").data("kendoComboBox").value(select_kasa_kart_id)
+            }
+
+            const wn_kasa = $("#wn_kasa").data("kendoWindow")
+
+            wn_kasa.title("Bankadan Para Çekme")
+            wn_kasa.center()
+            wn_kasa.open()
+        }
+
+        function havale_giris_click_event() {
+
+            const wn_havale = $("#wn_havale").data("kendoWindow")
+
+            banka_cari_form_temizle()
+
+            if (select_banka_kart_id != null) {
+
+                $("#cm_cari_bankalar").data("kendoComboBox").value(select_banka_kart_id)
+            }
+
+            banka_islem_tur = "havale-giris"
+
+            wn_havale.title("Bankaya Havale Girişi")
+            wn_havale.center()
+            wn_havale.open()
+        }
+
+        function havale_gonder_click_event() {
+
+            const wn_havale = $("#wn_havale").data("kendoWindow")
+
+            banka_cari_form_temizle()
+
+            if (select_banka_kart_id != null) {
+
+                $("#cm_cari_bankalar").data("kendoComboBox").value(select_banka_kart_id)
+            }
+
+            banka_islem_tur = "havale-gonderme"
+
+            wn_havale.title("Bankadan Havale Gönderme")
+            wn_havale.center()
+            wn_havale.open()
+        }
+
+        function banka_bakiye_raporu_ac() {
+
+
+            const wn_banka_rapor_bakiye = $("#wn_banka_rapor_bakiye").data("kendoWindow")
+            bakiye_rapor_form_temizle()
+
+            banka_bakiye_rapor_liste_al()
+            wn_banka_rapor_bakiye.title("Banka Ekstra Raporu")
+            wn_banka_rapor_bakiye.center()
+            wn_banka_rapor_bakiye.open()
+        }
+
+        function banka_ekstra_raporu_ac() {
+
+
+            const wn_banka_rapor_ekstra = $("#wn_banka_rapor_ekstra").data("kendoWindow")
+            banka_ekstra_rapor_form_temizle()
+
+            banka_ekstra_rapor_liste_al()
+            wn_banka_rapor_ekstra.title("Banka Ekstra Raporu")
+            wn_banka_rapor_ekstra.center()
+            wn_banka_rapor_ekstra.open()
+        }
+
+        function local_servis_calistir() {
+
+           
+
+          
+
+            var fileUrl = "file:///C://local-tacminsoft//servisler//MusavirMasaUstuServis//MusavirMasaUstuServis.exe";
+
+
+            window.open(fileUrl,"_blank")
+        }
+
+        $(document).ready(function () {
+
+            $.ajax({
+
+                url: "@Url.Action("KullaniciGirisKaydi", "islem")",
+                method: "GET",
+                success: function () {
+                    console.log("Kullanıcı Giriş Kaydı Ok.")
+                },
+                error: function () {
+                    console.log("Kullanıcı Giriş Kaydı Err.")
+                }
+            })
+           
+            $.ajax({
+
+                url: "http://localhost:5501",
+                method: "GET",
+                error: function () {
+
+                    local_servis_calistir()
+                    console.log("err")
+                }
+            })
+
+            
+
+           layout_local_listeleri_yukle()
+
+         
+
+        })
+
+        let maliye_giris_tur = ""
+
+        $.ty.init.start();
+
+        @if (TempData["toastr_messages"] != null)
+        {
+            var messages = (IEnumerable<Tacmin.Core.Model.Toastr>) TempData["toastr_messages"];
+            foreach (var message in messages)
+            {
+                @:toastr['@message.Type.ToString().ToLowerInvariant()']('@Html.Raw(HttpUtility.JavaScriptStringEncode(message.Message))', '@Html.Raw(HttpUtility.JavaScriptStringEncode(message.Title))')
+            }
+        }
+
+        @if (TempData["sweetAlert_Messages"] != null)
+        {
+            @:$(function() {
+                Html.Raw(TempData["sweetAlert_Messages"]);
+            @:});
+        }
+
+        function interaktif_giris_click_event() {
+
+            const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+            maliye_giris_tur = "inter_aktif"
+            //$("#mly_hzl_grs_btn").html("İnter Aktif VD. Giriş")
+            wn_hzl_gr_inter_aktif.title("İnteraktif Vergi Dairesi Giriş")
+            wn_hzl_gr_inter_aktif.center()
+            wn_hzl_gr_inter_aktif.open()
+        }
+
+        function internet_vd_sayfa_click_event() {
+
+            const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+            maliye_giris_tur = "internet_vergi_dairesi"
+            $("#mly_hzl_grs_btn").html("İnternet Vergi Dairesi Giriş")
+            wn_hzl_gr_inter_aktif.title("İnternet Vergi Dairesi Giriş")
+            wn_hzl_gr_inter_aktif.center()
+            wn_hzl_gr_inter_aktif.open()
+
+        }
+
+        function digital_vd_sayfa_click_event() {
+
+            const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+            maliye_giris_tur = "digital_vergi_dairesi"
+            $("#mly_hzl_grs_btn").html("Digital Vergi Dairesi Giriş")
+            wn_hzl_gr_inter_aktif.title("Digital Vergi Dairesi Giriş")
+            wn_hzl_gr_inter_aktif.center()
+            wn_hzl_gr_inter_aktif.open()
+
+        }
+
+        function earsiv_giris_click_event() {
+
+            const wn_hzl_gr_inter_aktif = $("#wn_hzl_gr_inter_aktif").data("kendoWindow")
+            maliye_giris_tur = "e_arsiv"
+            $("#mly_hzl_grs_btn").html("E-Arşiv Portal Giriş")
+            wn_hzl_gr_inter_aktif.title("E-Arşiv Portal Giriş")
+            wn_hzl_gr_inter_aktif.center()
+            wn_hzl_gr_inter_aktif.open()
+        }
+
+    </script>
+    <script type="text/javascript" src="~/assets/menu/mbjsmbmcp.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
+    <script>
+        const socket = io("http://localhost:5510");
+    </script>
+
+    <style>
+
+        .form-control:focus {
+            outline: none !important;
+            border: 2px solid #63b8ff;
+            box-shadow: 0 0 10px #719ECE;
+        }
+
+        .form-control:hover {
+            outline: none !important;
+            border: 2px solid #63b8ff;
+            box-shadow: 0 0 10px #719ECE;
+        }
+
+        .beyanIcon {
+            margin-left: 5px !important;
+        }
+
+        .k-grid .k-header {
+            width: 100% !important;
+            text-align: center !important;
+            font-weight: bold !important;
+            font-size: 14px !important;
+        }
+    </style>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

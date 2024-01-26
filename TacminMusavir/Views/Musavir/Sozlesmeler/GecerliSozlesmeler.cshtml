@@ -1,0 +1,58 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Musavir.SozlesmeModel>()
+    .Name("gecerliGridds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+<div class="row p-2">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Musavir.SozlesmeModel>().Name("gecerliGrid")
+        .Columns(c => {
+            c.Bound(m => m.mukvkn).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.muktckn).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.mukunvan).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.mukellefvdkodutext).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.sozno).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.soztarih).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.sozlesmesonislemtarihi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.kayitzamani).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.sozlesmetipi).Filterable(ftb => ftb.Multi(true).Search(true));
+
+        })
+        .Height(500)
+        )
+    </div>
+</div>
+
+<script>
+
+    async function gecerliSozlesmeListesiYukle(token,vergiNo) {
+
+        const data_str = "cmd=EBynYetkiIslemleri_sozlesmeListele&callid=3f7d78850e4b2-10&token=" + token
+            + "&jp=%7B%22VERGINO%22%3A%22" + vergiNo
+            + "%22%2C%22mukellefListe%22%3A%220%22%7D"
+
+        const servisUrl = "https://intvrg.gib.gov.tr/intvrg_server/dispatch"
+
+        const mly_res = await axios.post(servisUrl, data_str)
+
+        console.log("mly_res : ", mly_res.data)
+
+        const sozlesme_listesi = mly_res.data.data.sozlesme
+
+        try {
+
+            const gecerliGrid = $("#gecerliGrid").data("kendoGrid")
+
+            gecerliGrid.setDataSource(sozlesme_listesi)
+
+        } catch (e) {
+
+            console.log("")
+        }
+
+        kendo.ui.progress($('#content_div_id'), false);
+    }
+
+</script>

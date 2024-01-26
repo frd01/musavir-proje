@@ -1,0 +1,26 @@
+﻿@model IEnumerable<string>
+
+<div class="error-page">
+    <h2 class="headline text-danger">403</h2>
+
+    <div class="error-content">
+        <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Yetkisiz Erişim.</h3>
+
+        <p>
+            Bu sayfaya erişim yetkiniz yok.
+            Üst kullanıcınız tarafından kısıtlanmış bir sayfaya erişmeye çalışıyor veya
+            lisansınızda bulunmayan bir özelliği kullanmaya çalışıyor olabilirsiniz.
+        </p>
+
+        <p>
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Gereken Yetkiler
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                @Model.Join("<br />")
+            </div>
+        </div>
+    </div>
+</div>

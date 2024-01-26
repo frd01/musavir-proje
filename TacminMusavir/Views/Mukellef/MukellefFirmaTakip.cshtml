@@ -1,0 +1,435 @@
+﻿
+@model Tacmin.Model.Mukellef.BeyannameTakipModel
+
+
+@{
+
+    Title = Model.Unvan;
+}
+
+<!-- 1.Group -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group row">
+            <!-- Kdv 1 -->
+            <div class="col-md-2">
+                <span class="span_text_css">Kdv1</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Kdv1.Id)
+                            .Name("Kdv1")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+                            .Events(e=>e.Change("takip_combo_change"))
+                        )
+            </div>
+            <!-- MuhSgk -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">MUHSGK</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Muh_Sgk.Id)
+                            .Name("Muh_Sgk")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+                            .Events(e=>e.Change("takip_combo_change"))
+                        )
+            </div>
+
+            <!-- Gelir -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">GELIR</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Gelir.Id)
+                            .Name("Gelir")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Ötv1 -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">ÖTV1</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Otv1.Id)
+                            .Name("Otv1")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Öiv -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">ÖIV</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Oiv.Id)
+                            .Name("Oiv")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- 2.Group -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group row">
+            <!-- Kdv2 -->
+            <div class="col-md-2">
+                <span class="span_text_css">Kdv2</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Kdv2.Id)
+                            .Name("Kdv2")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Muhsgk2  -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">MUHSGK2</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Muh_Sgk2.Id)
+                            .Name("Muh_Sgk2")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Gelir 1001e -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">GELIR1001E</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Gelir_1001E.Id)
+                            .Name("Gelir_1001E")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Ötv3A -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">ÖTV3A</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Otv3A.Id)
+                            .Name("Otv3A")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Ba -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">Ba</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Ba.Id)
+                            .Name("Ba")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- 3.Group -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group row">
+            <!-- Kdv 4 -->
+            <div class="col-md-2">
+                <span class="span_text_css">Kdv4</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Kdv4.Id)
+                            .Name("Kdv4")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Kurumlar -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">KURUMLAR</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Kurumlar.Id)
+                            .Name("Kurumlar")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Gecici -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">GGECICI</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.G_Gecici.Id)
+                            .Name("G_Gecici")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Ötv3B -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">ÖTV3B</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Otv3B.Id)
+                            .Name("Otv3B")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!--Bs -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">Bs</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Bs.Id)
+                            .Name("Bs")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 4.Group -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group row">
+            <!-- Damga -->
+            <div class="col-md-2">
+                <span class="span_text_css">Damga</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Damga.Id)
+                            .Name("Damga")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Kgecici -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">KGECICI</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.K_Gecici.Id)
+                            .Name("K_Gecici")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Poşet -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">Poşet</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Poset.Id)
+                            .Name("Poset")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                           .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+            <!-- Ötv 4 -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">OTV4</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Otv4.Id)
+                            .Name("Otv4")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                           .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+
+            <!-- Turizm -->
+            <div class="col-md-2 ml-3">
+                <span class="span_text_css">Turizm</span>
+                @(Html.Kendo().ComboBoxFor(x=>x.Turizm.Id)
+                            .Name("Turizm")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("Donem_Adi")
+                            .HtmlAttributes(new { @class = "combo_css" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("BeyannameDonemListesi", "mukellef");
+                            })
+                            .Suggest(true)
+
+                        )
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function cm_takip_ondatabound_event(e) {
+
+        var ddl = e.sender;
+        var items = ddl.items();
+        for (let item of items) {
+            var dataItem = ddl.dataItem($(item));
+            if (dataItem.Donem_Adi == "YOK") {
+                $(item).css("background-color", "red");
+            }
+
+        }
+    }
+
+    function takip_combo_change() {
+
+        var value = $("#Muh_Sgk").data("kendoComboBox").value()
+        console.log("takip_combo_change : ",value)
+        if (value == 1) {
+            $(".Muh_Sgk_input").removeClass("combo_css")
+            $(".Muh_Sgk_input").addClass("combo_css combo_css_yok")
+
+            console.log(result)
+        }
+
+
+
+    }
+</script>
+
+
+<style>
+    .span_text_css {
+        margin-left: 40%;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .combo_css {
+        width: 100%;
+        text-align: center;
+    }
+
+    .combo_css_yok {
+        width: 100%;
+        text-align: center;
+    }
+
+    #Muh_Sgk_input {
+        background-color: red;
+    }
+</style>

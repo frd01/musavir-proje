@@ -1,0 +1,228 @@
+﻿@model  Tacmin.Model.MaliyeIslemleri.Beyanname.BeyannameListeleModel
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group row">
+            <div class="col-md-3">
+                @Html.Label("Cariler")
+            </div>
+            <div class="col-md-8">
+                @(Html.Kendo().MultiSelectFor(x=>x.Data_Firma_Id)
+                        .Name("Data_Firma_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Unvan")
+                        .DataValueField("Id")
+                        .TagMode(TagMode.Single)
+                        .DataSource(dataSource => {
+                            dataSource.Read("GibMukellefListesi", "beyanname");
+                        })
+                        .Events(e=>e.Select("Data_Firma_Id_select_event").Deselect("Data_Firma_Id_deselect_event"))
+                        )
+            </div>
+            <div class="col-md-3 mt-2" >
+                @Html.Label("Beyanname Türü")
+            </div>
+            <div class="col-md-8 mt-2 ">
+                @(Html.Kendo().MultiSelectFor(x=>x.Data_Vergi_Tur_Id)
+                        .Name("Data_Vergi_Tur_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Kod")
+                        .DataValueField("Id")
+                        .TagMode(TagMode.Single)
+                        .DataSource(dataSource => {
+                            dataSource.Read("GetBeyannameTurGroupListe", "beyanname");
+                        })
+                        .Events(e=> e.Select("beyanname_tur_select_event").Deselect("beyanname_tur_deselect_event"))
+                        )
+            </div>
+            <div class="col-md-3 mt-2">
+                @Html.Label("Tarih")
+            </div>
+            <div class="col-md-3 mt-2">
+                @Html.Kendo().DatePickerFor(x => x.Data_Ilk_Tarih).HtmlAttributes(new { style = "width: 100%;" })
+            </div>
+            
+            <div class="col-md-3 mt-2 ml-3">
+                @Html.Kendo().DatePickerFor(x => x.Data_Son_Tarih).HtmlAttributes(new { style = "width: 100%;" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-center">
+           @(
+           Html.Kendo().Button().Name("btn_beyanname_data")
+           .Content("LİSTELE")
+           .HtmlAttributes(new { style = "width : 35%" , @class = "kendoprimary" })
+           .Events(e=>e.Click("btn_beyanname_data_click_event"))
+            )
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+    let cari_filter_list = []
+    let beyanname_filter_list = []
+
+    function tarih_func(tarih_value){
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return yil + "/" + ay + "/" + gun;
+        }
+    }
+
+    function Data_Firma_Id_select_event(e) {
+
+        const cari_id = e.dataItem.Id
+        cari_filter_list.push(cari_id)
+
+        console.log(cari_filter_list)
+    }
+
+    function Data_Firma_Id_deselect_event(e) {
+
+        const cari_id = e.dataItem.Id
+
+        for (let i = 0; i < cari_filter_list.length; i++) {
+
+            const id = cari_filter_list[i]
+
+            if (cari_id == id) {
+
+                cari_filter_list.splice(i,1)
+            }
+        }
+
+        console.log(cari_filter_list)
+    }
+
+    function beyanname_tur_select_event(e) {
+
+        var kod = e.dataItem.Kod
+
+        beyanname_filter_list.push(kod)
+
+        console.log(beyanname_filter_list)
+    }
+
+    function beyanname_tur_deselect_event(e) {
+
+        var kod = e.dataItem.Kod
+
+        for (let i = 0; i < beyanname_filter_list.length; i++) {
+
+            const beyanname_kod = beyanname_filter_list[i].Kod
+
+            if (beyanname_kod == kod) {
+
+                beyanname_filter_list.splice(i,1)
+            }
+        }
+
+        console.log(beyanname_filter_list)
+    }
+
+    const beyanname_arama_model = {
+
+        Cariler: cari_filter_list,
+        BeyannameTurler: beyanname_filter_list,
+        IlkTarih: null,
+        SonTarih: null
+    }
+
+    async function beyanname_arama_liste_yukle() {
+
+        kendo.ui.progress($('.content'), true);
+
+        const beyanname_listesi = await $.ajax({
+
+            url: "@Url.Action("GetBeyannameDataAramaListe","beyanname")",
+            method: "POST",
+            dataType: "Json",
+            data: { client_data: beyanname_arama_model  }
+
+        })
+
+        const grid = $("#master").data("kendoGrid");
+
+        const grid_list = []
+
+        const beyanname_sayisi = beyanname_listesi.length
+
+        $("#gr_say_id").html('<span>' + beyanname_sayisi + '</span>')
+
+        for (var i = 0; i < beyanname_listesi.length; i++) {
+
+            const item = beyanname_listesi[i]
+
+            console.log(item)
+            if (item.TAH_VADE != null) {
+
+                item.TAH_VADE = new Date(parseInt(item.TAH_VADE.substr(6)));
+            }
+            if (item.GONDERIM_TARIHI != null) {
+
+                item.GONDERIM_TARIHI = new Date(parseInt(item.GONDERIM_TARIHI.substr(6)));
+            }
+
+            grid_list.push(item)
+
+        }
+
+        try {
+
+            grid.setDataSource(grid_list)
+
+            grid.refresh()
+
+        } catch {
+            console.log("")
+        }
+
+        kendo.ui.progress($('.content'), false);
+    }
+
+    async function btn_beyanname_data_click_event() {
+
+        const ilk_tarih = $("#Data_Ilk_Tarih").data("kendoDatePicker").value()
+        const son_tarih = $("#Data_Son_Tarih").data("kendoDatePicker").value()
+
+        beyanname_arama_model.BeyannameTurler = beyanname_filter_list
+        beyanname_arama_model.Cariler = cari_filter_list
+        beyanname_arama_model.IlkTarih = null
+        beyanname_arama_model.SonTarih = null
+
+        if (ilk_tarih != null && son_tarih != null) {
+
+            beyanname_arama_model.IlkTarih = tarih_func(ilk_tarih)
+            beyanname_arama_model.SonTarih = tarih_func(son_tarih)
+        }
+
+        $("#beyannameWindow").data("kendoWindow").close()
+
+        await beyanname_arama_liste_yukle()
+
+        
+    }
+
+</script>

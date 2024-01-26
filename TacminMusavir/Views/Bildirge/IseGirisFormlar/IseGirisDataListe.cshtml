@@ -1,0 +1,33 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Bildirge.IseGirisListeModel>()
+    .Name("listeGridds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Bildirge.IseGirisListeModel>().Name("listeGrid")
+        .Columns(c=>
+        {
+            c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.SubeAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.ReferansKodu).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.IslemTarihi).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:dd-MM-yyyy}");
+            c.Bound(m => m.Durum).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:dd-MM-yyyy}");
+            c.Bound(m => m.AdiSoyadi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.TcNo).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Detay(Url.RouteUrl(new { controller = "bildirge", action = "GetPdfEvrak", id = "#=Id#" }), "_blank", "hizListIcon");
+
+
+        })
+        .Height(500)
+
+        )
+    </div>
+</div>
+

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.875" name="Yonetim_Db">
+  <DataContextMoniker Name="/Yonetim_DbDataContext" />
+  <nestedChildShapes>
+    <classShape Id="e8568619-9856-4a34-b5c4-7341ea772c31" absoluteBounds="5.125, 1.75, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/Yonetim_DbDataContext/SmsFirmalar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="27ca55fe-0979-44b7-97ae-fc3df6dc8646" absoluteBounds="5.14, 2.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="df631ad1-de90-4cef-8b75-41198331c444" absoluteBounds="1.875, 0.5, 2, 8.1168440755208326">
+      <DataClassMoniker Name="/Yonetim_DbDataContext/KULLANICI_TANIMLARI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="86acddc3-35c2-4b53-bd8d-2ad7b5e415ec" absoluteBounds="1.8899999999999997, 0.96, 1.9700000000000002, 7.556844075520833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b92bf71-20e6-46d9-8db4-9d62d8d5803f" absoluteBounds="4.5, 3.5, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Yonetim_DbDataContext/KullaniciGirisleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c0b8b04a-1e50-42ca-a409-9c0a9e85e891" absoluteBounds="4.515, 3.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

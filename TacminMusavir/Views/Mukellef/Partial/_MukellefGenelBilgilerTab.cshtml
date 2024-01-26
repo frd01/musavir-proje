@@ -1,0 +1,310 @@
+﻿@model MukellefKayitModel
+
+@(Html.Kendo().DataSource<Tacmin.Data.DbModel.Firma_Iletisim>()
+                    .Name("iletisimds")
+                    .Ajax(x => x.PageSize(20))
+                )
+
+@Html.HiddenFor(x => x.ID)
+
+<div class="row">
+    <div class="col-md-5">
+        <fieldset class="groupbox">
+            <legend>Bilgiler</legend>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.UNVAN, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextBoxFor(x => x.UNVAN).HtmlAttributes(new { style = "width: 100%;" })
+                    @Html.ValidationMessageFor(x => x.UNVAN)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.TCKN, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-4">
+                    <div class="input-group">
+                        @Html.Kendo().TextBoxFor(x => x.TCKN).HtmlAttributes(new { style = "width: 85%;" })
+
+                    </div>
+
+                </div>
+                @Html.LabelFor(x => x.VERGI_NO, new { @class = "col-md-1 col-form-label" })
+                <div class="col-md-4">
+                    @Html.Kendo().TextBoxFor(x => x.VERGI_NO).HtmlAttributes(new { style = "width: 100%;" })
+                    @Html.ValidationMessageFor(x => x.VERGI_NO)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.VERGI_DAIRESI, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-6">
+                    @(Html.Kendo().ComboBoxFor(x=>x.Vergi_Daire_Id)
+                        .Name("Vergi_Daire_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Daire_Adi")
+                        .DataValueField("Id")
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("VergiDaireListesi", "mukellef");
+                        })
+                        .Suggest(true)
+                        )
+                </div>
+                <div class="col-md-3 ml-2" style="font-weight : bold;">
+                    @Html.Kendo().SwitchFor(x => x.AKTIF).Name("AKTIF").Messages(mes => mes.Checked("Aktif").Unchecked("Pasif")).HtmlAttributes(new { style = "width: 50%;" }).Events(e => e.Change("AKTIF_change_event"))
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.GRUP_KODU, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().ComboBoxFor(x => x.GRUP_KODU).HtmlAttributes(new { style = "width: 100%;" })
+                    @Html.ValidationMessageFor(x => x.GRUP_KODU)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.ADRES, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextAreaFor(x => x.ADRES).Rows(3).HtmlAttributes(new { style = "width: 100%;" })
+                    @Html.ValidationMessageFor(x => x.ADRES)
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.IL, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @(Html.Kendo().ComboBoxFor(x=>x.Sehir_Id)
+                        .Name("Sehir_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Sehir_Adi")
+                        .DataValueField("Id")
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("SehirListesi", "mukellef");
+                        })
+                        .Suggest(true)
+                        .Events(e=>e.Change("Sehir_Id_onchange_event"))
+                        )
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.ILCE, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @(Html.Kendo().ComboBoxFor(x=>x.Ilce_Id)
+                        .Name("Ilce_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Ilce_Adi")
+                        .DataValueField("Id")
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("IlceListesi", "mukellef");
+                        })
+                        .Suggest(true)
+                        )
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-md-7">
+        <fieldset>
+            <legend>İletişim Bilgileri</legend>
+            <div class="d-flex flex-row justify-content-end">
+                <div class="p-1">
+                    <button type="button" class="btn btn-success btn-sm" onclick="iletisim_form_ac_click_event()">
+                        Ekle
+                    </button>
+                </div>
+                <div class="p-1">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="iletisim_duzelt_click_event()">
+                        Düzelt
+                    </button>
+                    
+                </div>
+                <div class="p-1">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="iletisim_sil_click_event()">
+                        Sil
+                    </button>
+                    
+                </div>
+            </div>
+
+            <div class="d-flex flex-row">
+                <div class="p-0" style="width : 100%;">
+                    @(
+                        Html.Ty().TyGrid<Tacmin.Data.DbModel.Firma_Iletisim>().Name("iletisim")
+                        .Columns(c=>
+                        {
+
+                            c.Bound(x => x.Adi);
+                            c.Bound(x => x.Telefon);
+                            c.Bound(x => x.Mail);
+
+                        })
+                        .Height(300)
+                        .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+                        .Events(e=>e.Change("iletisim_select_change"))
+                        )
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset class="groupbox">
+            <legend>Faaliyet Kodları</legend>
+
+            @(Html.Ty().TyGrid<FaaliyetKoduAraModel>().Name("faaliyetKoduGrid")
+                .Filterable(false)
+                .DataSource(ds =>
+                    ds.Ajax()
+                        .Read(r => r.Url(Url.RouteUrl(new { controller = "mukellef", action = "MukellefFaaliyetKodlari" })).Data("getFirmaId"))
+                )
+                .Height(150)
+                .Columns(col =>
+                {
+                    col.Bound(x => x.FAALIYET_KODU);
+                    col.Bound(x => x.ACIKLAMA);
+                }))
+        </fieldset>
+    </div>
+</div>
+
+<div>
+    @(
+      Html.Kendo().Window()
+      .Name("wn_ilt_form")
+      .Visible(false)
+      .Modal(true)
+      .Width(350)
+      .Height(300)
+      .Content(Html.Partial("../Mukellef/Partial/IletisimForm").ToString())
+      .Events(e => e.Close("wn_ilt_form_close_event"))
+     )
+</div>
+
+<script>
+
+    let select_iletisim = {
+
+        Id: null,
+        Adi: "",
+        Telefon : "",
+        Mail : ""
+    }
+
+    function model_default() {
+
+        select_iletisim.Id = null
+        select_iletisim.Adi = ""
+        select_iletisim.Telefon = ""
+        select_iletisim.Mail = ""
+    }
+
+    function wn_ilt_form_close_event() {
+
+        model_default()
+    }
+
+    function iletisim_duzelt_click_event() {
+
+        if (select_iletisim.Id == null) {
+
+            mesaj("Kişi Seçiniz.", "error")
+            return
+        }
+
+        const ilt_frm_tx_adi = $("#ilt_frm_tx_adi").data("kendoTextBox")
+        const ilt_frm_tx_telefon = $("#ilt_frm_tx_telefon").data("kendoTextBox")
+        const ilt_frm_tx_mail = $("#ilt_frm_tx_mail").data("kendoTextBox")
+
+        ilt_frm_tx_adi.value(select_iletisim.Adi)
+        ilt_frm_tx_telefon.value(select_iletisim.Telefon)
+        ilt_frm_tx_mail.value(select_iletisim.Mail)
+
+        const wn_ilt_form = $("#wn_ilt_form").data("kendoWindow")
+
+        wn_ilt_form.title("İletişim Bilgi Kaydı")
+        wn_ilt_form.center()
+        wn_ilt_form.open()
+
+    }
+
+    function iletisim_sil_click_event() {
+
+        if (select_iletisim.Id == null) {
+
+            mesaj("Kişi Seçiniz.", "error")
+            return
+        }
+
+        var iletisim_grid = $("#iletisim").data("kendoGrid");
+        const liste = iletisim_grid.dataSource._pristineData;
+
+        for (var i = 0; i < liste.length; i++) {
+
+            if (liste[i].Id == select_iletisim.Id) {
+
+                liste.splice(i,1)
+            }
+        }
+
+        try {
+
+            iletisim_grid.setDataSource(liste)
+        } catch {
+
+            console.log("")
+        }
+
+        model_default()
+    }
+
+    function iletisim_form_ac_click_event() {
+
+        const wn_ilt_form = $("#wn_ilt_form").data("kendoWindow")
+
+        wn_ilt_form.title("İletişim Bilgi Kaydı")
+        wn_ilt_form.center()
+        wn_ilt_form.open()
+    }
+
+    function iletisim_select_change(e) {
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            select_iletisim.Adi = item.Adi
+            select_iletisim.Id = item.Id
+            select_iletisim.Mail = item.Mail
+            select_iletisim.Telefon = item.Telefon
+        }
+
+    }
+
+</script>
+
+<style>
+    #btn_iletisim {
+        width: 20%;
+        justify-content: center;
+        align-items: center;
+        margin-left: 30px;
+    }
+</style>

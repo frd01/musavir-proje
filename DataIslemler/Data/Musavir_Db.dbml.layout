@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 13.25, 58.25" name="Musavir_Db">
+  <DataContextMoniker Name="/Musavir_DbDataContext" />
+  <nestedChildShapes>
+    <classShape Id="843b9f86-2686-4889-b1e9-4f4fb4ecdfec" absoluteBounds="4.125, 1, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/Musavir_DbDataContext/DOSYA" />
+      <nestedChildShapes>
+        <elementListCompartment Id="cb201d8d-34e4-4246-9b32-f2f5682b8e67" absoluteBounds="4.14, 1.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2eaa58a4-4409-4e7c-9cb8-a7e82422ed08" absoluteBounds="0.5, 14, 2, 1.9631982421875">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Vergi_Levhalari" />
+      <nestedChildShapes>
+        <elementListCompartment Id="57fdf153-4d0b-403a-8b6d-79621467f50e" absoluteBounds="0.51500000000000012, 14.46, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bda7570e-02fb-441d-8e32-30feeeae7395" absoluteBounds="3, 13.375, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Sorgu_Listeleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="247ccc12-ecfe-42f7-9e5d-a62ef4f4d404" absoluteBounds="3.0149999999999997, 13.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d0684641-cd3a-44ba-9b4e-dbbde76f4213" absoluteBounds="3.875, 15.375, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Tebligat_Belge_Turleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ece8b95a-29f0-4d28-9328-26c02e2a99df" absoluteBounds="3.89, 15.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4002e704-68d6-4027-a246-90e6aa82602e" absoluteBounds="3.5, 17.375, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Vergi_Daireleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="33afe647-1586-465b-88ae-dc026fb6a274" absoluteBounds="3.515, 17.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="50fa470f-0a94-4155-9130-3dfff4dffa82" absoluteBounds="6, 5.25, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Maliye_Vergi_Turleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d9ea57e6-7b35-45ea-8ea7-3ec955a067df" absoluteBounds="6.0150000000000006, 5.71, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ef4e7cbd-e3c3-42a5-b1d0-e032ef457d8a" absoluteBounds="0.875, 19.75, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Sehirler" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0c1564a5-a264-4df1-aedc-7cccf33f1679" absoluteBounds="0.89, 20.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="094fa6da-c6e3-454e-811b-6831358a3ee8" absoluteBounds="3.625, 20.125, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Ilceler" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ce263375-2c55-46fc-88b3-d76becfff2c3" absoluteBounds="3.64, 20.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="57c481b7-c2eb-4357-9642-61b7c10ab3f7" absoluteBounds="7.125, 7.375, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Firma_Iletisim" />
+      <nestedChildShapes>
+        <elementListCompartment Id="739c41af-b92a-42d6-8040-371b70e47620" absoluteBounds="7.14, 7.835, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.83052987154447 : 9.14589680989583); (7.83052987154447 : 9.39589680989583); (8.43349251552484 : 9.39589680989583); (8.43349251552484 : 9.14589680989583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/Musavir_DbDataContext/Firma_Iletisim/Firma_Iletisim_Firma_Iletisim" />
+      <nodes>
+        <classShapeMoniker Id="57c481b7-c2eb-4357-9642-61b7c10ab3f7" />
+        <classShapeMoniker Id="57c481b7-c2eb-4357-9642-61b7c10ab3f7" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="140bd8fa-4627-413a-9e5a-bee9359e6d10" absoluteBounds="6.375, 9.625, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Beyanname_Turleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1f85ec7d-3597-4a38-965a-fa8c3571f3be" absoluteBounds="6.39, 10.085, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c01e7a2c-c115-425f-b0a9-3057be4c3f88" absoluteBounds="6.375, 11.375, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Beyanname_Donemler" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4a45d3b4-e0d1-48fc-a3a4-7ade0265a719" absoluteBounds="6.39, 11.835, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="84f0c529-6e7a-433d-aa1f-f8d1d3e429ee" absoluteBounds="9, 10, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Firma_Beyanname_Takip" />
+      <nestedChildShapes>
+        <elementListCompartment Id="14efb559-909f-4d46-9ce1-4f2f6124f6bf" absoluteBounds="9.015, 10.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="aa1c683e-670b-44b4-80cb-42f628058b26" absoluteBounds="1.125, 21.625, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Beyanname_Tur_Donem_Aylar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d24babdc-c223-494a-ab32-e8554818157c" absoluteBounds="1.1399999999999997, 22.085, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4d9162a3-f272-4739-90b5-b377f1e494f8" absoluteBounds="7.625, 13.75, 2, 3.8862125651041666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/KULLANICI_TANIMLARI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b95199d0-9c1c-411f-b2a9-8272839d483b" absoluteBounds="7.64, 14.21, 1.9700000000000002, 3.3262125651041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9458fdaf-3271-4757-83fa-b1f3f5ba0e9a" absoluteBounds="0.5, 7.75, 2, 4.4631168619791666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/GELEN_FATURALAR" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1ea98d7b-a97c-416f-9c06-590152439513" absoluteBounds="0.515, 8.21, 1.9700000000000002, 3.903116861979167" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(1.20923076923077 : 12.2131168619792); (1.20923076923077 : 12.4631168619792); (1.80461538461538 : 12.4631168619792); (1.80461538461538 : 12.2131168619792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/Musavir_DbDataContext/GELEN_FATURALAR/GELEN_FATURALAR_GELEN_FATURALAR" />
+      <nodes>
+        <classShapeMoniker Id="9458fdaf-3271-4757-83fa-b1f3f5ba0e9a" />
+        <classShapeMoniker Id="9458fdaf-3271-4757-83fa-b1f3f5ba0e9a" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="65c5d54a-af75-47f3-8bfa-1e55e13e40d3" absoluteBounds="7, 19.5, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/ArsivFaturalar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="89eb3b53-295b-4041-805c-76070d846d97" absoluteBounds="7.015, 19.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8fa8d0da-855e-47ab-8346-9fc6536e7fb7" absoluteBounds="0.5, 23.625, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Whats_App_Gonderileri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="51ce7dad-23e1-4848-b4fa-a4aabf034b07" absoluteBounds="0.51499999999999968, 24.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="29364508-97f9-44a8-bed9-629818530482" absoluteBounds="3.5, 21.875, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/Musavir_DbDataContext/TebligatDosyalar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3e0b512a-491d-429a-bed2-8a08e32278ac" absoluteBounds="3.5149999999999997, 22.335, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f489b8d3-bda2-4131-91d9-1badfe276166" absoluteBounds="0.5, 29.625, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/Musavir_DbDataContext/SorguTakip" />
+      <nestedChildShapes>
+        <elementListCompartment Id="20e48437-cdfd-4249-b417-847d29d395d4" absoluteBounds="0.51499999999999968, 30.085, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="286d62a5-2f3d-4e06-9b89-824d9b82d4a2" absoluteBounds="3, 32.375, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Firma_Bildirge_Takip" />
+      <nestedChildShapes>
+        <elementListCompartment Id="91cfe9bf-8a3b-401d-b6b6-cb6483e558b1" absoluteBounds="3.015, 32.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0e9a5ed2-3483-4236-b315-cc4d50785d4f" absoluteBounds="0.5, 31.875, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Bildirge_Turleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="42ecdd7d-80be-4ce5-b682-f8c8e3658df0" absoluteBounds="0.51499999999999968, 32.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="87b23646-3ce8-4057-a433-f785ac63dcf6" absoluteBounds="0.5, 40.625, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/Musavir_DbDataContext/IseGirisCikisDosyalar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b36fbc13-16d6-4cfd-a41d-c254cf496a20" absoluteBounds="0.51499999999999968, 41.085, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="207feb7c-e362-4e74-801b-18f53da25250" absoluteBounds="0.5, 43.375, 2, 3.1170068359375">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Kasa_Kartlari" />
+      <nestedChildShapes>
+        <elementListCompartment Id="41860d97-104d-4ab9-90d4-3fc481a1ef89" absoluteBounds="0.515, 43.835, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="344ed43d-ba3c-4c0c-8156-b84fc0ba56c9" absoluteBounds="3.5, 43.625, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Kasa_Odemeler" />
+      <nestedChildShapes>
+        <elementListCompartment Id="384d39c9-5096-4f36-8cec-e743acd52f1b" absoluteBounds="3.515, 44.085, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="93ca0f85-7449-4176-bb79-3e1ee6d48b7c" absoluteBounds="0.5, 46.875, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Kasa_Tahsilatlar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2f748e7a-6c65-4d65-a94b-b5af8bdd870e" absoluteBounds="0.515, 47.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d260c3be-029f-4ef6-a20a-eb5261dfc09f" absoluteBounds="3.25, 46.25, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Para_Birimleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d8a2dbe1-265f-4d9e-8b28-2b02b896c9a2" absoluteBounds="3.2649999999999997, 46.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="937dadc3-ed72-4b1a-a2eb-d951a0c0452e" absoluteBounds="11, 1, 2, 5.2323225911458326">
+      <DataClassMoniker Name="/Musavir_DbDataContext/FIRMA_TANIMLARI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c5a1a0ce-b58d-4e5b-a03c-6ec82f2bd4ed" absoluteBounds="11.015, 1.46, 1.9700000000000002, 4.672322591145833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(12 : 6.23232259114583); (12 : 8.26044840494792); (11.5520813333333 : 8.26044840494792 : JumpStart); (11.3854146666667 : 8.26044840494792 : JumpEnd); (9.125 : 8.26044840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/Musavir_DbDataContext/FIRMA_TANIMLARI/FIRMA_TANIMLARI_Firma_Iletisim" />
+      <nodes>
+        <classShapeMoniker Id="937dadc3-ed72-4b1a-a2eb-d951a0c0452e" />
+        <classShapeMoniker Id="57c481b7-c2eb-4357-9642-61b7c10ab3f7" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(11.468748 : 6.23232259114583); (11.468748 : 9.3125); (8.51682584885817 : 9.3125 : JumpStart); (8.35015918219151 : 9.3125 : JumpEnd); (7.9138632048778 : 9.3125 : JumpStart); (7.74719653821114 : 9.3125 : JumpEnd); (5.75 : 9.3125); (5.75 : 11.1745426432292); (2.875 : 11.1745426432292); (2.875 : 9.98155843098958); (2.5 : 9.98155843098958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/FIRMA_TANIMLARI/FIRMA_TANIMLARI_GELEN_FATURALAR" />
+      <nodes>
+        <classShapeMoniker Id="937dadc3-ed72-4b1a-a2eb-d951a0c0452e" />
+        <classShapeMoniker Id="9458fdaf-3271-4757-83fa-b1f3f5ba0e9a" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="d974a99e-aaa6-4fca-848c-38592a3d3432" absoluteBounds="2.75, 47.875, 2, 1.1939925130208333">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Banka_Hesap_Turleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="edbfe3c9-492f-4716-9eaa-19c35543f6d0" absoluteBounds="2.765, 48.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="35017fa0-55f3-4576-8766-8cc2eb247dec" absoluteBounds="0.5, 49.75, 2, 2.7324039713541666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Banka_Kartlari" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ae3f1249-5482-4ccb-ab32-38a50dd30807" absoluteBounds="0.515, 50.21, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="622ecc14-bc53-42f4-9000-b82e9525798f" absoluteBounds="2.75, 49.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Banka_Odemeler" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d8ed868c-f292-4eff-8d09-f98a65e7e0ed" absoluteBounds="2.765, 50.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ae2ba379-4aab-4d58-a891-baa48788e15e" absoluteBounds="0.5, 52.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Banka_Tahsilatlar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="26b1e5e9-88ff-45a3-947e-0e9c7aaf0a37" absoluteBounds="0.515, 53.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="dd0f6921-6053-43ab-b61f-34e1909d17d8" isExpanded="false" absoluteBounds="0.5, 34.125, 2, 0.45">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Firma_Sgk_Bilgileri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="78d711ea-bfbf-4acc-b5fa-7ff76cd5e691" absoluteBounds="0.515, 34.585, 1.9700000000000002, 4.2877197265625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="404e636a-82da-44c6-a7dd-488e2debfcf4" absoluteBounds="0.5, 55.625, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Mail_Gonderileri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bc4bb068-b534-4631-9aec-7d314e26332e" absoluteBounds="0.51499999999999968, 56.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0ae0096c-430b-44c4-9406-a942590bd6fa" absoluteBounds="3, 39.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Sms_Gonderileri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="64b7a6e7-5175-4db4-9f32-761f0c7e475a" absoluteBounds="3.0149999999999997, 40.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e1eccec3-b19d-47a8-b9e5-81529e7b785d" absoluteBounds="3.5, 3, 2, 7.9245426432291648">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Giden_Faturalar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7064d2fb-13bf-4c11-a8be-cd1fb288df86" absoluteBounds="3.515, 3.46, 1.9700000000000002, 7.3645426432291661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1a0c0565-fb1c-49b6-96e9-860710e2f65c" absoluteBounds="0.5, 16.375, 2, 3.1170068359375">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Tebligatlar_Gelir_Idaresi" />
+      <nestedChildShapes>
+        <elementListCompartment Id="53dae8a1-0379-4510-af94-b98df641b6ae" absoluteBounds="0.515, 16.835, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e3ff8beb-1a1a-4435-a4cd-47ebd6a1fa60" absoluteBounds="7, 22.25, 2, 3.3093082682291666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Tebligat_Icisleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="db639f30-1311-4345-8d3d-cdc588b0e4c4" absoluteBounds="7.015, 22.71, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4bd4a96e-deb0-48f5-93e6-d380bdb9c6ab" absoluteBounds="4.25, 24.625, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Tebligat_Vergi_Denetim" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5d1acab6-eeec-4afb-b7c6-fc8021cd7779" absoluteBounds="4.265, 25.085, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="616d7c95-8541-4064-b64d-e403a657d499" absoluteBounds="1.375, 26.125, 2, 3.1170068359375">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Tebligatlar_Ticaret_Bakanligi" />
+      <nestedChildShapes>
+        <elementListCompartment Id="022963ee-aea1-4650-ac7c-61ae3cfe52bb" absoluteBounds="1.3900000000000001, 26.585, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3aec6ec1-a315-482c-813d-671334502ad6" absoluteBounds="7.25, 26.125, 2, 3.3093082682291666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Maliye_Gelen_Faturalar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f260e18c-46bb-4c8e-abf9-eeb9e86276d4" absoluteBounds="7.265, 26.585, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cd1f9804-efc6-40dc-ae04-c3bb279b6104" absoluteBounds="3.5, 34.5, 2, 5.0400211588541657">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Firma_Viziteler" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1984099e-6b0b-42ec-9afc-32b8266cdd62" absoluteBounds="3.515, 34.96, 1.9700000000000002, 4.4800211588541661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="876eb95d-f1ef-48de-aa4d-a048b0609a2b" absoluteBounds="0.75, 35.75, 2, 2.9247054036458331">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Firma_IseGirisCikislar" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3bd66b07-d6df-4812-b9a7-72b9fa3575f0" absoluteBounds="0.765, 36.21, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9d6792cb-caad-4432-b621-0e46b8e3e929" absoluteBounds="3.625, 28.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/Musavir_DbDataContext/SorguOzet" />
+      <nestedChildShapes>
+        <elementListCompartment Id="042f7e8e-722f-4b51-b702-34edd6509ff6" absoluteBounds="3.6399999999999997, 29.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="219bdf65-353e-4ced-84c5-b3fdf865025c" absoluteBounds="2.875, 53, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Musavir_DbDataContext/Vergi_Turleri" />
+      <nestedChildShapes>
+        <elementListCompartment Id="05bd4ee0-20ae-477e-af08-701f8b6807f5" absoluteBounds="2.8899999999999997, 53.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="afd0fe36-bccb-4827-b274-f20c33febe42" absoluteBounds="0.5, 0.875, 2, 7.3476383463541657">
+      <DataClassMoniker Name="/Musavir_DbDataContext/BEYANNAME_ICERIKLERI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bbb66e1d-1538-4067-bf89-d69da4b502b7" absoluteBounds="0.515, 1.335, 1.9700000000000002, 6.7876383463541661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.125 : 1.88544840494792); (2.5 : 1.88544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/DOSYA/DOSYA_BEYANNAME_ICERIKLERI" />
+      <nodes>
+        <classShapeMoniker Id="843b9f86-2686-4889-b1e9-4f4fb4ecdfec" />
+        <classShapeMoniker Id="afd0fe36-bccb-4827-b274-f20c33febe42" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(4.125 : 1.38022420247396); (2.5 : 1.38022420247396)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/DOSYA/DOSYA_BEYANNAME_ICERIKLERI1" />
+      <nodes>
+        <classShapeMoniker Id="843b9f86-2686-4889-b1e9-4f4fb4ecdfec" />
+        <classShapeMoniker Id="afd0fe36-bccb-4827-b274-f20c33febe42" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(11 : 3.61616129557292); (10.4375 : 3.61616129557292); (10.4375 : 0.4375); (1.5 : 0.4375); (1.5 : 0.875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/FIRMA_TANIMLARI/FIRMA_TANIMLARI_BEYANNAME_ICERIKLERI" />
+      <nodes>
+        <classShapeMoniker Id="937dadc3-ed72-4b1a-a2eb-d951a0c0452e" />
+        <classShapeMoniker Id="afd0fe36-bccb-4827-b274-f20c33febe42" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="2b8b73e2-77ec-4759-b5c5-e679783770a3" absoluteBounds="8.375, 0.5, 2, 6.1938297526041657">
+      <DataClassMoniker Name="/Musavir_DbDataContext/BILDIRGE_ICERIKLERI" />
+      <nestedChildShapes>
+        <elementListCompartment Id="47c52a3d-730d-43c2-9085-609ca5c8b372" absoluteBounds="8.39, 0.96, 1.9700000000000002, 5.6338297526041661" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(6.125 : 1.88544840494792); (8.375 : 1.88544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/DOSYA/DOSYA_BILDIRGE_ICERIKLERI" />
+      <nodes>
+        <classShapeMoniker Id="843b9f86-2686-4889-b1e9-4f4fb4ecdfec" />
+        <classShapeMoniker Id="2b8b73e2-77ec-4759-b5c5-e679783770a3" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(6.125 : 1.38022420247396); (8.375 : 1.38022420247396)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/DOSYA/DOSYA_BILDIRGE_ICERIKLERI1" />
+      <nodes>
+        <classShapeMoniker Id="843b9f86-2686-4889-b1e9-4f4fb4ecdfec" />
+        <classShapeMoniker Id="2b8b73e2-77ec-4759-b5c5-e679783770a3" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(11 : 2.24558064778646); (10.375 : 2.24558064778646)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/Musavir_DbDataContext/FIRMA_TANIMLARI/FIRMA_TANIMLARI_BILDIRGE_ICERIKLERI" />
+      <nodes>
+        <classShapeMoniker Id="937dadc3-ed72-4b1a-a2eb-d951a0c0452e" />
+        <classShapeMoniker Id="2b8b73e2-77ec-4759-b5c5-e679783770a3" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

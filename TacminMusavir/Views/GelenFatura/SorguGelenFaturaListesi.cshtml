@@ -1,0 +1,294 @@
+﻿<div id="gel_fat_div_id" class="row p-2 ">
+    <div class="col-md-12 k-card">
+        <div class="d-flex flex-row justify-content-end">
+            <div id="gel_fat_baslik" class="p-2">
+                <span>GELEN FATURA LİSTESİ</span>
+            </div>
+            <div class="p-2">
+                @Html.Label("Mükellefler")
+            </div>
+            <div class="p-2">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("gln_ft_cm_firmalar")
+                .Filter("contains")
+                .DataTextField("Unvan")
+                .DataValueField("Id")
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                .Events(e=>e.Select("gln_ft_cm_firmalar_select_event"))
+                )
+            </div>
+            <div class="p-2 mt-1">
+                @Html.Label("İlk Tarih")
+            </div>
+            <div class="p-2">
+                @(
+
+                Html.Kendo().DatePicker()
+                .Name("gel_fat_dt_ilkTarih")
+                .Format("dd-MM-yyyy")
+                .Value(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm"})
+                )
+            </div>
+            <div class="p-2 mt-1">
+                @Html.Label("Son Tarih")
+            </div>
+            <div class="p-2">
+                @(
+
+                Html.Kendo().DatePicker()
+                .Name("gel_fat_dt_sonTarih")
+                .Format("dd-MM-yyyy")
+                .Value(DateTime.Now)
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm"})
+                )
+            </div>
+            <div class="p-2">
+                <button class="btn btn-primary btn-sm" onclick="gelen_fatura_sorgula_click_event()">
+                    Sorgula
+                </button>
+            </div>
+            <div class="p-2">
+                <button class="btn btn-warning btn-sm" onclick="gelen_fatura_listele_click_event()">
+                    Listele
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@(Html.Kendo().DataSource<Tacmin.Model.Maliye.MaliyeGelenFaturaListeModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+         Html.Ty().TyGrid<Tacmin.Model.Maliye.MaliyeGelenFaturaListeModel>().Name("master")
+         .Columns(c=>
+         {
+             c.Bound(m => m.MukellefUnvan).Filterable(ftb => ftb.Multi(true).Search(true)).Width(250);
+
+             c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(100);
+             c.Bound(m => m.FaturaNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(110);
+             c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).Width(250);
+             c.Bound(m => m.VergiNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(110);
+             c.Bound(m => m.ParaBirimi).Filterable(ftb => ftb.Multi(true).Search(true)).Width(100);
+             c.Bound(m => m.Toplam).Filterable(ftb => ftb.Multi(true).Search(true))
+             .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(110);
+             c.Bound(m => m.Vergi).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(110);
+             c.Bound(m => m.Odenecek).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(110);
+             c.Bound(m => m.TesisatNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(110);
+         })
+         .Height(550)
+        )
+    </div>
+</div>
+
+<script>
+
+    const select_model = {
+
+        gib_kodu: null,
+        gib_sifre: null,
+        gib_parola: null,
+        firmaId : null
+    }
+
+    async function data_fatura_listesi_yukle(ilkTarih, sonTarih) {
+
+        const data_list = await $.ajax({
+
+            url: "@Url.Action("GelenFaturaListesi", "gelenfatura")",
+            method: "POST",
+            dataType: "Json",
+            data: { ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        for (var i = 0; i < data_list.length; i++) {
+
+            data_list[i].Tarih = new Date(parseInt(data_list[i].Tarih.substr(6)))
+        }
+
+        const grid = $("#master").data("kendoGrid")
+
+        grid.setDataSource(data_list)
+
+
+    }
+
+    function gln_ft_cm_firmalar_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        select_model.gib_kodu = dataItem.GibKodu
+        select_model.gib_parola = dataItem.GibParola
+        select_model.gib_sifre = dataItem.GibSifre
+        select_model.firmaId = dataItem.Id
+
+        console.log("gln_ft_cm_firmalar_select_event : ", dataItem)
+    }
+
+    $(document).ready(async function () {
+
+        masaustu_servis_kontrol()
+
+        kendo.ui.progress($('#gel_fat_div_id'), true);
+
+        
+
+        let local_listeler = window.localStorage.getItem("local_listeler")
+
+        if (local_listeler != null) {
+
+            local_listeler = JSON.parse(local_listeler)
+
+            const gln_ft_cm_firmalar = $("#gln_ft_cm_firmalar").data("kendoComboBox")
+
+            gln_ft_cm_firmalar.setDataSource(local_listeler.FirmaListesi)
+        }
+
+        kendo.ui.progress($('#gel_fat_div_id'), false);
+    })
+
+    async function gelen_fatura_listele_click_event() {
+
+        const gel_fat_dt_ilkTarih = $("#gel_fat_dt_ilkTarih").data("kendoDatePicker")
+
+        const gel_fat_dt_sonTarih = $("#gel_fat_dt_sonTarih").data("kendoDatePicker")
+
+        if (gel_fat_dt_ilkTarih.value() == null || gel_fat_dt_sonTarih.value() == null) {
+
+            mesaj("Tarih Seçiniz.")
+            return
+        }
+
+        const ilkTarih = tarih_func_sql(gel_fat_dt_ilkTarih.value())
+        const sonTarih = tarih_func_sql(gel_fat_dt_sonTarih.value())
+
+        kendo.ui.progress($('#gel_fat_div_id'), true);
+
+        await data_fatura_listesi_yukle(ilkTarih, sonTarih)
+
+        kendo.ui.progress($('#gel_fat_div_id'), false);
+    }
+
+    async function gelen_fatura_sorgula_click_event() {
+
+        const gel_fat_dt_ilkTarih = $("#gel_fat_dt_ilkTarih").data("kendoDatePicker")
+
+        const gel_fat_dt_sonTarih = $("#gel_fat_dt_sonTarih").data("kendoDatePicker")
+
+        if (gel_fat_dt_ilkTarih.value() == null || gel_fat_dt_sonTarih.value() == null) {
+
+            mesaj("Tarih Seçiniz.")
+            return
+        }
+
+        kendo.ui.progress($('#gel_fat_div_id'), true);
+
+        const token_model = await inter_aktif_giris(select_model.gib_kodu, select_model.gib_sifre, select_model.gib_parola)
+
+        if (token_model.islemDurum == false) {
+            console.log("token model : ", token_model)
+            mesaj(token_model.mesaj, "error")
+            return
+        }
+
+        const ilkTarih = tarih_func_sql(gel_fat_dt_ilkTarih.value())
+        const sonTarih = tarih_func_sql(gel_fat_dt_sonTarih.value())
+
+        const tarih_listesi = await $.ajax({
+
+            url: "@Url.Action("TarihAralikListesi", "gelenfatura")",
+            method: "POST",
+            dataType: "Json",
+            data: { ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        const gelen_fatura_listesi = []
+
+        for (let i = 0; i < tarih_listesi.length; i++) {
+
+            const item = tarih_listesi[i]
+
+            const fatura_list = await fatura_listesi(token_model.token, item.BaslangicTarih, item.BitisTarih)
+
+            console.log("fatura_list : ", fatura_list)
+
+            for (let k = 0; k < fatura_list.length; k++) {
+
+                const fatura = fatura_list[k]
+
+                fatura.toplam = fatura.toplam.replace(".", ",")
+                fatura.odenecek = fatura.odenecek.replace(".", ",")
+                fatura.vergi = fatura.vergi.replace(".", ",")
+
+                gelen_fatura_listesi.push(fatura)
+            }
+        }
+
+        await inter_aktif_cikis(token_model.token)
+
+        const result = await $.ajax({
+
+            url: "@Url.Action("FaturaKayit", "gelenfatura")",
+            method: "POST",
+            dataType: "Json",
+            data: { clientList: gelen_fatura_listesi, firmaId: select_model.firmaId }
+        })
+
+        await data_fatura_listesi_yukle(ilkTarih, sonTarih)
+
+        kendo.ui.progress($('#gel_fat_div_id'), false);
+    }
+
+    async function fatura_listesi(token,ilkTarih, sonTarih) {
+
+        const data_str = "cmd=EFaturaIslemleri_eFaturaGoruntuleSorgula&callid=074d4fa89e435-25&pageName=P_EFATURA&token=" + token
+            + "&jp=%7B%22faturaTarihBas%22%3A%22" + ilkTarih
+            + "%22%2C%22textBox%22%3A%22%22%2C%22faturaTarihSon%22%3A%22" + sonTarih
+            + "%22%7D"
+
+        const url = "https://ivd.gib.gov.tr/tvd_server/dispatch"
+
+        const response = await $.ajax({
+
+            url: url,
+            method : "POST",
+            data: data_str
+        })
+
+        let result = response.data
+
+        let liste = []
+
+        if (!result.hasOwnProperty("GELEN")) {
+
+            liste = result.FATURASONUC
+        }
+
+        return liste
+    }
+
+
+
+</script>
+
+<style>
+
+    #gel_fat_baslik {
+        font-size: 15px;
+        color: red;
+        font-weight: bold;
+        margin-right: 200px;
+    }
+</style>
+
+

@@ -1,0 +1,130 @@
+﻿@model Tacmin.Model.Hesap.KullaniciModel
+
+<div class="row">
+    <div class="col-md-6">
+        <fieldset class="groupbox">
+            <legend>GİB Bilgileri</legend>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.GibKodu, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextBoxFor(x => x.GibKodu).HtmlAttributes(new { style = "width: 100%;" })
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.GibSifre, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextBoxFor(x => x.GibSifre).HtmlAttributes(new { style = "width: 100%;" })
+
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.GibParola, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextBoxFor(x => x.GibParola).HtmlAttributes(new { style = "width: 100%;" })
+
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="groupbox">
+            <legend>NTB Bilgileri</legend>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.NtbKodu, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextBoxFor(x => x.NtbKodu).HtmlAttributes(new { style = "width: 100%;" })
+                    
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(x => x.NtbSifre, new { @class = "col-md-2 col-form-label" })
+                <div class="col-md-9">
+                    @Html.Kendo().TextBoxFor(x => x.NtbSifre).HtmlAttributes(new { style = "width: 100%;" })
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-md-6">
+        <fieldset class="groupbox">
+            <legend>Mail Bilgileri</legend>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.MailKullaniciAdi, new { @class = "col-md-4 col-form-label" })
+                <div class="col-md-7">
+                    @Html.Kendo().TextBoxFor(x => x.MailKullaniciAdi).HtmlAttributes(new { style = "width: 100%;" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.MailSifre, new { @class = "col-md-4 col-form-label" })
+                <div class="col-md-7">
+                    @Html.Kendo().TextBoxFor(x => x.MailSifre).HtmlAttributes(new { style = "width: 100%;" })
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="groupbox">
+            <legend>Sms Bilgileri</legend>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.SmsFirmaId, new { @class = "col-md-4 col-form-label" })
+                <div class="col-md-7">
+                    @(
+                    Html.Kendo().ComboBoxFor(x=>x.SmsFirmaId)
+                    .Name("SmsFirmaId")
+                    .Filter("contains")
+
+                    .Suggest(true)
+                    .DataTextField("FirmaAdi")
+                    .DataValueField("Id")
+                    .DataSource(data =>
+                    {
+
+                        data.Read("SmsFirmaListesi", "hesap");
+                    })
+                    )
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.SmsKullaniciAdi, new { @class = "col-md-4 col-form-label" })
+                <div class="col-md-7">
+                    @Html.Kendo().TextBoxFor(x => x.SmsKullaniciAdi).HtmlAttributes(new { style = "width: 100%;" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.SmsSifre, new { @class = "col-md-4 col-form-label" })
+                <div class="col-md-7">
+                    @Html.Kendo().TextBoxFor(x => x.SmsSifre).HtmlAttributes(new { style = "width: 100%;" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(x => x.Baslik, new { @class = "col-md-4 col-form-label" })
+                <div class="col-md-7">
+                    @(
+                    Html.Kendo().ComboBoxFor(x=>x.Baslik)
+                    .Name("Baslik")
+                    .Filter("contains")
+
+                    .Suggest(true)
+                    .DataTextField("baslik")
+                    .DataValueField("baslik")
+                    
+                    )
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    @Html.Label("Kontor Bilgisi")
+                </div>
+                <div class="col-md-7">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("tx_kontor")
+                    .Enable(false)
+                    .HtmlAttributes(new { style = "width: 100%;" })
+                    )
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

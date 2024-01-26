@@ -1,0 +1,53 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.EArsiv.ArsivFaturaModel>()
+    .Name("ozetdbds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @(Html.Ty().TyGrid<Tacmin.Model.EArsiv.ArsivFaturaModel>().Name("ozetdb")
+            .Columns(c => {
+                c.Select().Width(50);
+                c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true))
+                .HtmlAttributes(new { @class = "unvan_css" }).Width(300);
+                c.Bound(m => m.tarih).Format("{0:dd/MM/yyyy}").Filterable(ftb => ftb.Multi(true).Search(true)).Width(110);
+                c.Bound(m => m.belgeNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(140);
+                c.Bound(m => m.aliciUnvan).Filterable(ftb => ftb.Multi(true).Search(true))
+                .HtmlAttributes(new { @class = "firmaunvan_css" }).Width(300);
+                c.Bound(m => m.aliciVergiNo).Filterable(ftb => ftb.Multi(true).Search(true)).Width(120);
+                c.Bound(m => m.malHizmetToplam).Filterable(ftb => ftb.Multi(true).Search(true))
+                .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(120);
+                c.Bound(m => m.KdvToplam).Filterable(ftb => ftb.Multi(true).Search(true))
+               .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(120);
+                c.Bound(m => m.iskontoToplam).Filterable(ftb => ftb.Multi(true).Search(true))
+              .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(150);
+                c.Bound(m => m.tevfikatKdvTutar).Filterable(ftb => ftb.Multi(true).Search(true))
+                .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(150);
+                c.Bound(m => m.vergidahilToplam).Filterable(ftb => ftb.Multi(true).Search(true))
+               .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(120);
+                c.Bound(m => m.odenecek).Filterable(ftb => ftb.Multi(true).Search(true))
+               .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" }).Width(120);
+                c.Bound(m => m.onayDurumu).Filterable(ftb => ftb.Multi(true).Search(true));
+
+            })
+            .Groupable(gr => gr.ShowFooter(true))
+            .Height(580)
+            .Selectable(select => select.Mode(GridSelectionMode.Multiple).Type(GridSelectionType.Row))
+            .Events(e => e.Change("fatura_select_change"))
+            )
+    </div>
+</div>
+<style>
+    .unvan_css {
+        color: red;
+        font-weight: bold;
+    }
+
+    .firmaunvan_css {
+        color: black;
+        font-weight: bold;
+    }
+</style>
+

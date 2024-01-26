@@ -1,0 +1,136 @@
+﻿@model MukellefAraModel
+
+@{
+    Title = "Mükellef Listesi";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.Ty().TyToolBar().Items(items =>
+{
+    items.Add().Filter(
+                @<text>
+                    @(Html.Ty().TyFilter<MukellefAraModel>()
+                    .Fields(f =>
+                    {
+                        f.Add(p => p.UNVAN).Label("Ünvan");
+                        f.Add(p => p.TCKN).Label("TC No");
+                        f.Add(p => p.VERGI_NO).Label("Vergi No");
+                    })
+                    .FilterExpression(f =>
+                    {
+                        f.Add(p => p.UNVAN).Contains("");
+                    })
+
+                )
+                </text>
+    ).HtmlAttributes(new { @class = "kendoprimary" });
+    items.Add().MknBilgiGnc().HtmlAttributes(new { @class = "kendosuccess" });
+    items.Add().New().Url(Url.RouteUrl(new { controller = "mukellef", action = "mukellefkayit" })).HtmlAttributes(new { @class = "kendoinfo" });
+    items.Add().BilgiGuncelle();
+
+})
+    </div>
+</div>
+
+@(Html.Kendo().DataSource<MukellefAraModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20))
+)
+@(Html.Ty().TyGrid<MukellefAraModel>().Name("master")
+    .Columns(c => {
+        c.Detay(Url.RouteUrl(new { controller = "mukellef", action = "mukellefkayit", id = "#= ID #" }),icon : "fa fa-user");
+        c.Bound(m => m.UNVAN).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.VERGI_DAIRESI).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.VERGI_NO).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.TCKN).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.GRUP_KODU).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.IL).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.ILCE).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.AKTIF).Filterable(ftb => ftb.Multi(true).Search(true)).ClientTemplate("#= showIcon_bool(AKTIF) #");
+
+
+    })
+)
+
+
+
+<div>
+    @(
+     Html.Kendo().Window()
+     .Name("wn_muk_bilgi_form")
+     .Visible(false)
+     .Modal(true)
+     .Width(550)
+     .Height(250)
+     
+     .Content(Html.Partial("../Mukellef/MukellefBilgiGuncellemeForm").ToString())
+    )
+</div>
+
+<script>
+
+    let excel_bilgi_tur = ""
+
+    function bilgi_guncelleme_click_event(e) {
+
+        excel_bilgi_tur = e.id
+
+        let baslik = ""
+
+        if (excel_bilgi_tur == "gib_bil") {
+
+            baslik = "Mükellef Gib Bilgileri Güncelleme"
+        }
+
+        const wn_muk_bilgi_form = $("#wn_muk_bilgi_form").data("kendoWindow")
+
+        wn_muk_bilgi_form.title(baslik)
+        wn_muk_bilgi_form.center()
+        wn_muk_bilgi_form.open()
+
+    }
+
+    function showIcon_bool(isValue) {
+
+        let icon = ""
+
+        if (isValue == true) {
+
+            icon = '<span style="font-size: 2em; color:#00ad43;"><i class="fa fa-check fa-sm" aria-hidden="true"></i></span>';
+        }
+        if (isValue == false) {
+
+            icon = '<span style="font-size: 2em; color: Tomato;"><i class="fa fa-times" aria-hidden="true"></i></span>'
+        }
+
+        return icon
+
+    }
+
+    function btn_mal_gnc_event() {
+        kendo.ui.progress($('.content'), true);
+        $.ajax({
+            url:'@Url.RouteUrl(new { controller = "mukellef", action = "MaliyeBilgiGuncelleme" })',
+            method: "GET",
+            success: function (data) {
+
+                console.log("btn_mal_gnc_event : ", data)
+                kendo.ui.progress($('.content'), false);
+
+            },
+            error: function (e) {
+
+                kendo.ui.progress($('.content'), false);
+                alert(e)
+            }
+        });
+    }
+</script>
+
+<style>
+    .k-filter-menu-container span {
+        font-weight: bold;
+        font-size: 11px;
+    }
+</style>

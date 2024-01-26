@@ -1,0 +1,153 @@
+﻿@model UserLoginModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giriş Yap - Tacmin Müşavir</title>
+    @Html.Partial("_DefaultHeader")
+</head>
+<body class="login-page" cz-shortcut-listen="true" style="min-height: 466px;">
+    <div class="login-box">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a href="https://tacminyazilim.com" target="_blank" class="h1">
+                    <img src="~/assets/img/logo/logo-dark-lg.png" width="270" />
+                </a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Oturumu başlatmak için giriş yapınız</p>
+
+                
+                    <div class="input-group mb-3">
+                        @(Html.TextBoxFor(x => x.kullaniciKodu, new { @class = "form-control", placeholder = "Kullanıcı Kodu" }))
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-layer-group"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group mb-3">
+                        @Html.PasswordFor(x => x.sifre, new { @class = "form-control", placeholder = "Şifre" })
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                @Html.Kendo().CheckBoxFor(x => x.beniHatirla).Label("Beni Hatırla")
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <button type="button" id="btn_giris" onclick="giris_click_event()" class="btn btn-primary btn-block">Giriş</button>
+                        </div>
+                    </div>
+               
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+<script>
+
+
+
+    function mesaj(mesaj, icon) {
+
+        Swal.fire({
+            icon: icon,
+            title: 'İşlem Sonucu',
+            text: mesaj,
+            confirmButtonText: "Tamam"
+        })
+    }
+
+    async function giris_click_event() {
+
+        kendo.ui.progress($('.content'), true);
+
+        const kullanici_kodu = $("#kullaniciKodu").val()
+        const sifre = $("#sifre").val()
+
+        let is_beni_hatirla = false
+
+        const ch_beni_hatirla = $("#beniHatirla:checked").val()
+
+        console.log("ch_beni_hatirla : : ", ch_beni_hatirla)
+
+        if (ch_beni_hatirla == "true") {
+
+            is_beni_hatirla = true;
+        }
+
+        const model = {
+
+            kullaniciKodu: kullanici_kodu,
+            sifre: sifre,
+            beniHatirla: is_beni_hatirla,
+            kullaniciAdi: "",
+            returl: "",
+            token : ""
+        }
+
+        console.log("model : ", model)
+
+        const isDurum = await $.ajax({
+
+            url: '@Url.RouteUrl(new { controller = "login", action = "KullaniciGiris" })',
+            method: "POST",
+            dataType: "Json",
+            data: { usermodel: model },
+        })
+
+
+        if (isDurum == false) {
+            kendo.ui.progress($('.content'), false);
+            mesaj("Kullanıcı Adı yada Şifre Yanlış Kontrol Ediniz.", "error")
+
+        }
+        if (isDurum == true) {
+
+            kendo.ui.progress($('.content'), false);
+
+            const local_listeler = await $.ajax({
+
+                url: "@Url.Action("LocalListeler", "main")",
+                method : "GET"
+            })
+
+            window.localStorage.setItem("local_listeler", JSON.stringify(local_listeler))
+
+            let link = window.location.host
+
+            if (link.indexOf("localhost") != -1) {
+
+                link = "http://" + link
+            }
+            else {
+                link = "https://" + link
+            }
+
+            window.open(link, "_self");
+        }
+       
+    }
+
+</script>

@@ -1,0 +1,21 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Gib.GibTabloSonuc>()
+    .Name("hatadbds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row p-2">
+    <div class="col-md-6">
+        @(Html.Ty().TyGrid<Tacmin.Model.Gib.GibTabloSonuc>().Name("hatadb")
+            .Columns(c => {
+                c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).Width(150);
+                c.Bound(m => m.Mesaj).Filterable(ftb => ftb.Multi(true).Search(true));
+
+            })
+            .Height(500)
+        )
+    </div>
+</div>
+
+

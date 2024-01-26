@@ -1,0 +1,42 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Rapor.RaporFirmaModel>()
+    .Name("gibGridds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Rapor.RaporFirmaModel>().Name("gibGrid")
+        .Columns(c => {
+
+            c.Bound(m => m.Unvan).Filterable(false);
+           
+        })
+        .Height(500)
+        )
+    </div>
+</div>
+
+<script>
+
+    async function gibFirmaGridYukle() {
+
+        const data_list = await $.ajax({
+
+            url: "@Url.Action("GibBilgisiEksikFirmalar", "rapor")",
+            method : "GET"
+        })
+
+        try {
+
+            const gibGrid = $("#gibGrid").data("kendoGrid")
+            gibGrid.setDataSource(data_list)
+        } catch (e) {
+
+            console.log("")
+        }
+    }
+
+</script>

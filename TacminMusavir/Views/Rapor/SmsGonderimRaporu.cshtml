@@ -1,0 +1,135 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Whatsapp.GonderimBilgi>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                @Html.Label("İlk Tarih")
+            </div>
+            <div class="p-2">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("rps_dt_ilk_tarih")
+                .Format("dd-MM-yyyy")
+                .Value(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))
+                .HtmlAttributes(new { style="width : 100%;" })
+                )
+            </div>
+
+            <div class="p-2">
+                @Html.Label("Son Tarih")
+            </div>
+            <div class="p-2">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("rps_dt_son_tarih")
+                .Format("dd-MM-yyyy")
+                .Value(DateTime.Now)
+                .HtmlAttributes(new { style="width : 100%;" })
+                )
+            </div>
+            <div class="p-2">
+                <button type="button" onclick="gonderi_rapor_listele_click_event()">
+                    Listele
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-2 k-card">
+    <div class="col-md-12 ">
+        <div class="d-flex flex-row">
+            <div class="p-2" style="width:100%;">
+                @(
+         Html.Ty().TyGrid<Tacmin.Model.Whatsapp.GonderimBilgi>().Name("master")
+         .Columns(c =>
+         {
+             c.Bound(m => m.GonderimZamani).Format("{0:dd-MM-yyyy HH:mm}")
+             .Filterable(ftb => ftb.Multi(true).Search(true)).Width(110);
+             c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true)).Width(250);
+             c.Bound(m => m.Modul).Filterable(ftb => ftb.Multi(true).Search(true)).Width(120);
+             c.Bound(m => m.GonderimIcerik).Filterable(ftb => ftb.Multi(true).Search(true)).Width(350);
+
+
+         })
+         .Height(600)
+        )
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function tarih_func_sql(tarih_value) {
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return yil + "/" + ay + "/" + gun;
+        }
+    }
+    async function gonderi_rapor_listele_click_event() {
+
+        const rps_dt_ilk_tarih = $("#rps_dt_ilk_tarih").data("kendoDatePicker").value()
+
+        const rps_dt_son_tarih = $("#rps_dt_son_tarih").data("kendoDatePicker").value()
+
+        let ilkTarih = null
+        let sonTarih = null
+
+        if (rps_dt_ilk_tarih != null) {
+
+            ilkTarih = tarih_func_sql(rps_dt_ilk_tarih)
+        }
+
+        if (rps_dt_son_tarih != null) {
+
+            sonTarih = tarih_func_sql(rps_dt_son_tarih)
+        }
+
+        kendo.ui.progress($('.content'), true);
+
+        const data_liste = await $.ajax({
+
+            url: "@Url.Action("Sms_GonderimRaporuTarih", "rapor")",
+            method: "POST",
+            dataType: "Json",
+            data: { ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        for (var i = 0; i < data_liste.length; i++) {
+
+            if (data_liste[i].GonderimZamani != null) {
+
+                data_liste[i].GonderimZamani = new Date(parseInt(data_liste[i].GonderimZamani.substr(6)))
+            }
+        }
+
+        kendo.ui.progress($('.content'), false);
+
+        try {
+            const grid = $("#master").data("kendoGrid")
+            grid.setDataSource(data_liste)
+
+        } catch {
+
+            console.log("")
+        }
+
+    }
+</script>
+

@@ -1,0 +1,65 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Musavir.MukellefBorcDetayModel>()
+    .Name("vadeGecmeyenGridds")
+    .Ajax(x => x.PageSize(20)
+
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+       Html.Ty().TyGrid<Tacmin.Model.Musavir.MukellefBorcDetayModel>().Name("vadeGecmeyenGrid")
+       .Columns(c=>
+       {
+
+           c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+           c.Bound(m => m.VergiKodu).Filterable(ftb => ftb.Multi(true).Search(true));
+           c.Bound(m => m.VergiAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+           c.Bound(m => m.AnaBorc).Filterable(false)
+           .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+           c.Bound(m => m.GecikmeZammi).Filterable(false)
+           .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+           c.Bound(m => m.Toplam).Filterable(false)
+           .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+       })
+       .Height(500)
+
+       )
+    </div>
+</div>
+
+<script>
+
+    function vadesiGelmemisGridYukle(anaListe) {
+
+        const liste = []
+
+        for (var i = 0; i < anaListe.length; i++) {
+
+            const item = anaListe[i]
+
+            for (var d = 0; d < item.VadesiGelmemisBorcListesi.length; d++) {
+
+                const detay = item.VadesiGelmemisBorcListesi[d]
+
+                detay.Unvan = item.Unvan
+
+                liste.push(detay)
+            }
+        }
+
+        try {
+
+            const vadeGecmeyenGrid = $("#vadeGecmeyenGrid").data("kendoGrid")
+
+            vadeGecmeyenGrid.setDataSource(liste)
+
+        } catch (e) {
+
+            console.log("")
+        }
+    }
+
+</script>
+
+

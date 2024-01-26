@@ -1,0 +1,519 @@
+﻿
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Tc Kimlik No : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_tc_no")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Rapor Takip No : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_rapor_takip_no")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Sağlık Tesis Adı : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_saglik_tesis_adi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Polikinik Tarihi : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_poliklinik_tarihi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Vaka : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_vaka")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Hastaneye Yatiş Tarihi : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_has_yat_tarihi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Rapor Başlama Tarihi : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_rap_bas_tarihi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Rapor Türü : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_rapor_turu")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("İş Kazası Tarihi : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_is_kaz_tarihi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+                <fieldset>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Ad Soyad : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_ad_soyad")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Rapor Sıra No : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_rapor_sira_no")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Düzenleyen Poliklinik Kodu : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_dzn_polik_kodu")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Poliklinik Defter Sıra No : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_dzn_polik_def_sira_no")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Rapor Durumu : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_rapor_durumu")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Hastane Çıkış Tarihi : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_has_cik_tarihi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Rapor Bitiş Tarihi : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_rap_bit_tarihi")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 40%;">
+                            @Html.Label("Ekrana Düştüğü Tarih : ")
+                        </div>
+                        <div class="p-1" style="width : 60%;">
+                            @(
+                             Html.Kendo().TextBox()
+                             .Name("vz_dt_tx_ekran_dus_tarih")
+                             .Enable(false)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-center" style="margin-top : 15px;">
+            <div class="p-1" id="kisi_bilgi">
+                
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-center" style="margin-top : 15px;">
+            <div class="p-1 mt-1 text-danger text-bold" id="tarih_bilgi">
+                
+            </div>
+            <div class="p-1 mt-1">
+                ile
+            </div>
+            <div class="p-1" style="width : 14%;">
+                @(
+                 Html.Kendo().DatePicker()
+                 .Name("vz_dt_onay_tarih")
+                 .Format("dd-MM-yyyy")
+                 .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm text-red text-bold" })
+                 )
+            </div>
+            <div class="p-1 mt-1">
+                tarihleri arasında
+            </div>
+        </div>
+        <div class="d-flex flex-row justify-content-center" style="margin-top : 15px;">
+            <div class="p-1" style="width : 15%;margin-left : 60px;">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("vz_dt_cm_durum_liste")
+                .SelectedIndex(0)
+                .DataTextField("value")
+                .DataValueField("id")
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm" })
+                .Events(e=>e.Select("vz_dt_cm_durum_liste_select_event"))
+                )
+            </div>
+            <div class="p-1">
+                <button class="btn btn-success" onclick="rapor_onayla_click_event()">
+                    Onayla
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function detay_form_veri_temizle() {
+
+        const vz_dt_tx_tc_no = $("#vz_dt_tx_tc_no").data("kendoTextBox")
+        const vz_dt_tx_rapor_takip_no = $("#vz_dt_tx_rapor_takip_no").data("kendoTextBox")
+        const vz_dt_tx_saglik_tesis_adi = $("#vz_dt_tx_saglik_tesis_adi").data("kendoTextBox")
+        const vz_dt_tx_poliklinik_tarihi = $("#vz_dt_tx_poliklinik_tarihi").data("kendoTextBox")
+        const vz_dt_tx_vaka = $("#vz_dt_tx_vaka").data("kendoTextBox")
+        const vz_dt_tx_has_yat_tarihi = $("#vz_dt_tx_has_yat_tarihi").data("kendoTextBox")
+        const vz_dt_tx_rap_bas_tarihi = $("#vz_dt_tx_rap_bas_tarihi").data("kendoTextBox")
+        const vz_dt_tx_rapor_turu = $("#vz_dt_tx_rapor_turu").data("kendoTextBox")
+        const vz_dt_tx_is_kaz_tarihi = $("#vz_dt_tx_is_kaz_tarihi").data("kendoTextBox")
+        const vz_dt_tx_ad_soyad = $("#vz_dt_tx_ad_soyad").data("kendoTextBox")
+        const vz_dt_tx_rapor_sira_no = $("#vz_dt_tx_rapor_sira_no").data("kendoTextBox")
+        const vz_dt_tx_dzn_polik_kodu = $("#vz_dt_tx_dzn_polik_kodu").data("kendoTextBox")
+        const vz_dt_tx_dzn_polik_def_sira_no = $("#vz_dt_tx_dzn_polik_def_sira_no").data("kendoTextBox")
+        const vz_dt_tx_rapor_durumu = $("#vz_dt_tx_rapor_durumu").data("kendoTextBox")
+        const vz_dt_tx_has_cik_tarihi = $("#vz_dt_tx_has_cik_tarihi").data("kendoTextBox")
+        const vz_dt_tx_rap_bit_tarihi = $("#vz_dt_tx_rap_bit_tarihi").data("kendoTextBox")
+        const vz_dt_tx_ekran_dus_tarih = $("#vz_dt_tx_ekran_dus_tarih").data("kendoTextBox")
+
+        vz_dt_tx_tc_no.value("")
+        vz_dt_tx_rapor_takip_no.value("")
+        vz_dt_tx_saglik_tesis_adi.value("")
+        vz_dt_tx_poliklinik_tarihi.value("")
+        vz_dt_tx_vaka.value("")
+        vz_dt_tx_has_yat_tarihi.value("")
+        vz_dt_tx_rap_bas_tarihi.value("")
+        vz_dt_tx_rapor_turu.value("")
+        vz_dt_tx_is_kaz_tarihi.value("")
+        vz_dt_tx_ad_soyad.value("")
+        vz_dt_tx_rapor_sira_no.value("")
+        vz_dt_tx_dzn_polik_kodu.value("")
+        vz_dt_tx_dzn_polik_def_sira_no.value("")
+        vz_dt_tx_rapor_durumu.value("")
+        vz_dt_tx_has_cik_tarihi.value("")
+        vz_dt_tx_rap_bit_tarihi.value("")
+        vz_dt_tx_ekran_dus_tarih.value("")
+    }
+
+    function detay_form_veri_doldur() {
+
+        const vz_dt_tx_tc_no = $("#vz_dt_tx_tc_no").data("kendoTextBox")
+        const vz_dt_tx_rapor_takip_no = $("#vz_dt_tx_rapor_takip_no").data("kendoTextBox")
+        const vz_dt_tx_saglik_tesis_adi = $("#vz_dt_tx_saglik_tesis_adi").data("kendoTextBox")
+        const vz_dt_tx_poliklinik_tarihi = $("#vz_dt_tx_poliklinik_tarihi").data("kendoTextBox")
+        const vz_dt_tx_vaka = $("#vz_dt_tx_vaka").data("kendoTextBox")
+        const vz_dt_tx_has_yat_tarihi = $("#vz_dt_tx_has_yat_tarihi").data("kendoTextBox")
+        const vz_dt_tx_rap_bas_tarihi = $("#vz_dt_tx_rap_bas_tarihi").data("kendoTextBox")
+        const vz_dt_tx_rapor_turu = $("#vz_dt_tx_rapor_turu").data("kendoTextBox")
+        const vz_dt_tx_is_kaz_tarihi = $("#vz_dt_tx_is_kaz_tarihi").data("kendoTextBox")
+        const vz_dt_tx_ad_soyad = $("#vz_dt_tx_ad_soyad").data("kendoTextBox")
+        const vz_dt_tx_rapor_sira_no = $("#vz_dt_tx_rapor_sira_no").data("kendoTextBox")
+        const vz_dt_tx_dzn_polik_kodu = $("#vz_dt_tx_dzn_polik_kodu").data("kendoTextBox")
+        const vz_dt_tx_dzn_polik_def_sira_no = $("#vz_dt_tx_dzn_polik_def_sira_no").data("kendoTextBox")
+        const vz_dt_tx_rapor_durumu = $("#vz_dt_tx_rapor_durumu").data("kendoTextBox")
+        const vz_dt_tx_has_cik_tarihi = $("#vz_dt_tx_has_cik_tarihi").data("kendoTextBox")
+        const vz_dt_tx_rap_bit_tarihi = $("#vz_dt_tx_rap_bit_tarihi").data("kendoTextBox")
+        const vz_dt_tx_ekran_dus_tarih = $("#vz_dt_tx_ekran_dus_tarih").data("kendoTextBox")
+
+        vz_dt_tx_tc_no.value(sgk_detay_model.tc_kimlik_no)
+        vz_dt_tx_rapor_takip_no.value(sgk_detay_model.rapor_takip_no)
+        vz_dt_tx_saglik_tesis_adi.value(sgk_detay_model.tesis_adi)
+        vz_dt_tx_poliklinik_tarihi.value(sgk_detay_model.poliklinik_tarihi)
+        vz_dt_tx_vaka.value(sgk_detay_model.vaka_adi)
+        vz_dt_tx_has_yat_tarihi.value(tarih_kontrol(sgk_detay_model.yat_rap_bas_tar))
+        vz_dt_tx_rap_bas_tarihi.value(sgk_detay_model.a_bas_tar)
+        vz_dt_tx_rapor_turu.value("HEYET")
+        vz_dt_tx_is_kaz_tarihi.value(sgk_detay_model.iskazasi_tarihi)
+        vz_dt_tx_ad_soyad.value(sgk_detay_model.adi_soyadi)
+        vz_dt_tx_rapor_sira_no.value(sgk_detay_model.rapor_sira_no)
+        vz_dt_tx_dzn_polik_kodu.value("1900")
+        vz_dt_tx_dzn_polik_def_sira_no.value("0")
+
+        let raporDurum = "ÇALIŞMAZ"
+
+        if (sgk_detay_model.rapor_durumu == "1") {
+
+            raporDurum = "ÇALIŞIR"
+        }
+
+        vz_dt_tx_rapor_durumu.value(raporDurum)
+        vz_dt_tx_has_cik_tarihi.value(tarih_kontrol(sgk_detay_model.yat_rap_bit_tar))
+        vz_dt_tx_rap_bit_tarihi.value(sgk_detay_model.a_bit_tar)
+        vz_dt_tx_ekran_dus_tarih.value(sgk_detay_model.bas_hekim_onay_tarihi)
+
+        // 32947348112 kimlik numaralı MUSTAFA KÖLÜK isimli çalışanım
+
+        const kisi_bilgi_html = sgk_detay_model.tc_kimlik_no + " kimlik numaralı " + sgk_detay_model.adi_soyadi + " isimli çalışanım"
+
+
+        let tarih = tarih_kontrol(sgk_detay_model.yat_rap_bas_tar)
+
+        if (tarih == "-") {
+
+            tarih = sgk_detay_model.a_bas_tar
+        }
+
+        const vz_dt_onay_tarih = $("#vz_dt_onay_tarih").data("kendoDatePicker")
+
+        const _rapor_bt_tarih = sgk_detay_model.a_bit_tar.toString().split("-")
+
+      
+
+        const rapor_bt_tarih = new Date(_rapor_bt_tarih[2], _rapor_bt_tarih[1] - 1, _rapor_bt_tarih[0])
+
+        vz_dt_onay_tarih.value(rapor_bt_tarih)
+
+        const tarih_bilgi_html = tarih 
+         
+
+        $("#kisi_bilgi").html(kisi_bilgi_html)
+
+        $("#tarih_bilgi").html(tarih_bilgi_html)
+
+        const durum_list = [
+
+            {
+                id : 0,value : "Çalışmamıştır"
+            },
+            {
+                id : 1, value : "Çalışmıştır"
+            }
+        ]
+
+        const vz_dt_cm_durum_liste = $("#vz_dt_cm_durum_liste").data("kendoComboBox")
+
+        vz_dt_cm_durum_liste.setDataSource(durum_list)
+        vz_dt_cm_durum_liste.select(0)
+       
+    }
+
+    function tarih_kontrol(value) {
+
+        let deger = value
+
+        if (value == null) {
+
+            return value
+        }
+
+        const tarih = value.toString().split('-')
+
+        const yil = Number(tarih[2])
+
+        if (yil < 2000) {
+            deger = "-"
+        }
+        
+
+        return deger 
+    }
+
+    let select_nitelik_durum = 0
+
+    function vz_dt_cm_durum_liste_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        select_nitelik_durum = dataItem.id
+
+        console.log("vz_dt_cm_durum_liste_select_event : ", select_nitelik_durum)
+
+    }
+
+    async function rapor_onayla_click_event() {
+
+        if (select_nitelik_durum == null) {
+
+            alert("Çalışma Bilgisini Seçiniz.")
+
+            return
+        }
+
+        const vz_dt_onay_tarih = $("#vz_dt_onay_tarih").data("kendoDatePicker").value()
+
+        if (vz_dt_onay_tarih == null) {
+
+            alert("Tarih Seçiniz.")
+            return
+        }
+
+        const model = {
+
+            kullanici_kodu: sgk_detay_model.kullanici_kodu,
+            isyeri_kodu: sgk_detay_model.isyeri_kodu,
+            isyeri_sifresi: sgk_detay_model.isyeri_sifresi,
+            tc_kimlik_no: sgk_detay_model.tc_kimlik_no,
+            tarih: get_tarih(vz_dt_onay_tarih),
+            medula_rapor_id: sgk_detay_model.medula_rapor_id,
+            nitelik_durum: select_nitelik_durum,
+            vaka: sgk_detay_model.vaka
+        }
+
+        console.log("Giden Data : ", model)
+
+        
+
+        kendo.ui.progress($('.k-window'), true);
+
+        const servis_url = "http://localhost:5503/api/vizite/rapor-onay/onaysiz-onay-method"
+
+        const result = await axios.post(servis_url, model)
+
+        kendo.ui.progress($('.k-window'), false);
+
+        console.log(result.data)
+        alert("Rapor Onayı Yapıldı.")
+
+       
+
+    }
+
+</script>
+
+<style>
+    .k-window-title{
+
+        display : block;
+        width : 100%;
+        text-align : center !important;
+        color : red;
+        font-weight : bold;
+        font-size : 19px;
+    }
+
+    .k-textbox{
+
+        display : block;
+        font-size : 14px;
+        color : black;
+        font-weight : bold;
+    }
+</style>

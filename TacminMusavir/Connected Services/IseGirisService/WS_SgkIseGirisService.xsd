@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://servisler.ws.tescil4a.isegiris.sgk.gov.tr" targetNamespace="http://servisler.ws.tescil4a.isegiris.sgk.gov.tr" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="iseGirisKaydet" type="tns:iseGirisKaydet" />
+  <xs:element name="iseGirisKaydetResponse" type="tns:iseGirisKaydetResponse" />
+  <xs:element name="iseGirisPdfDokum" type="tns:iseGirisPdfDokum" />
+  <xs:element name="iseGirisPdfDokumResponse" type="tns:iseGirisPdfDokumResponse" />
+  <xs:element name="tckimlikNoTarihileiseGirisSorgula" type="tns:tckimlikNoTarihileiseGirisSorgula" />
+  <xs:element name="tckimlikNoTarihileiseGirisSorgulaResponse" type="tns:tckimlikNoTarihileiseGirisSorgulaResponse" />
+  <xs:element name="tckimlikNoileiseGirisSorgula" type="tns:tckimlikNoileiseGirisSorgula" />
+  <xs:element name="tckimlikNoileiseGirisSorgulaResponse" type="tns:tckimlikNoileiseGirisSorgulaResponse" />
+  <xs:complexType name="iseGirisPdfDokum">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullanici" type="tns:kullaniciBilgileri" />
+      <xs:element name="referansKodu" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="kullaniciBilgileri">
+    <xs:sequence>
+      <xs:element name="kullaniciAdi" type="xs:string" />
+      <xs:element name="isyeriKodu" type="xs:string" />
+      <xs:element name="sistemSifre" type="xs:string" />
+      <xs:element name="isyeriSifre" type="xs:string" />
+      <xs:element name="isyeriSicil" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="iseGirisPdfDokumResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="iseGirisPdfDokumReturn" type="tns:pdfDokumSonuc" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="pdfDokumSonuc">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="hataAciklama" type="xs:string" />
+      <xs:element name="hatakodu" type="xs:int" />
+      <xs:element minOccurs="0" name="pdfByteArray" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoTarihileiseGirisSorgula">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tcKimlikTarihtenIseGirisSorParametre" type="tns:tcKimlikTarihtenIseGirisSorParametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tcKimlikTarihtenIseGirisSorParametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullaniciBilgileri" type="tns:kullaniciBilgileri" />
+      <xs:element name="tcKimlikNo" type="xs:long" />
+      <xs:element minOccurs="0" name="iseGirisTarihi" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoTarihileiseGirisSorgulaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tckimlikNoTarihileiseGirisSorgulaReturn" type="tns:iseGirisListesi" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="iseGirisListesi">
+    <xs:sequence>
+      <xs:element name="hatakodu" type="xs:int" />
+      <xs:element minOccurs="0" name="hataAciklama" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="iseGirisKayitlari" type="tns:sgkIseGirisKaydi" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sgkIseGirisKaydi">
+    <xs:sequence>
+      <xs:element name="tckimlikNo" type="xs:long" />
+      <xs:element name="sicilno" type="xs:long" />
+      <xs:element minOccurs="0" name="girisTarihi" type="xs:string" />
+      <xs:element minOccurs="0" name="sigortaTuru" type="xs:string" />
+      <xs:element minOccurs="0" name="istisnaKodu" type="xs:string" />
+      <xs:element minOccurs="0" name="islemTarihi" type="xs:string" />
+      <xs:element name="idariParaCezasi" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="iseGirisKaydet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="sgk4aIseGirisParametre" type="tns:sgk4AIseGirisParametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sgk4AIseGirisParametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullaniciBilgileri" type="tns:kullaniciBilgileri" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="sigortaliIseGirisListesi" type="tns:sigortaliIseGiris" />
+      <xs:element minOccurs="0" name="ayniIsverenFarkliIsyeriNakil" type="xs:string" />
+      <xs:element minOccurs="0" name="nakilGeldigiIsyeriSicil" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sigortaliIseGiris">
+    <xs:sequence>
+      <xs:element name="tckimlikNo" type="xs:long" />
+      <xs:element name="ad" type="xs:string" />
+      <xs:element name="soyad" type="xs:string" />
+      <xs:element name="giristarihi" type="xs:string" />
+      <xs:element name="sigortaliTuru" type="xs:short" />
+      <xs:element name="gorevkodu" type="xs:string" />
+      <xs:element name="meslekkodu" type="xs:string" />
+      <xs:element name="csgbiskolu" type="xs:string" />
+      <xs:element name="eskihukumlu" type="xs:string" />
+      <xs:element name="ozurlu" type="xs:string" />
+      <xs:element name="ogrenimkodu" type="xs:string" />
+      <xs:element name="mezuniyetbolumu" type="xs:string" />
+      <xs:element name="mezuniyetyili" type="xs:short" />
+      <xs:element name="kismiSureliCalisiyormu" type="xs:string" />
+      <xs:element name="kismiSureliCalismaGunSayisi" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="iseGirisKaydetResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="iseGirisKaydetReturn" type="tns:sigortaliIseGirisIslemSonuclari" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sigortaliIseGirisIslemSonuclari">
+    <xs:sequence>
+      <xs:element name="hataKodu" type="xs:int" />
+      <xs:element minOccurs="0" name="hataAciklamasi" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="sigortaliIseGirisSonuc" type="tns:sigortaliIseGirisSonuc" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sigortaliIseGirisSonuc">
+    <xs:sequence>
+      <xs:element name="islemSonucu" type="xs:long" />
+      <xs:element minOccurs="0" name="islemAciklamasi" type="xs:string" />
+      <xs:element name="tcKimlikNo" type="xs:long" />
+      <xs:element name="sicilno" type="xs:long" />
+      <xs:element minOccurs="0" name="adSoyad" type="xs:string" />
+      <xs:element name="referansKodu" type="xs:long" />
+      <xs:element minOccurs="0" name="iseGirisTarihi" type="xs:string" />
+      <xs:element minOccurs="0" name="isyeriSicil" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoileiseGirisSorgula">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tcKimliktenIseGirisSorParametre" type="tns:tcKimliktenIseGirisSorParametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tcKimliktenIseGirisSorParametre">
+    <xs:sequence>
+      <xs:element name="kullaniciBilgileri" type="tns:kullaniciBilgileri" />
+      <xs:element name="tcKimlikNo" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoileiseGirisSorgulaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tckimlikNoileiseGirisSorgulaReturn" type="tns:iseGirisListesi" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,33 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Kasa.KasaIslemListeModel>()
+    .Name("grid_kasa_carids")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+         Html.Ty().TyGrid<Tacmin.Model.Kasa.KasaIslemListeModel>().Name("grid_kasa_cari")
+         .Columns(c=>
+         {
+             c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(120);
+             c.Bound(m => m.IslemTur).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.Aciklama).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.GirenTutar).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(175);
+             c.Bound(m => m.CikanTutar).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(175);
+             c.Bound(m => m.Bakiye).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" }).Width(175);
+
+         })
+         .Height(230)
+        )
+    </div>
+</div>
+
+
+<style>
+</style>
+

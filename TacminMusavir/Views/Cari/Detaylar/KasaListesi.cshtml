@@ -1,0 +1,28 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Cari.CariListeModel>()
+    .Name("kasaGridds")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Cari.CariHareketDetay>().Name("kasaGrid")
+        .Columns( c=> {
+
+            c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:dd-MM-yyyy}").HtmlAttributes(new { @class = "text-center" });
+            c.Bound(m => m.ModulAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Aciklama).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Borc).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+            c.Bound(m => m.Alacak).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+            c.Bound(m => m.Bakiye).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+        })
+        .Height(300)
+        )
+        
+    </div>
+</div>

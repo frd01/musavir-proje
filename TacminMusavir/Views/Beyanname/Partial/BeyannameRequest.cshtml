@@ -1,0 +1,81 @@
+﻿@model BeyannameRequestModel
+
+
+<div class="form-group row">
+    <div class="col-md-4">
+        @Html.Kendo().CheckBoxFor(x => x.Is_Vergi_No).Label("Vergi No/Tckn")
+    </div>
+    <div class="col-md-8">
+        @(Html.Kendo().ComboBoxFor(x=>x.Firma_Id)
+                        .Name("Firma_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Unvan")
+                        .DataValueField("Id")
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("GibMukellefListesi", "beyanname");
+                        })
+                        .Suggest(true)
+                        .Events(e=>e.Change("Firma_Id_change_event"))
+                        )
+        
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-md-4">
+        @Html.Kendo().CheckBoxFor(x=>x.Is_Vergi_Tur).Label("Beyanname Türü")
+    </div>
+    <div class="col-md-8">
+        @(Html.Kendo().ComboBoxFor(x=>x.Vergi_Tur_Id)
+                        .Name("Vergi_Tur_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Beyanname_Adi")
+                        .DataValueField("Id")
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("VergiTurListesi", "beyanname");
+                        })
+                        .Suggest(true)
+                        )
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-md-4">
+        @Html.Kendo().CheckBoxFor(x => x.Is_Vergi_Dairesi).Label("Vergi Dairesi")
+    </div>
+    <div class="col-md-8">
+        @(Html.Kendo().ComboBoxFor(x=>x.Vergi_Daire_Id)
+                        .Name("Vergi_Daire_Id")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Daire_Adi")
+                        .DataValueField("Id")
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("VergiDaireListesi", "beyanname");
+                        })
+                        .Suggest(true)
+                        .Events(e => e.Change("Vergi_Daire_Id_change_event"))
+                        )
+    </div>
+</div>
+
+<div class="form-group row">
+    @Html.LabelFor(x => x.TARIH_ILK, new { @class = "col-md-2" })
+    <div class="col-md-3">
+        @Html.Kendo().DatePickerFor(x => x.TARIH_ILK).HtmlAttributes(new { style = "width: 100%;" })
+    </div>
+    @Html.LabelFor(x => x.TARIH_SON, new { @class = "col-md-2 col-form-label ml-1" })
+    <div class="col-md-3">
+        @Html.Kendo().DatePickerFor(x => x.TARIH_SON).HtmlAttributes(new { style = "width: 100%;" })
+    </div>
+</div>
+
+
+<button type="button" id="btn_sorgula" onclick="beyanname_sorgula_click_event()"   class="btn btn-info">Beyanname Sorgula</button>
+<button type="button" class="btn btn-default float-right">Temizle</button>
+

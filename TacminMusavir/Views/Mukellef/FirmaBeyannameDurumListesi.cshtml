@@ -1,0 +1,371 @@
+﻿@model  DataIslemler.Models.AyModel
+
+@(Html.Kendo().DataSource<Tacmin.Model.Mukellef.BeyannameTakipModel>()
+    .Name("firmatakipds")
+    .Ajax(x => x.PageSize(20))
+)
+
+<div class="row p-2">
+    <div class="col-md-12 justify-content-center">
+        <div class="col-md-2" style="margin-left:40%">
+            @(Html.Kendo().ComboBoxFor(x=>x.Ay)
+                            .Name("cm_ay")
+                            .Filter(FilterType.Contains)
+                            .DataTextField("AyStr")
+                            .HtmlAttributes(new { style = "width: 100%;" })
+                            .DataValueField("Id")
+
+                            .DataSource(dataSource => {
+                                dataSource.Read("Get_AyListesi", "mukellef");
+                            })
+                            .Suggest(true)
+                            .Events(e=>e.Change("cm_ay_change_event"))
+                        )
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 title_css text-center">
+        <span>@ViewBag.AyBaslik AYINDA VERİLMESİ GEREKEN BEYANNAMELER</span>
+    </div>
+</div>
+@(Html.Ty().TyGrid<Tacmin.Model.Mukellef.BeyannameTakipModel>().Name("firmatakip")
+    .Columns(c => {
+
+        c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+        c.Bound(m => m.Kdv1).ClientTemplate("#=Kdv1.Donem_Adi#").Width(160).Filterable(false);
+
+        c.Bound(m => m.Kdv2).ClientTemplate("#=Kdv2.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Kdv4).ClientTemplate("#=Kdv4.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Muh_Sgk).ClientTemplate("#=Muh_Sgk.Donem_Adi#").Width(160).Filterable(false);
+        c.Bound(m => m.Muh_Sgk2).ClientTemplate("#=Muh_Sgk2.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.G_Gecici).ClientTemplate("#=G_Gecici.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.K_Gecici).ClientTemplate("#=K_Gecici.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Ba).ClientTemplate("#=Ba.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Bs).ClientTemplate("#=Bs.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Gelir).ClientTemplate("#=Gelir.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Gelir_1001E).ClientTemplate("#=Gelir_1001E.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Kurumlar).ClientTemplate("#=Kurumlar.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Otv1).ClientTemplate("#=Otv1.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Otv3A).ClientTemplate("#=Otv3A.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Otv3B).ClientTemplate("#=Otv3B.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Otv4).ClientTemplate("#=Otv4.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Oiv).ClientTemplate("#=Oiv.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Turizm).ClientTemplate("#=Turizm.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Poset).ClientTemplate("#=Poset.Donem_Adi#").Width(80).Filterable(false);
+        c.Bound(m => m.Damga).ClientTemplate("#=Damga.Donem_Adi#").Width(80).Filterable(false);
+
+    })
+    .Events(e=>e.DataBound("firmatakip_databound_event").Change("firma_takip_change_event"))
+    .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Cell))
+    
+)
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>
+
+<script>
+    let select_ay = null;
+
+    function firma_takip_change_event() {
+
+        var grid = $("#firmatakip").data("kendoGrid");
+        console.log("grid.Width() : ", grid.options.width)
+
+        const liste = grid.dataSource._pristineData;
+
+        var selectedCellIndex = grid.cellIndex(grid.select());
+        currentSelection = grid.select();
+        selectedRows = [];
+        
+        currentSelection.each(function (i,r) {
+            var currentRowIndex = $(this).closest("tr").index();
+            if (selectedRows.indexOf(currentRowIndex) == -1) {
+
+                console.log("r value : ",r)
+                const model = {
+
+                    index: currentRowIndex,
+                    text: `${r.innerText}`
+                    
+                }
+                selectedRows.push(model);
+            }
+        })
+
+        const item = selectedRows[0]
+
+        const data_item = liste[item.index]
+
+        console.log("data_item : ", data_item)
+
+        if (item.text != "YOK" && item.text != "Verilmedi") {
+
+            console.log(item)
+
+            //beyanname/tahakkukpdfgor?id=360
+
+            // http://localhost:62457/beyanname/beyannamepdfgor?id=360
+
+            const key = get_key(selectedCellIndex)
+
+            const local_url = window.location.origin + "/beyanname/beyannamepdfgor?id=" + data_item[key].Beyanname_Id;
+
+            console.log("local_url : ", local_url)
+
+            window.open(local_url,"_blank")
+
+        }
+    }
+
+    function get_key(index) {
+
+        let key = ""
+
+        if (index == 1) key = "Kdv1"
+        if (index == 2) key = "Kdv2"
+        if (index == 3) key = "Kdv4"
+        if (index == 4) key = "Muh_Sgk"
+        if (index == 5) key = "Muh_Sgk2"
+        if (index == 6) key = "G_Gecici"
+        if (index == 7) key = "K_Gecici"
+        if (index == 8) key = "Ba"
+        if (index == 9) key = "Bs"
+        if (index == 10) key = "Gelir"
+        if (index == 11) key = "Gelir_1001E"
+        if (index == 12) key = "Kurumlar"
+        if (index == 13) key = "Otv1"
+        if (index == 14) key = "Otv3A"
+        if (index == 15) key = "Otv3B"
+        if (index == 16) key = "Otv4"
+        if (index == 17) key = "Oiv"
+        if (index == 18) key = "Turizm"
+        if (index == 19) key = "Poset"
+        if (index == 20) key = "Damga"
+       
+
+        return key
+    }
+
+    /*$("#firmatakip").on("click", "td", function (e) {
+        var row = $(this).closest("tr");
+        var textVal = "";
+        row.find("td").each(function (i, r) {
+            textVal += `Col ${i + 1}: ${r.innerText}\n`;
+        });
+        alert(textVal);
+    });*/
+
+    $(document).ready(function () {
+
+        $.ajax({
+
+            method: "POST",
+            url: '@Url.RouteUrl(new { controller = "mukellef", action = "Get_FirmaBeyannameDurumListesi" })',
+            type: "json",
+            data: { ay: select_ay },
+            success: function (data) {
+
+                var grid = $("#firmatakip").data("kendoGrid");
+
+                const liste = []
+
+                for (let i = 0; i < data.length; i++) {
+
+                    const model = { ...data[i], uid: get_id() }
+
+                    liste.push(model)
+                }
+                grid_column_kontrol(liste, "Kdv1", 1)
+                grid_column_kontrol(liste, "Kdv2", 2)
+                grid_column_kontrol(liste, "Kdv4", 3)
+                grid_column_kontrol(liste, "Muh_Sgk", 4)
+                grid_column_kontrol(liste, "Muh_Sgk2", 5)
+                grid_column_kontrol(liste, "G_Gecici", 6)
+                grid_column_kontrol(liste, "K_Gecici", 7)
+                grid_column_kontrol(liste, "Ba", 8)
+                grid_column_kontrol(liste, "Bs", 9)
+                grid_column_kontrol(liste, "Gelir", 10)
+                grid_column_kontrol(liste, "Gelir_1001E", 11)
+                grid_column_kontrol(liste, "Kurumlar", 12)
+                grid_column_kontrol(liste, "Otv1", 13)
+                grid_column_kontrol(liste, "Otv3A", 14)
+                grid_column_kontrol(liste, "Otv3B", 15)
+                grid_column_kontrol(liste, "Otv4", 16)
+                grid_column_kontrol(liste, "Oiv", 17)
+                grid_column_kontrol(liste, "Turizm", 18)
+                grid_column_kontrol(liste, "Poset", 19)
+                grid_column_kontrol(liste, "Damga", 20)
+
+                grid.setDataSource(liste)
+            }
+
+        });
+    })
+
+
+    function grid_column_kontrol(liste, key,column_index) {
+
+        const liste_uzunluk = liste.length;
+
+        let index = 0;
+        for (let i = 0; i < liste.length; i++) {
+
+            const model = liste[i]
+
+            if (model[key].Donem_Adi == "YOK") {
+                index++
+            }
+        }
+
+        console.log("index : ", index)
+        console.log("liste_uzunluk : ", liste_uzunluk)
+
+        if (liste_uzunluk == index) {
+            console.log("if bloğu")
+            var grid = $("#firmatakip").data("kendoGrid");
+            grid.hideColumn(column_index)
+
+        }
+    }
+
+    function cm_ay_change_event() {
+
+        var combobox = $("#cm_ay").data("kendoComboBox");
+        var dataItem = combobox.dataItem();
+
+        select_ay = dataItem.Ay
+        kendo.ui.progress($('.content'), true);
+          $.ajax({
+
+            method: "POST",
+            url: '@Url.RouteUrl(new { controller = "mukellef", action = "Get_FirmaBeyannameDurumListesi" })',
+            type: "json",
+            data: { ay: select_ay },
+            success: function (data) {
+
+                var grid = $("#firmatakip").data("kendoGrid");
+
+                const liste = []
+
+                for (let i = 0; i < data.length; i++) {
+
+                    const model = { ...data[i], uid: get_id() }
+
+                    liste.push(model)
+                }
+                grid_column_kontrol(liste, "Kdv1", 1)
+                grid_column_kontrol(liste, "Kdv2", 2)
+                grid_column_kontrol(liste, "Kdv4", 3)
+                grid_column_kontrol(liste, "Muh_Sgk", 4)
+                grid_column_kontrol(liste, "Muh_Sgk2", 5)
+                grid_column_kontrol(liste, "G_Gecici", 6)
+                grid_column_kontrol(liste, "K_Gecici", 7)
+                grid_column_kontrol(liste, "Ba", 8)
+                grid_column_kontrol(liste, "Bs", 9)
+                grid_column_kontrol(liste, "Gelir", 10)
+                grid_column_kontrol(liste, "Gelir_1001E", 11)
+                grid_column_kontrol(liste, "Kurumlar", 12)
+                grid_column_kontrol(liste, "Otv1", 13)
+                grid_column_kontrol(liste, "Otv3A", 14)
+                grid_column_kontrol(liste, "Otv3B", 15)
+                grid_column_kontrol(liste, "Otv4", 16)
+                grid_column_kontrol(liste, "Oiv", 17)
+                grid_column_kontrol(liste, "Turizm", 18)
+                grid_column_kontrol(liste, "Poset", 19)
+                grid_column_kontrol(liste, "Damga", 20)
+
+                grid.setDataSource(liste)
+
+                kendo.ui.progress($('.content'), false);
+            }
+
+        });
+    }
+
+    function firmatakip_databound_event(e) {
+
+
+        var rows = e.sender.content.find('tr');
+       // var ageIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "age" + "]").index();
+        var customIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + "custom" + "]").index();
+
+        rows.each(function (index, row) {
+
+            var dataItem = e.sender.dataItem(row);
+
+            grid_cell_style(e, dataItem, "Kdv1", customIndex, row)
+            grid_cell_style(e, dataItem, "Muh_Sgk", customIndex, row)
+            /*if (!dataItem.name) {
+                $(row).children('td:eq(' + ageIndex + '), td:eq(' + customIndex + ')').addClass('editable');
+            } else {
+                $(row).children('td:eq(' + ageIndex + '), td:eq(' + customIndex + ')').addClass('non-editable');
+            }*/
+        })
+    }
+
+    function grid_cell_style(e, dataItem, value_key, customIndex,row) {
+
+        var ageIndex = e.sender.wrapper.find(".k-grid-header [data-field=" + value_key  + "]").index();
+        if (dataItem[value_key].Donem_Adi == "YOK") {
+
+            $(row).children('td:eq(' + ageIndex + '), td:eq(' + customIndex + ')').addClass('kontrol_css_yok');
+        }
+        if (dataItem[value_key].Donem_Adi == "Verilmedi") {
+
+            $(row).children('td:eq(' + ageIndex + '), td:eq(' + customIndex + ')').addClass('kontrol_css_verilmedi');
+        }
+
+        if (dataItem[value_key].Donem_Adi != "Verilmedi" && dataItem[value_key].Donem_Adi != "YOK") {
+
+            $(row).children('td:eq(' + ageIndex + '), td:eq(' + customIndex + ')').addClass('kontrol_css_onay');
+        }
+    }
+
+    function returnFalse() {
+        return false;
+    }
+
+    function get_css() {
+
+        return "kontrol_css_yok"
+    }
+
+    function get_id() {
+
+        let u = '', i = 0;
+        while (i++ < 36) {
+            var c = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i - 1], r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            u += (c == '-' || c == '4') ? c : v.toString(16)
+        }
+        return u;
+    }
+
+</script>
+<style>
+
+    .kontrol_css_yok {
+        color: #828282;
+        background-color: #828282;
+    }
+
+    .kontrol_css_verilmedi {
+        color: #ffff00;
+        background-color: #ffff00;
+    }
+    .kontrol_css_onay {
+        color: white;
+        font-weight: bold;
+        background-color: #ff1493;
+        width : 100%;
+        text-align : center;
+    }
+    .title_css {
+        background-color: #00ff00;
+        color: white;
+        font-weight: bold;
+        font-size: 24px;
+        height : 50px;
+       padding-top : 5px;
+    }
+</style>

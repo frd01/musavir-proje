@@ -1,0 +1,226 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                @(
+                Html.Kendo().ComboBox()
+                .Name("muk_cm_firmalar")
+                .Filter("contains")
+                .Suggest(true)
+                .DataTextField("Unvan")
+                .DataValueField("Id")
+                .Events(e=>e.Select("muk_cm_firmalar_select_event"))
+                )
+            </div>
+            <div class="p-2">
+                <button class="btn btn-primary" onclick="borc_sorgula_click_event()">
+                    Sorgula
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_borc_listesi")
+        .Items(item =>
+        {
+
+            item.Add().Text("Ana Liste")
+            .Selected(true)
+            .Content(Html.Partial("BorcListeler/OzetListe").ToString());
+
+            item.Add().Text("Vadesi Geçenler")
+           .Content(Html.Partial("BorcListeler/VadesiGecenListe").ToString());
+
+            item.Add().Text("Vadesi Gelmeyenler")
+           .Content(Html.Partial("BorcListeler/VadesiGelmemisListe").ToString());
+        })
+        )
+    </div>
+</div>
+
+
+
+
+<script>
+
+    let select_gib_model = null
+
+    let vergi_tur_listesi = []
+
+    function dataBound() {
+        this.expandRow(this.tbody.find("tr.k-master-row").first());
+    }
+
+    $(document).ready(async function () {
+
+        let liste = window.localStorage.getItem("local_listeler")
+
+        vergi_tur_listesi = await $.ajax({
+
+            url: "@Url.Action("VergiTurListesi", "musavir")",
+            method : "GET"
+        })
+
+        if (liste!=null) {
+
+            liste = JSON.parse(liste)
+
+            try {
+
+                const muk_cm_firmalar = $("#muk_cm_firmalar").data("kendoComboBox")
+
+                muk_cm_firmalar.setDataSource(liste.FirmaListesi)
+
+            } catch (e) {
+
+                console.log("")
+            }
+        }
+    })
+
+    function muk_cm_firmalar_select_event(e) {
+
+        const dataItem = this.dataItem(e.item.index())
+
+        select_gib_model = {
+
+            GibKodu: dataItem.GibKodu,
+            GibParola: dataItem.GibParola,
+            GibSifre: dataItem.GibSifre,
+            Id: dataItem.Id,
+            Unvan: dataItem.Unvan
+        }
+
+        console.log("Data Item : ", dataItem)
+    }
+
+    async function borc_sorgula_click_event() {
+
+        if (select_gib_model == null) {
+
+            mesaj("Mükellef Seçiniz.", "error")
+
+            return
+        }
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const token_islem = await digital_mukellef_vergi_dairesi_giris(
+            select_gib_model.GibKodu, select_gib_model.GibSifre,
+            select_gib_model.GibParola
+        )
+
+        if (token_islem.is_kullanici == false) {
+
+            kendo.ui.progress($('#content_div_id'), false);
+
+            mesaj(token_islem.hata_mesaj, "error")
+            return
+        }
+
+        const token = token_islem.token
+
+        const req_model = {
+            "meta": {
+                "filters": [],
+                "pagination": {
+                    "pageNo": 1,
+                    "pageSize": 50
+                }
+            }
+        }
+
+
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        const servis_url = "https://dijital.gib.gov.tr/apigateway/payment/api/debtinformation-homepage-summary/false"
+
+        const response = await axios.post(servis_url, req_model, config)
+
+        console.log("Maliye Data : ", response.data)
+
+        const ozet_list = response.data.ozetBilgi
+
+
+        if (ozet_list != null) {
+
+            const model = {
+
+                Id: 1,
+                Unvan: select_gib_model.Unvan,
+                VadesiGecmisBorc: ozet_list[0].toplam.replace(".", ","),
+                VadesiGelmemisBorc: ozet_list[1].toplam.replace(".", ","),
+                VadesiGecmisBorcListesi: getMaliyeDetayList(ozet_list[0].vergiKoduDetay),
+                VadesiGelmemisBorcListesi: getMaliyeDetayList(ozet_list[1].vergiKoduDetay),
+                ToplamBorc: ozet_list[2].toplam.replace(".", ",")                
+            }
+
+            const borc_liste = []
+            borc_liste.push(model)
+
+
+
+            console.log("borc_liste : ", borc_liste)
+
+            try {
+
+                const ozetGrid = $("#ozetGrid").data("kendoGrid")
+
+                ozetGrid.setDataSource(borc_liste)
+            } catch (e) {
+                console.log("")
+            }
+
+            vadesiGecmisGridYukle(borc_liste)
+            vadesiGelmemisGridYukle(borc_liste)
+
+            console.log("model : ", model)
+
+            await digital_vergi_dairesi_cikis_yap(token, "", "")
+
+            kendo.ui.progress($('#content_div_id'), false);
+        }
+
+        function getMaliyeDetayList(dataList) {
+
+            const liste = []
+
+            for (var i = 0; i < dataList.length; i++) {
+
+                const item = dataList[i]
+
+                const model = {
+
+                    Id: i,
+                    VergiKodu: item.vergiKodu,
+                    VergiAdi: getVergiKodu(item.vergiKodu),
+                    AnaBorc: item.vabSum.replace(".", ","),
+                    GecikmeZammi: item.gzSum.replace(".", ","),
+                    Toplam: item.toplam.replace(".", ",")
+                }
+
+                liste.push(model)
+            }
+
+            return liste
+
+        }
+
+        function getVergiKodu(vergiKodu) {
+
+            const model = vergi_tur_listesi.find(x => x.VergiKodu == vergiKodu)
+
+            return model.VergiAdi
+        }
+
+
+
+    }
+</script>

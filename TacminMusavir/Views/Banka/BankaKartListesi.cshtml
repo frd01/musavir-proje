@@ -1,0 +1,347 @@
+﻿@{
+
+    Title = "BANKA KARTLARI";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+          Html.Ty().TyToolBar().Items(item =>
+          {
+
+              item.Add().Btn_Custom(label: "Yeni", icon: "new", clickEvent: "yeni_kart_click_event")
+               .HtmlAttributes(new { @class = "kendoprimary" });
+
+              item.Add().Btn_Custom(label: "Detay", icon: "detail", clickEvent: "detay_kart_click_event")
+               .HtmlAttributes(new { @class = "kendowarning" });
+
+
+          })
+         )
+    </div>
+</div>
+<br />
+
+@(Html.Kendo().DataSource<Tacmin.Model.Banka.BankaKartListeModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+         Html.Ty().TyGrid<Tacmin.Model.Banka.BankaKartListeModel>().Name("master")
+         .Columns(c=>
+         {
+             c.Bound(m => m.BankaKodu).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.BankaAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.SubeAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.HesapTurAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.HesapNo).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.ParaBirimAdi).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.Tahsilat).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" });
+             c.Bound(m => m.Odeme).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" });
+             c.Bound(m => m.Bakiye).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" });
+
+         })
+         .Height(240)
+           .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+           .Events(e=>e.Change("banka_kart_grid_change_event"))
+        )
+    </div>
+</div>
+
+<div class="row k-card p-2">
+    <div class="col-md-12">
+
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button class="btn btn-primary btn-sm" id="banka_kayit_duzelt" onclick="banka_kayit_duzelt_click_event()">
+                    <i class="fa-solid fa-pen"></i>
+                    Kayıt Düzelt
+                </button>
+                <button class="btn btn-danger btn-sm" id="banka_kayit_sil" onclick="banka_kayit_sil_click_event()">
+                    <i class="fa-solid fa-trash"></i>
+                    Kayıt Sil
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+         Html.Kendo().TabStrip()
+         .Name("tb_banka_kart")
+         .Items(item =>
+         {
+
+             item.Add().Text("Tüm Hareketler")
+             .Selected(true)
+             .Content(Html.Partial("BankaIslemListesi").ToString());
+
+             item.Add().Text("Cari Hareketleri")
+             .Content(Html.Partial("BankaCariIslemListesi").ToString());
+
+             item.Add().Text("Kasa Hareketleri")
+             .Content(Html.Partial("BankaKasaIslemListesi").ToString());
+
+         })
+        )
+    </div>
+</div>
+
+<div>
+    @(
+     Html.Kendo().Window()
+     .Name("wn_banka_fis")
+     .Content(Html.Partial("BankaKartIslemFis").ToString())
+     .Visible(false)
+     .Modal(true)
+     .Height(500)
+     .Width(850)
+    )
+</div>
+
+
+<script>
+
+    let islem_tur = null
+
+    const select_banka_model = {
+
+        BankaKodu: "",
+        BankaAdi: "",
+        Bakiye: 0,
+        HesapAdi: "",
+        HesapNo: "",
+        HesapTurAdi: "",
+        HesapTurId: null,
+        IbanNo: "",
+        Id: null,
+        Odeme: 0,
+        ParaBirimAdi: "",
+        ParaBirimId: null,
+        SubeAdi: "",
+        SubeKodu: "",
+        Tahsilat : 0
+    }
+
+    function yeni_kart_click_event() {
+
+        const wn_banka_fis = $("#wn_banka_fis").data("kendoWindow")
+
+        islem_tur = "yenikayit";
+        //$(".k-window-content").css("background-color", "#e8e8e8")
+
+
+
+
+        wn_banka_fis.title("Yeni Banka Kartı")
+        wn_banka_fis.center()
+        wn_banka_fis.open()
+    }
+
+    async function BankaIslemListesiYukle(bankaId) {
+
+        const banka_listesi = await $.ajax({
+
+            url: "@Url.Action("GetBankaIslemListesi", "banka")",
+            method: "POST",
+            dataType: "Json",
+            data: { bankaId: bankaId }
+        })
+
+
+        for (let i = 0; i < banka_listesi.length; i++) {
+
+            if (banka_listesi[i].Tarih != null) {
+                banka_listesi[i].Tarih = new Date(parseInt(banka_listesi[i].Tarih.substr(6)))
+            }
+        }
+
+
+        var banka_grid = $("#banka_grid").data("kendoGrid");
+
+        try {
+
+            banka_grid.setDataSource(banka_listesi)
+        }
+        catch {
+
+            console.log("")
+        }
+
+        try {
+            var cari_grid = $("#cari_grid").data("kendoGrid");
+            const cari_banka_listesi = banka_listesi.filter(x => x.Islem == "cari")
+
+            cari_grid.setDataSource(cari_banka_listesi)
+
+        } catch {
+            console.log("")
+        }
+
+        try {
+            var kasa_grid = $("#kasa_grid").data("kendoGrid");
+            const kasa_banka_listesi = banka_listesi.filter(x => x.Islem == "kasa")
+
+            kasa_grid.setDataSource(kasa_banka_listesi)
+
+        } catch {
+            console.log("")
+        }
+
+
+
+
+    }
+
+    async function banka_kart_grid_change_event(e) {
+
+        kendo.ui.progress($('.k-window'), true);
+
+        select_model = null
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            select_banka_kart_id = item.Id
+
+            select_banka_model.BankaAdi = item.BankaAdi
+            select_banka_model.BankaKodu = item.BankaKodu
+            select_banka_model.Bakiye = item.Bakiye
+            select_banka_model.HesapAdi = item.HesapAdi
+            select_banka_model.HesapNo = item.HesapNo
+            select_banka_model.HesapTurAdi = item.HesapTurAdi
+            select_banka_model.HesapTurId = item.HesapTurId
+            select_banka_model.IbanNo = item.IbanNo
+            select_banka_model.Id = item.Id
+            select_banka_model.Odeme = item.Odeme
+            select_banka_model.ParaBirimAdi = item.ParaBirimAdi
+            select_banka_model.ParaBirimId = item.ParaBirimId
+            select_banka_model.SubeAdi = item.SubeAdi
+            select_banka_model.SubeKodu = item.SubeKodu
+            select_banka_model.Tahsilat = item.Tahsilat
+
+
+            await BankaIslemListesiYukle(item.Id)
+
+            kendo.ui.progress($('.k-window'), false);
+
+        }
+
+
+
+    }
+
+    async function banka_kayit_sil_click_event() {
+
+        if (genel_select_model == null) {
+
+            mesaj("Kayıt Seçiniz.", "error")
+            return
+        }
+
+        banka_islem_tur = genel_select_model.IslemTuru
+
+        
+
+
+       kendo.ui.progress($('.content'), true);
+
+
+        Swal.fire({
+
+            title: "Seçtiğiniz Kayıt Silinecek! Onaylıyor musunuz?",
+            showCancelButton: true,
+            cancelButtonText: "Vazgeç",
+            confirmButtonText: "Onayla",
+            allowOutsideClick: false
+        })
+            .then(async (result) => {
+
+                if (result.isConfirmed) {
+
+                     const banka_sil_res = await $.ajax({
+
+                            url: "@Url.Action("BankaKayitSil", "banka")",
+                            method: "POST",
+                            dataType: "Json",
+                         data: { clientData: genel_select_model, islemTur: banka_islem_tur }
+                        })
+
+                    kendo.ui.progress($('.content'), false);
+
+                        if (banka_sil_res.IslemDurum == false) {
+
+                            mesaj(banka_sil_res.Mesaj,"error")
+                       }
+
+                        if (banka_sil_res.IslemDurum == true) {
+
+                           window.location.reload()
+                       }
+                }
+            })
+
+    }
+
+    function detay_kart_click_event() {
+
+        const wn_banka_fis = $("#wn_banka_fis").data("kendoWindow")
+
+        islem_tur = "guncelleme"
+
+        $("#tx_banka_kodu").data("kendoTextBox").value(select_banka_model.BankaKodu)
+        $("#cm_para_birim").data("kendoComboBox").value(select_banka_model.ParaBirimId)
+        $("#tx_banka_adi").data("kendoTextBox").value(select_banka_model.BankaAdi)
+        $("#tx_sube_adi").data("kendoTextBox").value(select_banka_model.SubeAdi)
+        $("#tx_sube_kodu").data("kendoTextBox").value(select_banka_model.SubeKodu)
+        $("#cm_hesap_turleri").data("kendoComboBox").value(select_banka_model.HesapTurId)
+        $("#tx_hesap_adi").data("kendoTextBox").value(select_banka_model.HesapAdi)
+        $("#tx_hesap_no").data("kendoTextBox").value(select_banka_model.HesapNo)
+        $("#tx_iban_no").data("kendoTextBox").value(select_banka_model.IbanNo)
+        $("#Id").val(select_banka_model.Id)
+
+        wn_banka_fis.title("Banka Kartı")
+        wn_banka_fis.center()
+        wn_banka_fis.open()
+    }
+
+    $(document).ready(function () {
+
+
+
+        //css_class_load()
+    })
+</script>
+<style>
+
+    span{
+
+        font-size : 12px;
+        font-weight : bold;
+        color : black !important;
+    }
+
+    .k-grid {
+
+        font-size : 11px;
+    }
+
+</style>

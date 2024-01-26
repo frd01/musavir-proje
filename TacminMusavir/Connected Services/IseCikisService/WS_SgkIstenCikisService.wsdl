@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsp200607="http://www.w3.org/2006/07/ws-policy" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns0="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" xmlns:wsp200409="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:schema>
+      <xsd:import schemaLocation="WS_SgkIstenCikisService.xsd2.xsd" namespace="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="istenCikisDonemVeGunSayisiBul">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:istenCikisDonemVeGunSayisiBul" />
+  </wsdl:message>
+  <wsdl:message name="istenCikisDonemVeGunSayisiBulResponse">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:istenCikisDonemVeGunSayisiBulResponse" />
+  </wsdl:message>
+  <wsdl:message name="istenCikisKaydet">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:istenCikisKaydet" />
+  </wsdl:message>
+  <wsdl:message name="istenCikisKaydetResponse">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:istenCikisKaydetResponse" />
+  </wsdl:message>
+  <wsdl:message name="istenCikisPdfDokum">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:istenCikisPdfDokum" />
+  </wsdl:message>
+  <wsdl:message name="istenCikisPdfDokumResponse">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:istenCikisPdfDokumResponse" />
+  </wsdl:message>
+  <wsdl:message name="tckimlikNoileistenCikisSorgula">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:tckimlikNoileistenCikisSorgula" />
+  </wsdl:message>
+  <wsdl:message name="tckimlikNoileistenCikisSorgulaResponse">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:tckimlikNoileistenCikisSorgulaResponse" />
+  </wsdl:message>
+  <wsdl:message name="tckimlikNoTarihileistenCikisSorgula">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:tckimlikNoTarihileistenCikisSorgula" />
+  </wsdl:message>
+  <wsdl:message name="tckimlikNoTarihileistenCikisSorgulaResponse">
+    <wsdl:part xmlns:xsns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" name="parameters" element="xsns:tckimlikNoTarihileistenCikisSorgulaResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WS_SgkIstenCikis">
+    <wsdl:operation name="istenCikisDonemVeGunSayisiBul">
+      <wsdl:input name="istenCikisDonemVeGunSayisiBulRequest" message="ns0:istenCikisDonemVeGunSayisiBul" />
+      <wsdl:output name="istenCikisDonemVeGunSayisiBulResponse" message="ns0:istenCikisDonemVeGunSayisiBulResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="istenCikisKaydet">
+      <wsdl:input name="istenCikisKaydetRequest" message="ns0:istenCikisKaydet" />
+      <wsdl:output name="istenCikisKaydetResponse" message="ns0:istenCikisKaydetResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="istenCikisPdfDokum">
+      <wsdl:input name="istenCikisPdfDokumRequest" message="ns0:istenCikisPdfDokum" />
+      <wsdl:output name="istenCikisPdfDokumResponse" message="ns0:istenCikisPdfDokumResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="tckimlikNoileistenCikisSorgula">
+      <wsdl:input name="tckimlikNoileistenCikisSorgulaRequest" message="ns0:tckimlikNoileistenCikisSorgula" />
+      <wsdl:output name="tckimlikNoileistenCikisSorgulaResponse" message="ns0:tckimlikNoileistenCikisSorgulaResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="tckimlikNoTarihileistenCikisSorgula">
+      <wsdl:input name="tckimlikNoTarihileistenCikisSorgulaRequest" message="ns0:tckimlikNoTarihileistenCikisSorgula" />
+      <wsdl:output name="tckimlikNoTarihileistenCikisSorgulaResponse" message="ns0:tckimlikNoTarihileistenCikisSorgulaResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WS_SgkIstenCikisPortBinding" type="ns0:WS_SgkIstenCikis">
+    <soap11:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="istenCikisDonemVeGunSayisiBul">
+      <soap11:operation soapAction="istenCikisDonemVeGunSayisiBul" style="document" />
+      <wsdl:input name="istenCikisDonemVeGunSayisiBulRequest">
+        <soap11:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="istenCikisDonemVeGunSayisiBulResponse">
+        <soap11:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="istenCikisKaydet">
+      <soap11:operation soapAction="istenCikisKaydet" style="document" />
+      <wsdl:input name="istenCikisKaydetRequest">
+        <soap11:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="istenCikisKaydetResponse">
+        <soap11:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="istenCikisPdfDokum">
+      <soap11:operation soapAction="istenCikisPdfDokum" style="document" />
+      <wsdl:input name="istenCikisPdfDokumRequest">
+        <soap11:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="istenCikisPdfDokumResponse">
+        <soap11:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="tckimlikNoileistenCikisSorgula">
+      <soap11:operation soapAction="tckimlikNoileistenCikisSorgula" style="document" />
+      <wsdl:input name="tckimlikNoileistenCikisSorgulaRequest">
+        <soap11:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="tckimlikNoileistenCikisSorgulaResponse">
+        <soap11:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="tckimlikNoTarihileistenCikisSorgula">
+      <soap11:operation soapAction="tckimlikNoTarihileistenCikisSorgula" style="document" />
+      <wsdl:input name="tckimlikNoTarihileistenCikisSorgulaRequest">
+        <soap11:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="tckimlikNoTarihileistenCikisSorgulaResponse">
+        <soap11:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WS_SgkIstenCikisService">
+    <wsdl:port name="WS_SgkIstenCikisPort" binding="ns0:WS_SgkIstenCikisPortBinding">
+      <soap11:address location="https://uyg.sgk.gov.tr:443/WS_SgkTescil4a/WS_SgkIstenCikisService" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

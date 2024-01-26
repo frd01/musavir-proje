@@ -1,0 +1,407 @@
+﻿@model MukellefKayitModel
+
+@{
+    Title = "Mükellef Kayit - " + Model.UNVAN;
+}
+
+@Html.Ty().TyToolBar().Items(item =>
+{
+    item.Add().New().Url(Url.RouteUrl(new { controller = "mukellef", action = "mukellefkayit" })).HtmlAttributes(new { @class = "" })
+    .HtmlAttributes(new { @class = "kendoinfo" });
+    item.Add().Delete().HtmlAttributes(new { @class = "kendodanger" });
+    item.Add().Save().Click("onKaydetClick").HtmlAttributes(new { @class = "kendosuccess" });
+})
+
+<form id="postForm" method="post" >
+    @Html.Kendo().TabStrip().Name("mukellefKayitTab").Items(tab =>
+    {
+        tab.Add().Text("Genel Bilgiler").Selected(true).Content(
+            @<text>
+                @Html.Partial("Partial/_MukellefGenelBilgilerTab")
+            </text>
+        );
+
+        tab.Add().Text("Beyannameler").Content(
+            @<text>
+                @Html.Partial("Partial/_BeyannameBilgiForm")
+            </text>
+         );
+        tab.Add().Text("Beyanname Takip")
+       .Content(Html.Action("MukellefFirmaTakip", "mukellef",new { id = Model.ID }).ToString());
+
+        tab.Add().Text("Sgk")
+        .Content(Html.Partial("SgkBilgileri").ToString());
+    })
+</form>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@section scripts{
+    <script>
+
+        function mesaj(mesaj, icon) {
+
+            Swal.fire({
+                icon: icon,
+                title: 'İşlem Sonucu',
+                text: mesaj,
+                confirmButtonText: "Tamam"
+            })
+        }
+
+        let is_aktif = true
+        
+        let sgk_sube_listesi = []
+
+        function AKTIF_change_event(e) {
+
+            is_aktif: e.checked
+        }
+        $(document).ready(async function () {
+
+            var result = $("#Kdv1").data('kendoComboBox')
+
+            console.log("result : ", result.value())
+
+            const id = $("#ID").val()
+           
+
+            sgk_sube_listesi = await $.ajax({
+
+                url: "@Url.Action("MusteriSgkSubeListesi", "mukellef")",
+                method: "POST",
+                dataType: "Json",
+                data: { firmaId : id }
+            })
+
+            if (sgk_sube_listesi.length > 0) {
+
+                try {
+
+                    const sgkGrid = $("#sgkGrid").data("kendoGrid")
+
+                    sgkGrid.setDataSource(sgk_sube_listesi)
+
+                } catch  {
+
+                    console.log("")
+                }
+            }
+
+         
+
+            if (id.length <=0) {
+
+                $("#muk_btn_sube_ekle").prop("disabled", true);
+            }
+
+            if (id.length >0) {
+
+                const data_iletisim_list = await $.ajax({
+
+                    url: "@Url.Action("FirmaIletisimListesi", "mukellef")",
+                    method: "POST",
+                    dataType: "Json",
+                    data: { firmaId : id}
+                })
+
+
+
+                try {
+
+                    var iletisim_grid = $("#iletisim").data("kendoGrid");
+
+                    iletisim_grid.setDataSource(data_iletisim_list)
+
+                } catch {
+
+                    console.log("")
+                }
+            }
+        })
+
+        let iletisim_listesi = []
+        function Sehir_Id_onchange_event(e) {
+
+            var sehir_id = $("#Sehir_Id").data('kendoComboBox').value()
+
+            $.ajax({
+
+                method: "POST",
+                url: '@Url.RouteUrl(new { controller = "mukellef", action = "Get_IlceListesi" })',
+                data: JSON.stringify({ sehir_id: sehir_id }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    console.log("Sehir_Id_onchange_event : ", data)
+                    var ilce_cm = $("#Ilce_Id").data("kendoComboBox")
+                    ilce_cm.setDataSource(data)
+                }
+            })
+
+        }
+
+        function btn_iletisim_ekle_click_event() {
+
+
+
+            var formData = $.ty.utils.serializeObject($('#postForm'));
+
+            if (formData.ID.toString().length < 0) {
+
+                alert("İlk Önce Mükellef Kaydını Tamamlayınız.")
+                return
+            }
+
+            let btn_text = $("#btn_iletisim").text()
+
+            console.log("btn_text : ", btn_text)
+
+            if (btn_text == "Ekle") {
+
+                const model = {
+
+                    Adi: "",
+                    Telefon: "",
+                    Mail: "",
+                    Firma_Id: null,
+                    Id: get_id()
+                }
+
+                console.log("btn_iletisim_ekle_click_event : ", model)
+
+                var grid = $("#iletisim").data("kendoGrid");
+                const liste = grid.dataSource._pristineData;
+
+                //const liste = []
+
+                liste.push({ ...model, uid: get_id() })
+                grid.setDataSource(liste)
+
+                $("#btn_iletisim").removeClass("btn btn-success")
+                $("#btn_iletisim").addClass("btn btn-danger")
+                $("#btn_iletisim").text("Kaydet")
+
+                return
+            }
+
+
+            if (btn_text == "Kaydet") {
+
+                $("#btn_iletisim").removeClass("btn btn-danger")
+                $("#btn_iletisim").addClass("btn btn-success")
+
+                $("#btn_iletisim").text("Ekle")
+
+                var grid = $("#iletisim").data("kendoGrid");
+
+                grid.setDataSource(iletisim_listesi)
+
+                console.log("iletişim listesi : ", iletisim_listesi)
+            }
+
+
+
+        }
+
+        function iletisim_edit_event(e) {
+
+            const model = { ...e.model,uid : get_id()}
+
+            var grid = $("#iletisim").data("kendoGrid");
+            const liste = grid.dataSource._pristineData;
+
+            for (let i = 0; i < liste.length; i++) {
+
+                if (liste[i].Id == model.Id) {
+
+                    liste[i].Adi = model.Adi
+                    liste[i].Telefon = model.Telefon
+                    liste[i].Mail = model.Mail
+                }
+            }
+
+            iletisim_listesi = liste;
+
+            console.log("liste : ", iletisim_listesi)
+
+
+
+        }
+
+        function onKaydetClick() {
+
+            kendo.ui.progress($('.content'), true);
+            var formData = $.ty.utils.serializeObject($('#postForm'));
+
+            let aktif = false
+
+            const ltAktif = $("#AKTIF:checked").val()
+
+            console.log("ltAktif : ", ltAktif)
+
+             
+
+            if (ltAktif == "true") {
+                aktif = true
+            }
+
+            formData.AKTIF = aktif
+
+            console.log("formData : ", formData)
+            
+            
+
+            let id = formData.ID
+
+            id = id.toString()
+
+            var grid = $("#iletisim").data("kendoGrid");
+            const liste = grid.dataSource._pristineData;
+
+            const firma_bilgi = get_firma_takip_bilgi()
+
+            console.log("firma_bilgi : ", firma_bilgi)
+
+             
+
+            const firma_takip_bilgi = {
+                Id: null,
+                Unvan: "",
+                Kdv1: get_donem_model(firma_bilgi.Kdv1),
+                Kdv2: get_donem_model(firma_bilgi.Kdv2),
+                Kdv4: get_donem_model(firma_bilgi.Kdv4),
+                Muh_Sgk: get_donem_model(firma_bilgi.Muh_Sgk),
+                Muh_Sgk2: get_donem_model(firma_bilgi.Muh_Sgk2),
+                G_Gecici: get_donem_model(firma_bilgi.G_Gecici),
+                K_Gecici: get_donem_model(firma_bilgi.K_Gecici),
+                Ba: get_donem_model(firma_bilgi.Ba),
+                Bs: get_donem_model(firma_bilgi.Bs),
+                Gelir: get_donem_model(firma_bilgi.Gelir),
+                Gelir_1001E: get_donem_model(firma_bilgi.Gelir_1001E),
+                Kurumlar: get_donem_model(firma_bilgi.Kurumlar),
+                Otv1: get_donem_model(firma_bilgi.Otv1),
+                Otv3A: get_donem_model(firma_bilgi.Otv3A),
+                Otv3B: get_donem_model(firma_bilgi.Otv3B),
+                Otv4: get_donem_model(firma_bilgi.Otv4),
+                Oiv: get_donem_model(firma_bilgi.Oiv),
+                Turizm: get_donem_model(firma_bilgi.Turizm),
+                Poset: get_donem_model(firma_bilgi.Poset),
+                Damga: get_donem_model(firma_bilgi.Damga),
+            }
+
+              $.ajax({
+
+                method: "POST",
+                  url: '@Url.RouteUrl(new { controller = "mukellef", action = "MukellefKayitUpdate" })',
+                  data: { model: formData, iletisim_listesi: liste, firma_takip_bilgi: firma_takip_bilgi },
+                dataType: "Json",
+                  success: function (data) {
+                    console.log("Update Response : ", data)
+                      kendo.ui.progress($('.content'), false);
+                      if (id.length <= 0) mesaj("Mükellef Bilgileri Eklendi.", "success")
+                      else mesaj("Mükellef Bilgileri Güncellendi.","success")
+                  },
+                  error: function (e) {
+
+                      console.log("error");
+                  }
+            })
+
+
+        }
+
+        function get_donem_model(id) {
+
+            console.log("get_donem_model : ", id)
+            const model = {
+
+                Id: id,
+                Donem_Adi: "",
+                Beyanname_Id : null
+            }
+
+            return model
+        }
+
+        function get_firma_takip_bilgi() {
+
+            const Kdv1 = $("#Kdv1").data('kendoComboBox').value()
+            const Kdv2 = $("#Kdv2").data('kendoComboBox').value()
+            const Kdv4 = $("#Kdv4").data('kendoComboBox').value()
+            const Muh_Sgk = $("#Muh_Sgk").data('kendoComboBox').value()
+            const Muh_Sgk2 = $("#Muh_Sgk2").data('kendoComboBox').value()
+            const G_Gecici = $("#G_Gecici").data('kendoComboBox').value()
+            const K_Gecici = $("#K_Gecici").data('kendoComboBox').value()
+            const Ba = $("#Ba").data('kendoComboBox').value()
+            const Bs = $("#Bs").data('kendoComboBox').value()
+            const Gelir = $("#Gelir").data('kendoComboBox').value()
+            const Gelir_1001E = $("#Gelir_1001E").data('kendoComboBox').value()
+            const Kurumlar = $("#Kurumlar").data('kendoComboBox').value()
+            const Otv1 = $("#Otv1").data('kendoComboBox').value()
+            const Otv3A = $("#Otv3A").data('kendoComboBox').value()
+            const Otv3B = $("#Otv3B").data('kendoComboBox').value()
+            const Otv4 = $("#Otv4").data('kendoComboBox').value()
+            const Oiv = $("#Oiv").data('kendoComboBox').value()
+            const Turizm = $("#Turizm").data('kendoComboBox').value()
+            const Poset = $("#Poset").data('kendoComboBox').value()
+            const Damga = $("#Damga").data('kendoComboBox').value()
+
+            const model = {
+                Id: null,
+                Unvan: "",
+                Kdv1: Kdv1,
+                Kdv2: Kdv2,
+                Kdv4: Kdv4,
+                Muh_Sgk: Muh_Sgk,
+                Muh_Sgk2: Muh_Sgk2,
+                G_Gecici: G_Gecici,
+                K_Gecici: K_Gecici,
+                Ba: Ba,
+                Bs: Bs,
+                Gelir: Gelir,
+                Gelir_1001E: Gelir_1001E,
+                Kurumlar: Kurumlar,
+                Otv1: Otv1,
+                Otv3A: Otv3A,
+                Otv3B: Otv3B,
+                Otv4: Otv4,
+                Oiv: Oiv,
+                Turizm: Turizm,
+                Poset: Poset,
+                Damga: Damga,
+            }
+
+            return model
+        }
+
+        function get_id() {
+
+            let u = '', i = 0;
+            while (i++ < 36) {
+                var c = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i - 1], r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                u += (c == '-' || c == '4') ? c : v.toString(16)
+            }
+            return u;
+        }
+
+        function getFirmaId() {
+            var firmaId = $('#ID').val();
+            return {
+                firmaId
+            };
+        }
+
+        function tbDeleteBtnOnClick() {
+            var req = $.ajax({
+                url: '@Url.RouteUrl(new { controller = "mukellef", action = "mukellefdestroy", id = Model.ID })',
+                method: 'POST'
+            });
+
+            req.done(function (res) {
+                if (res.success) {
+                    console.log(res.message);
+                }
+            });
+        }
+    </script>
+}

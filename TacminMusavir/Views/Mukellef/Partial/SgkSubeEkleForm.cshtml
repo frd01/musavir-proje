@@ -1,0 +1,699 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6 ">
+                <fieldset>
+                    <legend></legend>
+                    <div class="d-flex flex-row">
+                        <div class="p-0 text-left text-black" style="width : 30%;">
+                            @Html.Label("Şube Adı")
+                        </div>
+
+                        <div class="p-1" style="width : 70%;">
+                            @(
+                            Html.Kendo().TextBox()
+                            .Name("tx_sgk_sube_adi")
+                            .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                             )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-left text-black" style="width : 30%;">
+                            @Html.Label("Adres")
+                        </div>
+                        <div class="p-1" style="width:70%;">
+                            @(
+                     Html.Kendo().TextArea()
+                     .Name("muk_sgk_txa_adres")
+                     .Rows(4)
+                     .HtmlAttributes(new { style = "width : 100%;" })
+                    )
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+                <fieldset>
+                    <legend>Sgk Şifreleri</legend>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-left text-black" style="width : 30%;">
+                            @Html.Label("Kullanıcı Adı")
+                        </div>
+                        <div class="p-1" style="width : 40%;">
+                            @(
+                Html.Kendo().TextBox()
+                .Name("tx_sgk_kullanici_adi_1")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                 )
+                        </div>
+                        <div class="p-1" style="width : 20%;">
+                            @(
+                Html.Kendo().TextBox()
+                .Name("tx_sgk_kullanici_adi_2")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                 )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-left text-black" style="width : 30%;">
+                            @Html.Label("Sistem Şifresi")
+                        </div>
+                        <div class="p-1" style="width : 40%;">
+                            @(
+                Html.Kendo().TextBox()
+                .Name("tx_sgk_sistem_sifresi")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                 )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-left text-black" style="width : 30%;">
+                            @Html.Label("İşyeri Şifresi")
+                        </div>
+                        <div class="p-1" style="width : 40%;">
+                            @(
+                Html.Kendo().TextBox()
+                .Name("tx_sgk_isyeri_sifresi")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                 )
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+     
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <legend>Sgk Sicil No</legend>
+
+            <div class="d-flex flex-row">
+                <div class="p-0 text-center" style="width : 6%;">
+                    @Html.Label("M")
+                </div>
+                <div class="p-0 text-center" style="width : 18%;">
+                    @Html.Label("İş Kolu Kodu")
+                </div>
+                <div class="p-0 text-center" style="width : 8%;">
+                    @Html.Label("Yeni")
+                </div>
+                <div class="p-0 text-center" style="width : 8%;">
+                    @Html.Label("Eski")
+                </div>
+                <div class="p-0 text-center" style="width : 15%;">
+                    @Html.Label("İş Yeri Sıra No")
+                </div>
+                <div class="p-0 text-center" style="width : 10%;">
+                    @Html.Label("İl Kodu")
+                </div>
+                <div class="p-0 text-center" style="width : 10%">
+                    @Html.Label("İlçe Kodu")
+                </div>
+                <div class="p-0 text-center" style="width : 15%;">
+                    @Html.Label("Kontrol No")
+                </div>
+                <div class="p-0 text-center" style="width : 10%;">
+                    @Html.Label("Aracı Kodu")
+                </div>
+            </div>
+
+            <div class="d-flex flex-row">
+                <div class="p-0" style="width: 6%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_m_kod")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength = "1" })
+                    )
+                </div>
+                <div class="p-0" style="width:18%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_is_kolu")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength = "4" })
+                    )
+                </div>
+                <div class="p-0" style="width : 8%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_yeni")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength = "2" })
+                    )
+                </div>
+                <div class="p-0" style="width: 8%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_eski")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength="2" })
+                    )
+                </div>
+                <div class="p-0" style=" width : 15%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_isyeri_sira_no")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength = "7" })
+                    )
+                </div>
+                <div class="p-0" style="width : 10%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_il_kodu")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength="3" })
+                    )
+                </div>
+                <div class="p-0" style="width : 10%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_ilce_kodu")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength = "2" })
+                    )
+                </div>
+                <div class="p-0" style="width : 15%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_kontrol_no")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength="2" })
+                    )
+                </div>
+                <div class="p-0" style="width : 10%;">
+                    @(
+                    Html.Kendo().TextBox()
+                    .Name("sgk_araci_kodu")
+                    .HtmlAttributes(new { style = "width : 100%;", @class="form-control form-control-sm", @maxlength="3" })
+                    )
+                </div>
+            </div>
+
+        </fieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-7">
+                <fieldset>
+                    
+                    <div class="d-flex flex-row">
+                        <div class="d-flex flex-row">
+                            <div class="p-1 text-left text-black" style="width : 30%;">
+                                @Html.Label("Notlar")
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row" style="width : 100%;">
+                            @(
+                             Html.Kendo().TextArea()
+                             .Name("muk_sgk_sube_txa_notlar")
+                             .Rows(6)
+                             .HtmlAttributes(new { style = "width : 100%;" })
+                            )
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-5">
+                <fieldset>
+                    
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-black" style="width : 30%;">
+                            @Html.Label("Aktif")
+                        </div>
+                        <div class="p-1">
+                            @(
+                          Html.Kendo().CheckBox()
+                          .Name("muk_sgk_ch_aktif")
+
+                          )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-left text-black" style="width : 30%;">
+                            @Html.Label("Açılış Tarihi")
+                        </div>
+                        <div class="p-1" style="width : 70%;">
+                            @(
+                          Html.Kendo().DatePicker()
+                          .Name("muk_sgk_dt_acilis_tarihi")
+                          .Format("dd-MM-yyyy")
+                          .HtmlAttributes(new {style = "width : 100%;", @class = "form-control form-control-sm"})
+                         )
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div class="p-1 text-left text-black" style="width : 30%;">
+                            @Html.Label("Kapanış Tarihi")
+                        </div>
+                        <div class="p-1" style="width : 70%;">
+                            @(
+                          Html.Kendo().DatePicker()
+                          .Name("muk_sgk_dt_kapanis_tarihi")
+                          .Format("dd-MM-yyyy")
+                          .HtmlAttributes(new {style = "width : 100%;",@class = "form-control form-control-sm"})
+                         )
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    
+    <div class="col-md-12">
+        <fieldset>
+            <legend class="text-blue">Bildirge Takip Seçimleri</legend>
+            <div class="d-flex flex-row">
+                <div class="p-2" >
+                    <button id="btn_1" class="btn btn-danger" onclick="takip_secim_click_event('btn_1:icon_1')">
+                        <i id="icon_1" class="fa-solid fa-xmark"></i>
+                        26322
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_2" class="btn btn-danger" onclick="takip_secim_click_event('btn_2:icon_2')">
+                        <i id="icon_2" class="fa-solid fa-xmark"></i>
+                        14857
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_3" class="btn btn-danger" onclick="takip_secim_click_event('btn_3:icon_3')">
+                        <i id="icon_3" class="fa-solid fa-xmark"></i>
+                        27103
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_4" class="btn btn-danger" onclick="takip_secim_click_event('btn_4:icon_4')">
+                        <i id="icon_4" class="fa-solid fa-xmark"></i>
+                        17103
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_5" class="btn btn-danger" onclick="takip_secim_click_event('btn_5:icon_5')">
+                        <i id="icon_5" class="fa-solid fa-xmark"></i>
+                        05510
+                    </button>
+                </div>
+                <div class="p-2" >
+                    <button id="btn_6" class="btn btn-danger" onclick="takip_secim_click_event('btn_6:icon_6')">
+                        <i id="icon_6" class="fa-solid fa-xmark"></i>
+                        03294
+                    </button>
+                </div>
+            </div>
+            <div class="d-flex flex-row">
+                <div class="p-2">
+                    <button id="btn_7" class="btn btn-danger" onclick="takip_secim_click_event('btn_7:icon_7')">
+                        <i id="icon_7" class="fa-solid fa-xmark"></i>
+                        16322
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_8" class="btn btn-danger" onclick="takip_secim_click_event('btn_8:icon_8')">
+                        <i id="icon_8" class="fa-solid fa-xmark"></i>
+                        06111
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_9" class="btn btn-danger" onclick="takip_secim_click_event('btn_9:icon_9')">
+                        <i id="icon_9" class="fa-solid fa-xmark"></i>
+                        05746
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_10" class="btn btn-danger" onclick="takip_secim_click_event('btn_10:icon_10')">
+                        <i id="icon_10" class="fa-solid fa-xmark"></i>
+                        56486
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button id="btn_11" class="btn btn-danger" onclick="takip_secim_click_event('btn_11:icon_11')">
+                        <i id="icon_11" class="fa-solid fa-xmark"></i>
+                        Emekli
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+        
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" >
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button class="btn btn-success btn-sm" onclick="btn_sube_ekle_click_event()">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Şube Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const sube_model = {
+
+        Id: null,
+        SubeAdi: "",
+        Adres: "",
+        KullaniciAdi_1: "",
+        KullaniciAdi_2: "",
+        SistemSifresi: "",
+        IsyeriSifresi: "",
+        AcilisTarihi: null,
+        KapanisTarihi: null,
+        Notlar: "",
+        Aktif: true,
+        TakipListesi: [],
+        M: "",
+        IsKoluKodu: "",
+        Yeni: "",
+        Eski: "",
+        IsYeriSiraNo: "",
+        IlKodu: "",
+        IlceKodu: "",
+        KontrolNo: "",
+        AraciKodu : ""
+    }
+
+    function sube_model_temizle() {
+
+        sube_model.Id = null
+        sube_model.SubeAdi = ""
+        sube_model.Adres = ""
+        sube_model.KullaniciAdi_1 = ""
+        sube_model.KullaniciAdi_2 = ""
+        sube_model.SistemSifresi = ""
+        sube_model.IsyeriSifresi = ""
+        sube_model.AcilisTarihi = null
+        sube_model.KapanisTarihi = null
+        sube_model.Notlar = ""
+        sube_model.Aktif = true
+        sube_model.TakipListesi = []
+        sube_model.M = ""
+        sube_model.IsKoluKodu = ""
+        sube_model.Yeni = ""
+        sube_model.Eski = ""
+        sube_model.IsYeriSiraNo = ""
+        sube_model.IlKodu = ""
+        sube_model.IlceKodu = ""
+        sube_model.KontrolNo = ""
+        sube_model.AraciKodu = ""
+
+       
+
+         $("#tx_sgk_sube_adi").data("kendoTextBox").value("")
+         $("#tx_sgk_kullanici_adi_1").data("kendoTextBox").value("")
+         $("#tx_sgk_kullanici_adi_2").data("kendoTextBox").value("")
+         $("#tx_sgk_sistem_sifresi").data("kendoTextBox").value("")
+         $("#tx_sgk_isyeri_sifresi").data("kendoTextBox").value("")
+        $("#muk_sgk_sube_txa_notlar").data("kendoTextArea").value("")
+        $("#muk_sgk_txa_adres").data("kendoTextArea").value("")
+
+         $("#muk_sgk_dt_acilis_tarihi").data("kendoDatePicker").value("")
+
+        $("#muk_sgk_dt_kapanis_tarihi").data("kendoDatePicker").value("")
+
+        $("#sgk_m_kod").data("kendoTextBox").value("")
+        $("#sgk_is_kolu").data("kendoTextBox").value("")
+        $("#sgk_yeni").data("kendoTextBox").value("")
+        $("#sgk_eski").data("kendoTextBox").value("")
+        $("#sgk_isyeri_sira_no").data("kendoTextBox").value("")
+        $("#sgk_il_kodu").data("kendoTextBox").value("")
+        $("#sgk_ilce_kodu").data("kendoTextBox").value("")
+        $("#sgk_kontrol_no").data("kendoTextBox").value("")
+        $("#sgk_araci_kodu").data("kendoTextBox").value("")
+
+        $("#muk_sgk_ch_aktif").prop("checked",true)
+
+    }
+
+    function form_data_yukle() {
+
+        $("#tx_sgk_sube_adi").data("kendoTextBox").value(sube_model.SubeAdi)
+        $("#tx_sgk_kullanici_adi_1").data("kendoTextBox").value(sube_model.KullaniciAdi_1)
+        $("#tx_sgk_kullanici_adi_2").data("kendoTextBox").value(sube_model.KullaniciAdi_2)
+        $("#tx_sgk_sistem_sifresi").data("kendoTextBox").value(sube_model.SistemSifresi)
+        $("#tx_sgk_isyeri_sifresi").data("kendoTextBox").value(sube_model.IsyeriSifresi)
+        $("#muk_sgk_sube_txa_notlar").data("kendoTextArea").value(sube_model.Notlar)
+        $("#muk_sgk_txa_adres").data("kendoTextArea").value(sube_model.Adres)
+
+
+
+        $("#muk_sgk_dt_acilis_tarihi").data("kendoDatePicker").value(sube_model.AcilisTarihi)
+
+        $("#muk_sgk_dt_kapanis_tarihi").data("kendoDatePicker").value(sube_model.KapanisTarihi)
+
+        $("#sgk_m_kod").data("kendoTextBox").value(sube_model.M)
+        $("#sgk_is_kolu").data("kendoTextBox").value(sube_model.IsKoluKodu)
+        $("#sgk_yeni").data("kendoTextBox").value(sube_model.Yeni)
+        $("#sgk_eski").data("kendoTextBox").value(sube_model.Eski)
+        $("#sgk_isyeri_sira_no").data("kendoTextBox").value(sube_model.IsYeriSiraNo)
+        $("#sgk_il_kodu").data("kendoTextBox").value(sube_model.IlKodu)
+        $("#sgk_ilce_kodu").data("kendoTextBox").value(sube_model.IlceKodu)
+        $("#sgk_kontrol_no").data("kendoTextBox").value(sube_model.KontrolNo)
+        $("#sgk_araci_kodu").data("kendoTextBox").value(sube_model.AraciKodu)
+
+        $("#muk_sgk_ch_aktif").prop("checked", sube_model.Aktif)
+    }
+
+    function sgk_takip_list_durum_guncelle(durum,btnId) {
+
+        for (var i = 0; i < bilgi_takip_listesi.length; i++) {
+
+            if (bilgi_takip_listesi[i].BtnId == btnId) {
+
+                bilgi_takip_listesi[i].IsSecili = durum
+            }
+        }
+    }
+
+    function takip_secim_click_event(_value) {
+
+        let value = _value.toString().split(':')
+
+        const btn_id = "#" + value[0]
+        const icon_id = "#" + value[1]
+        const btn = $(btn_id)
+        const icon = $(icon_id)
+
+        if (btn.hasClass("btn btn-danger") == true) {
+
+            btn.removeClass("btn btn-danger")
+            btn.addClass("btn btn-success")
+
+            icon.removeClass("fa-solid fa-xmark")
+            icon.addClass("fa-solid fa-check")
+
+            sgk_takip_list_durum_guncelle(true, btn_id)
+
+
+        }
+        else {
+
+            btn.removeClass("btn btn-success")
+            btn.addClass("btn btn-danger")
+
+            icon.removeClass("fa-solid fa-check")
+            icon.addClass("fa-solid fa-xmark")
+
+            sgk_takip_list_durum_guncelle(false, btn_id)
+            
+        }
+    }
+
+    function get_id() {
+
+        let u = '', i = 0;
+        while (i++ < 36) {
+            var c = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[i - 1], r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            u += (c == '-' || c == '4') ? c : v.toString(16)
+        }
+        return u;
+    }
+
+   async function btn_sube_ekle_click_event() {
+
+        const tx_sgk_sube_adi = $("#tx_sgk_sube_adi").data("kendoTextBox").value()
+        const tx_sgk_kullanici_adi_1 = $("#tx_sgk_kullanici_adi_1").data("kendoTextBox").value()
+        const tx_sgk_kullanici_adi_2 = $("#tx_sgk_kullanici_adi_2").data("kendoTextBox").value()
+        const tx_sgk_sistem_sifresi = $("#tx_sgk_sistem_sifresi").data("kendoTextBox").value()
+        const tx_sgk_isyeri_sifresi = $("#tx_sgk_isyeri_sifresi").data("kendoTextBox").value()
+        const muk_sgk_sube_txa_notlar = $("#muk_sgk_sube_txa_notlar").data("kendoTextArea").value()
+        const muk_sgk_txa_adres = $("#muk_sgk_txa_adres").data("kendoTextArea").value()
+
+        const muk_sgk_dt_acilis_tarihi = $("#muk_sgk_dt_acilis_tarihi").data("kendoDatePicker").value()
+
+        const muk_sgk_dt_kapanis_tarihi = $("#muk_sgk_dt_kapanis_tarihi").data("kendoDatePicker").value()
+
+        const muk_sgk_ch_aktif = $("#muk_sgk_ch_aktif").attr("checked")
+
+        if (tx_sgk_sube_adi.length<=0) {
+
+            alert("Şube Adını Giriniz.")
+            return
+        }
+        if (tx_sgk_kullanici_adi_1.length <= 0 || tx_sgk_kullanici_adi_2.length <=0) {
+
+            alert("Kullanıcı Adını Giriniz.")
+            return
+        }
+        if (tx_sgk_sistem_sifresi.length <=0) {
+
+            alert("Sistem Şifresini Giriniz.")
+            return
+        }
+        if (tx_sgk_isyeri_sifresi.length <=0) {
+
+            alert("İşyeri Şifresini Giriniz.")
+            return
+        }
+
+        if (muk_sgk_ch_aktif != null) {
+
+            sube_model.Aktif = muk_sgk_ch_aktif
+        }
+
+        if (muk_sgk_dt_acilis_tarihi != null) {
+
+            sube_model.AcilisTarihi = tarih_func_sql(muk_sgk_dt_acilis_tarihi)
+        }
+
+        if (muk_sgk_dt_kapanis_tarihi != null) {
+
+            sube_model.KapanisTarihi = tarih_func_sql(muk_sgk_dt_kapanis_tarihi)
+        }
+
+        if (tx_sgk_sube_adi.length >0 ) {
+
+            sube_model.SubeAdi = tx_sgk_sube_adi
+        }
+        if (tx_sgk_kullanici_adi_1.length>0) {
+
+            sube_model.KullaniciAdi_1 = tx_sgk_kullanici_adi_1
+        }
+        if (tx_sgk_kullanici_adi_2.length > 0) {
+            sube_model.KullaniciAdi_2 = tx_sgk_kullanici_adi_2
+        }
+        if (tx_sgk_sistem_sifresi.length >0) {
+
+            sube_model.SistemSifresi = tx_sgk_sistem_sifresi
+        }
+        if (tx_sgk_isyeri_sifresi.length>0) {
+
+            sube_model.IsyeriSifresi = tx_sgk_isyeri_sifresi
+       }
+       console.log("muk_sgk_sube_txa_notlar : ", muk_sgk_sube_txa_notlar)
+        if (muk_sgk_sube_txa_notlar != null) {
+
+            sube_model.Notlar = muk_sgk_sube_txa_notlar
+        }
+
+        if (muk_sgk_txa_adres != null) {
+
+            sube_model.Adres = muk_sgk_txa_adres
+       }
+
+       const sgk_m_kod = $("#sgk_m_kod").data("kendoTextBox").value()
+       const sgk_is_kolu = $("#sgk_is_kolu").data("kendoTextBox").value()
+       const sgk_yeni = $("#sgk_yeni").data("kendoTextBox").value()
+       const sgk_eski = $("#sgk_eski").data("kendoTextBox").value()
+       const sgk_isyeri_sira_no = $("#sgk_isyeri_sira_no").data("kendoTextBox").value()
+       const sgk_il_kodu = $("#sgk_il_kodu").data("kendoTextBox").value()
+       const sgk_ilce_kodu = $("#sgk_ilce_kodu").data("kendoTextBox").value()
+       const sgk_kontrol_no = $("#sgk_kontrol_no").data("kendoTextBox").value()
+       const sgk_araci_kodu = $("#sgk_araci_kodu").data("kendoTextBox").value()
+
+       if (sgk_m_kod.length <= 0) {
+           alert("Sgk M Kodunu Giriniz.")
+           return
+       }
+       if (sgk_is_kolu.length <=0) {
+
+           alert("Sgk İş Kolu Kodunu Giriniz.")
+           return
+       }
+
+       if (sgk_yeni.length <= 0) {
+           alert("Sgk Yeni Kodunu Giirniz.")
+           return
+       }
+       if (sgk_eski.length <= 0) {
+
+           alert("Sgk Eski Kodunu Giriniz.")
+           return
+       }
+       if (sgk_isyeri_sira_no.length <=0) {
+
+           alert("Sgk İşyeri Sıra No'yu Giriniz.")
+           return
+       }
+
+       if (sgk_il_kodu.length <=0) {
+
+           alert("Sgk İl Kodunu Giriniz.")
+           return
+       }
+       if (sgk_ilce_kodu.length <=0) {
+
+           alert("Sgk İlkodunuz Giriniz.")
+           return
+       }
+       if (sgk_kontrol_no.length<=0) {
+
+           alert("Sgk Kontrol No'yu Giriniz.")
+           return
+       }
+       if (sgk_araci_kodu.length <=0) {
+
+           alert("Sgk Aracı Kodunu Giriniz.")
+           return
+       }
+
+       sube_model.M = sgk_m_kod
+       sube_model.IsKoluKodu = sgk_is_kolu
+       sube_model.Yeni = sgk_yeni
+       sube_model.Eski = sgk_eski
+       sube_model.IsYeriSiraNo = sgk_isyeri_sira_no
+       sube_model.IlKodu = sgk_il_kodu
+       sube_model.IlceKodu = sgk_ilce_kodu
+       sube_model.KontrolNo = sgk_kontrol_no
+       sube_model.AraciKodu = sgk_araci_kodu
+      
+
+       sube_model.TakipListesi = bilgi_takip_listesi
+
+       const firmaId = $("#ID").val()
+
+       kendo.ui.progress($('#content_div_id'), true);
+
+       var result = await $.ajax({
+
+           url: "@Url.Action("MukellefSgkSubeKaydet", "mukellef")",
+           method: "POST",
+           dataType: "Json",
+           data: { clientData: sube_model, firmaId: firmaId }
+
+       })
+
+       if (result.IslemDurum == false) {
+
+           alert(result.Mesaj)
+           return
+       }
+
+       await sgk_sube_grid_yenile()
+       kendo.ui.progress($('#content_div_id'), false);
+        sube_model_temizle()
+
+        const wn_muk_yeni_sube_ekle = $("#wn_muk_yeni_sube_ekle").data("kendoWindow")
+
+        wn_muk_yeni_sube_ekle.close()
+    }
+
+</script>

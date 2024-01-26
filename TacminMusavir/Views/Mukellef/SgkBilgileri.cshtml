@@ -1,0 +1,230 @@
+﻿<div class="row">
+    <div class="col-md-8">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button type="button" id="muk_btn_sube_ekle" class="btn btn-success" onclick="sgk_sube_ekle_click_event()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Şube Ekle
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@(Html.Kendo().DataSource<Tacmin.Model.Mukellef.SgkListeModel>()
+    .Name("sgkGridds")
+    .Ajax(x => x.PageSize(20))
+)
+
+<div class="row">
+    <div class="col-md-8">
+        @(
+         Html.Ty().TyGrid<Tacmin.Model.Mukellef.SgkListeModel>().Name("sgkGrid")
+         .Columns(c=>
+         {
+
+             c.Bound(m => m.SubeAdi).Filterable(ftb => ftb.Multi(true).Search(true)).Width(100);
+             c.Bound(m => m.Adres).Filterable(ftb => ftb.Multi(true).Search(true)).Width(100);
+             c.Command(cmd => cmd.Custom("duzenle").Text("Düzenle").Click("sgk_duzenle_click_event")
+             .HtmlAttributes(new { @class = "kendowarning" })
+
+             ).Width(40);
+             c.Command(cmd => cmd.Custom("sil").Text("Sil").Click("sgk_sube_sil_click_event")
+             .HtmlAttributes(new { @class = "kendodanger" })
+
+             ).Width(40);
+           
+         })
+         .Height(400)
+         .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+            .Events(e => e.Change("sgkGrid_select_change_event").DataBound("sgkGrid_databound_event"))
+
+        )
+    </div>
+</div>
+
+
+<div>
+    @(
+     Html.Kendo().Window()
+     .Name("wn_muk_yeni_sube_ekle")
+     .Visible(false)
+     .Modal(true)
+     .Width(950)
+     .Height(680)
+     .Title("Sgk Şube Ekleme")
+     .Content(Html.Partial("Partial/SgkSubeEkleForm").ToString())
+    )
+</div>
+
+<script>
+
+    
+    let is_yeni_kayit = true
+    let bilgi_takip_listesi = []
+
+    let select_sgk_sube_id = null
+
+    function sgkGrid_databound_event(e) {
+
+        $(".k-grid-duzenle").find("span").addClass("k-icon k-edit");
+    }
+
+    function sgkGrid_select_change_event(e) {
+
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        select_detay_data = []
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            console.log("item : ", item)
+
+            select_sgk_sube_id = item.Id
+        }
+
+    }
+
+    function sgk_duzenle_click_event(e) {
+
+        const tr = $(e.target).closest("tr");
+        const item = this.dataItem(tr);
+
+        console.log("item : ", item)
+
+        const data_model = item
+
+        sube_model.Id = data_model.Id
+        sube_model.SubeAdi = data_model.SubeAdi
+        sube_model.Adres = data_model.Adres
+        sube_model.KullaniciAdi_1 = data_model.KullaniciAdi_1
+        sube_model.KullaniciAdi_2 = data_model.KullaniciAdi_2
+        sube_model.SistemSifresi = data_model.SistemSifresi
+        sube_model.IsyeriSifresi = data_model.IsyeriSifresi
+        sube_model.Notlar = data_model.Notlar
+        sube_model.Aktif = data_model.Aktif
+        sube_model.TakipListesi = data_model.TakipListesi
+        sube_model.M = data_model.M
+        sube_model.IsKoluKodu = data_model.IsKoluKodu
+        sube_model.Yeni = data_model.Yeni
+        sube_model.Eski = data_model.Eski
+        sube_model.IsYeriSiraNo = data_model.IsYeriSiraNo
+        sube_model.IlKodu = data_model.IlKodu
+        sube_model.IlceKodu = data_model.IlceKodu
+        sube_model.KontrolNo = data_model.KontrolNo
+        sube_model.AraciKodu = data_model.AraciKodu
+
+        if (data_model.AcilisTarihi != null) {
+
+            sube_model.AcilisTarihi = new Date(parseInt(data_model.AcilisTarihi.substr(6)))
+        }
+
+        if (data_model.KapanisTarihi != null) {
+
+            sube_model.KapanisTarihi = new Date(parseInt(data_model.KapanisTarihi.substr(6)))
+        }
+
+        for (var i = 0; i < sube_model.TakipListesi.length; i++) {
+
+            const item = sube_model.TakipListesi[i]
+
+            if (item.IsSecili == true) {
+
+                const btn = $(item.BtnId)
+                const icon = $(item.IconId)
+
+                btn.removeClass("btn btn-danger")
+                btn.addClass("btn btn-success")
+
+                icon.removeClass("fa-solid fa-xmark")
+                icon.addClass("fa-solid fa-check")
+            }
+        }
+
+        form_data_yukle()
+
+        const wn_muk_yeni_sube_ekle = $("#wn_muk_yeni_sube_ekle").data("kendoWindow")
+
+        wn_muk_yeni_sube_ekle.center()
+        wn_muk_yeni_sube_ekle.open()
+        
+    }
+
+    function sgk_sube_sil_click_event(e) {
+
+        const tr = $(e.target).closest("tr");
+        const item = this.dataItem(tr);
+
+        var sgkGrid = $("#sgkGrid").data("kendoGrid");
+        const liste = sgkGrid.dataSource._pristineData;
+
+        for (var i = 0; i < liste.length; i++) {
+
+            if (liste[i].Id == item.Id) {
+
+                liste.splice(i,1)
+            }
+        }
+
+        sgkGrid.setDataSource(liste)
+    }
+
+    async function sgk_sube_grid_yenile() {
+
+        try {
+
+            const sgkGrid = $("#sgkGrid").data("kendoGrid")
+
+            const firmaId = $("#ID").val()
+
+            const liste = await $.ajax({
+
+                url: "@Url.Action("MusteriSgkSubeListesi", "mukellef")",
+                method: "POST",
+                dataType: "Json",
+                data: { firmaId: firmaId }
+            })
+
+            sgkGrid.setDataSource(liste)
+            
+
+        } catch {
+
+            console.log("")
+        }
+    }
+
+   async function get_bilgi_takip_listesi(subeId) {
+
+       const liste = await $.ajax({
+
+           url: "@Url.Action("BilgiTakipList", "mukellef")",
+           method: "POST",
+           dataType: "Json",
+           data: { subeId: subeId }
+       })
+
+       return liste
+    }
+
+    async function sgk_sube_ekle_click_event() {
+
+
+        const wn_muk_yeni_sube_ekle = $("#wn_muk_yeni_sube_ekle").data("kendoWindow")
+
+        bilgi_takip_listesi = await get_bilgi_takip_listesi(null)
+
+        sube_model_temizle()
+
+        wn_muk_yeni_sube_ekle.center()
+        wn_muk_yeni_sube_ekle.open()
+        
+    }
+
+</script>

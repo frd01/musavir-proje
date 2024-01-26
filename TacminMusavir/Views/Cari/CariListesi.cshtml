@@ -1,0 +1,238 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.Cari.CariListeModel>()
+    .Name("cariGridds")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.Cari.CariListeModel>().Name("cariGrid")
+        .Columns(c=>
+        {
+
+            c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Telefon).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.Borc).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class="text-right" });
+            c.Bound(m => m.Alacak).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+            c.Bound(m => m.BorcBakiye).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+            c.Bound(m => m.AlacakBakiye).Filterable(ftb => ftb.Multi(true).Search(true))
+            .Format("{0:n2}").HtmlAttributes(new { @class = "text-right" });
+
+        })
+        .Height(260)
+        .Selectable(select => select.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+        .Events(e => e.Change("cari_select_change"))
+        )
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-center">
+            <div class="p-2">
+                @Html.Label("İlk Tarih")
+            </div>
+            <div class="p-2">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("cari_dt_ilk_tarih")
+                .Format("dd.MM.yyyy")
+                .Value(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm"})
+                )
+            </div>
+            <div class="p-2">
+                @Html.Label("Son Tarih")
+            </div>
+            <div class="p-2">
+                @(
+                Html.Kendo().DatePicker()
+                .Name("cari_dt_son_tarih")
+                .Format("dd.MM.yyyy")
+                .Value(DateTime.Now)
+                .HtmlAttributes(new { style = "width : 100%;", @class = "form-control form-control-sm"})
+                )
+            </div>
+            <div class="p-2">
+                <button class="btn btn-warning" onclick="listele_click_event()">
+                    Listele
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @(
+        Html.Kendo().TabStrip()
+        .Name("tb_cari_liste")
+        .Items(item =>
+        {
+
+            item.Add().Text("Hepsi").Selected(true)
+            .Content(Html.Partial("../Cari/Detaylar/TumListe").ToString());
+
+            item.Add().Text("Gelirler");
+
+            item.Add().Text("Kasa")
+            .Content(Html.Partial("../Cari/Detaylar/KasaListesi").ToString());
+
+            item.Add().Text("Banka")
+            .Content(Html.Partial("../Cari/Detaylar/BankaListesi").ToString());
+        })
+        )
+    </div>
+</div>
+
+<script>
+
+    let select_cari_id = null
+
+   async function cari_select_change(e) {
+
+       
+        var selectedRows = this.select();
+        var selectedDataItems = [];
+        for (var i = 0; i < selectedRows.length; i++) {
+            var dataItem = this.dataItem(selectedRows[i]);
+            selectedDataItems.push(dataItem);
+        }
+
+        for (let i = 0; i < selectedDataItems.length; i++) {
+
+            const item = selectedDataItems[i]
+
+            select_cari_id = item.Id
+
+            await cari_hareket_listesi_yukle(select_cari_id,null,null)
+        }
+    }
+
+    async function listele_click_event() {
+
+        const cari_dt_ilk_tarih = $("#cari_dt_ilk_tarih").data("kendoDatePicker")
+
+        const cari_dt_son_tarih = $("#cari_dt_son_tarih").data("kendoDatePicker")
+
+        if (select_cari_id == null) {
+
+            mesaj("Cari Seçiniz.", "error")
+            return
+        }
+
+        if (cari_dt_ilk_tarih == null || cari_dt_son_tarih == null) {
+
+            mesaj("Tarih Seçiniz.", "error")
+            return
+        }
+
+        let ilkTarih = tarih_func_sql(cari_dt_ilk_tarih)
+        let sonTarih = tarih_func_sql(cari_dt_son_tarih)
+
+        await cari_hareket_listesi_yukle(select_cari_id, ilkTarih, sonTarih)
+
+    }
+
+    $(document).ready(function () {
+
+        try {
+
+            const tumGrid = $("#tumGrid").data("kendoGrid")
+
+            tumGrid.setDataSource([])
+
+        } catch {
+
+            console.log("")
+        }
+
+        try {
+
+            const kasaGrid = $("#kasaGrid").data("kendoGrid")
+
+            kasaGrid.setDataSource([])
+
+        } catch {
+
+            console.log("")
+        }
+
+        try {
+            
+
+            const bankaGrid = $("#bankaGrid").data("kendoGrid")
+
+            bankaGrid.setDataSource([])
+
+        } catch {
+
+            console.log("")
+        }
+    })
+
+    async function cari_hareket_listesi_yukle(cariId, ilkTarih, sonTarih) {
+
+        const cari_listesi = await $.ajax({
+
+            url: "@Url.Action("CariHareketListesi", "cari")",
+            method: "POST",
+            dataType: "Json",
+            data: { cariId: cariId, ilkTarih: ilkTarih, sonTarih: sonTarih }
+        })
+
+        for (var i = 0; i < cari_listesi.length; i++) {
+
+            const item = cari_listesi[i]
+
+            if (item.Tarih != null) {
+
+                item.Tarih = new Date(parseInt(item.Tarih.substr(6)))
+            }
+        }
+
+        // grid yukleme işlemleri
+
+        console.log("cari_hareket_listesi_yukle : ", cari_listesi)
+
+        try {
+
+            const tumGrid = $("#tumGrid").data("kendoGrid")
+
+            tumGrid.setDataSource(cari_listesi)
+
+        } catch {
+
+            console.log("")
+        }
+
+        try {
+
+            const kasa_listesi = cari_listesi.filter(x=>x.ModulAdi == "Kasa")
+
+            const kasaGrid = $("#kasaGrid").data("kendoGrid")
+
+            kasaGrid.setDataSource(kasa_listesi)
+
+        } catch {
+
+            console.log("")
+        }
+
+        try {
+            const banka_listesi = cari_listesi.filter(x => x.ModulAdi == "Banka")
+
+            const bankaGrid = $("#bankaGrid").data("kendoGrid")
+
+            bankaGrid.setDataSource(banka_listesi)
+
+        } catch {
+
+            console.log("")
+        }
+    }
+
+</script>

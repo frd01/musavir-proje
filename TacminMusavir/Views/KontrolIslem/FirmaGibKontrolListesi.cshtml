@@ -1,0 +1,159 @@
+﻿@(Html.Kendo().DataSource<Tacmin.Model.KontrolIslem.FirmaKontrolModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20))
+)
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex flex-row justify-content-end">
+            <div class="p-2">
+                <button onclick="kontrol_click_event()" class="btn btn-primary">
+                    Kontrol Et
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-2">
+    <div class="col-md-12">
+        @(
+        Html.Ty().TyGrid<Tacmin.Model.KontrolIslem.FirmaKontrolModel>().Name("master")
+        .Columns(c=>
+        {
+
+            c.Bound(m => m.Unvan).Filterable(ftb => ftb.Multi(true).Search(true));
+            c.Bound(m => m.GibKodu).Filterable(false);
+            c.Bound(m => m.GibSifre).Filterable(false);
+            c.Bound(m => m.GibParola).Filterable(false);
+            c.Bound(m => m.IslemDurum).Filterable(false)
+            .ClientTemplate("#= showIcon_bool(IslemDurum) #");
+            c.Bound(m => m.Aciklama).Filterable(ftb => ftb.Multi(true).Search(true));
+        })
+        .Height(600)
+        )
+    </div>
+</div>
+<script src="~/assets/islemler/maliyeGirisler.js" ></script>
+<script>
+
+    async function kontrol_click_event() {
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        const grid_liste = []
+
+        for (var i = 0; i < firma_listesi.length; i++) {
+
+            const item = firma_listesi[i]
+
+            Swal.fire({
+                title: 'Kontrol İşlemi Yapılıyor....',
+                html: item.Unvan,
+                onBeforeOpen: () => {
+
+                    Swal.showLoading()
+                }
+
+            })
+            const token_islem = await inter_aktif_giris(item.GibKodu, item.GibSifre, item.GibParola)
+
+            let islemDurum = true
+            let mesaj = ""
+
+            if (token_islem.islemDurum == false) {
+
+                islemDurum = false
+                mesaj = token_islem.mesaj
+            }
+
+            if (token_islem.islemDurum == true) {
+
+                islemDurum = true
+                mesaj = "İşlem Başarılı"
+
+                await inter_aktif_cikis(token_islem.token)
+            }
+
+            const model = {
+
+                Id: item.Id,
+                Unvan: item.Unvan,
+                GibKodu: item.GibKodu,
+                GibSifre: item.GibSifre,
+                GibParola: item.GibParola,
+                IslemDurum: islemDurum,
+                Aciklama: mesaj
+            }
+
+            grid_liste.push(model)
+
+            Swal.close()
+
+
+        }
+
+
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+        try {
+
+            const grid = $("#master").data("kendoGrid")
+
+            grid.setDataSource(grid_liste)
+
+        } catch (e) {
+
+            console.log("")
+        }
+
+    }
+
+    let firma_listesi = []
+
+    $(document).ready(async function () {
+
+        console.log("Kontrol İşlemleri Başladı....")
+
+        kendo.ui.progress($('#content_div_id'), true);
+
+        firma_listesi = await $.ajax({
+            
+            url: "@Url.Action("FirmaKontrolListesi", "kontrolislem")",
+            method : "GET"
+        })
+
+        kendo.ui.progress($('#content_div_id'), false);
+
+        try {
+
+            const grid = $("#master").data("kendoGrid")
+
+            grid.setDataSource(firma_listesi)
+
+        } catch (e) {
+
+            console.log("")
+        }
+
+    })
+
+    function showIcon_bool(isValue) {
+
+        let icon = ""
+
+        if (isValue == true) {
+
+            icon = '<span style="font-size: 2em; color:#00ad43;"><i class="fa fa-check fa-sm" aria-hidden="true"></i></span>';
+        }
+        if (isValue == false) {
+
+            icon = '<span style="font-size: 2em; color: Tomato;"><i class="fa fa-times" aria-hidden="true"></i></span>'
+        }
+
+        return icon
+
+    }
+
+</script>

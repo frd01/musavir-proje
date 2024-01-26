@@ -1,0 +1,18 @@
+﻿@model int?
+
+@(Html.Kendo().ComboBoxFor(x=>x)
+                        .Name("cm_donem")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Donem_Adi")
+                        .DataValueField("Id")
+
+                        .ValuePrimitive(true)
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("BeyannameDonemListesi", "mukellef");
+                        })
+                        .Suggest(true)
+                        .AutoBind(false)
+                        
+                        )

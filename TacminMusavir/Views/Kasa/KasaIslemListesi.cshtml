@@ -1,0 +1,84 @@
+﻿@{ 
+
+    Title = "Kasa İşlemler";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+
+            Html.Ty().TyToolBar()
+            .Items(item =>
+            {
+
+                item.Add().Btn_Custom(label : "Tahsilat", clickEvent: "kasa_tahsilat_click_event")
+                .HtmlAttributes(new { @class = "kendosuccess" });
+
+                item.Add().Btn_Custom(label : "Ödeme", clickEvent: "kasa_odeme_click_event")
+                .HtmlAttributes(new { @class = "kendodanger" });
+            })
+        )
+    </div>
+</div>
+
+@(Html.Kendo().DataSource<Tacmin.Model.Kasa.KasaIslemListeModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20)
+    )
+)
+
+<br />
+<div class="row">
+    <div class="col-md-12">
+        @(
+         Html.Ty().TyGrid<Tacmin.Model.Kasa.KasaIslemListeModel>().Name("master")
+         .Columns(c=>
+         {
+             c.Bound(m => m.Tarih).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:dd/MM/yyyy}").Width(120);
+             c.Bound(m => m.KasaAdi).Filterable(ftb => ftb.Multi(true).Search(true));            
+             c.Bound(m => m.Aciklama).Filterable(ftb => ftb.Multi(true).Search(true));
+             c.Bound(m => m.GirenTutar).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(175);
+             c.Bound(m => m.CikanTutar).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+             .HtmlAttributes(new { @class = "text-right" }).Width(175);
+             c.Bound(m => m.Bakiye).Filterable(ftb => ftb.Multi(true).Search(true)).Format("{0:n2}")
+            .HtmlAttributes(new { @class = "text-right" }).Width(175);
+             
+         })
+         .Height(600)
+        )
+    </div>
+</div>
+
+
+<script>
+
+    function tarih_func(tarih_value) {
+
+        if (tarih_value) {
+
+            let yil = tarih_value.getFullYear().toString();
+            let ay = (tarih_value.getMonth() + 1).toString();
+            let gun = tarih_value.getDate().toString();
+
+            if (gun.length === 1) {
+                gun = "0" + gun;
+            }
+            if (ay.length == 1) {
+                ay = "0" + ay;
+            }
+            return yil + "/" + ay + "/" + gun;
+        }
+    }
+
+    
+
+    
+
+</script>
+
+<style>
+
+    
+
+</style>

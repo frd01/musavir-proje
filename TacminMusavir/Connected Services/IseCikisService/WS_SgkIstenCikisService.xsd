@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" targetNamespace="http://servisler.ws.tescil4a.istencikis.sgk.gov.tr" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="istenCikisDonemVeGunSayisiBul" type="tns:istenCikisDonemVeGunSayisiBul" />
+  <xs:element name="istenCikisDonemVeGunSayisiBulResponse" type="tns:istenCikisDonemVeGunSayisiBulResponse" />
+  <xs:element name="istenCikisKaydet" type="tns:istenCikisKaydet" />
+  <xs:element name="istenCikisKaydetResponse" type="tns:istenCikisKaydetResponse" />
+  <xs:element name="istenCikisPdfDokum" type="tns:istenCikisPdfDokum" />
+  <xs:element name="istenCikisPdfDokumResponse" type="tns:istenCikisPdfDokumResponse" />
+  <xs:element name="tckimlikNoTarihileistenCikisSorgula" type="tns:tckimlikNoTarihileistenCikisSorgula" />
+  <xs:element name="tckimlikNoTarihileistenCikisSorgulaResponse" type="tns:tckimlikNoTarihileistenCikisSorgulaResponse" />
+  <xs:element name="tckimlikNoileistenCikisSorgula" type="tns:tckimlikNoileistenCikisSorgula" />
+  <xs:element name="tckimlikNoileistenCikisSorgulaResponse" type="tns:tckimlikNoileistenCikisSorgulaResponse" />
+  <xs:complexType name="istenCikisDonemVeGunSayisiBul">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullanici" type="tns:kullaniciBilgileri" />
+      <xs:element name="tckimlikno" type="xs:long" />
+      <xs:element minOccurs="0" name="istenCikisTarihi" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="kullaniciBilgileri">
+    <xs:sequence>
+      <xs:element name="kullaniciAdi" type="xs:string" />
+      <xs:element name="isyeriKodu" type="xs:string" />
+      <xs:element name="sistemSifre" type="xs:string" />
+      <xs:element name="isyeriSifre" type="xs:string" />
+      <xs:element name="isyeriSicil" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisDonemVeGunSayisiBulResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="istenCikisDonemVeGunSayisiBulReturn" type="tns:istenCikisDonemBilgileri" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisDonemBilgileri">
+    <xs:sequence>
+      <xs:element name="tckimlikNo" type="xs:long" />
+      <xs:element name="islemSonucu" type="xs:int" />
+      <xs:element name="islemSonucAciklamasi" type="xs:string" />
+      <xs:element name="istenCikisTarihi" type="xs:string" />
+      <xs:element name="iseGirisTarihi" type="xs:string" />
+      <xs:element name="bulundugumuzDonemBaslangicTarihi" type="xs:string" />
+      <xs:element name="bulundugumuzDonemBitisTarihi" type="xs:string" />
+      <xs:element name="bulundugumuzDonemGunSayisi" type="xs:int" />
+      <xs:element name="oncekiDonemBaslangicTarihi" type="xs:string" />
+      <xs:element name="oncekiDonemBitisTarihi" type="xs:string" />
+      <xs:element name="oncekiDonemGunSayisi" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisPdfDokum">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullanici" type="tns:kullaniciBilgileri" />
+      <xs:element name="referansKodu" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisPdfDokumResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="istenCikisPdfDokumReturn" type="tns:pdfDokumSonuc" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="pdfDokumSonuc">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="hataAciklama" type="xs:string" />
+      <xs:element name="hatakodu" type="xs:int" />
+      <xs:element minOccurs="0" name="pdfByteArray" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisKaydet">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="sgk4aIstenCikisParametre" type="tns:sgk4AIstenCikisParametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sgk4AIstenCikisParametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullaniciBilgileri" type="tns:kullaniciBilgileri" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="sigortaliIstenCikisListesi" type="tns:sigortaliIstenCikis" />
+      <xs:element minOccurs="0" name="nakilGidecegiIsyeriSicil" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sigortaliIstenCikis">
+    <xs:sequence>
+      <xs:element name="tckimlikNo" type="xs:long" />
+      <xs:element name="ad" type="xs:string" />
+      <xs:element name="soyad" type="xs:string" />
+      <xs:element name="istenCikisTarihi" type="xs:string" />
+      <xs:element name="istenCikisNedeni" type="xs:string" />
+      <xs:element name="meslekkodu" type="xs:string" />
+      <xs:element name="csgbiskolu" type="xs:string" />
+      <xs:element name="bulundugumuzDonem" type="tns:bulundugumuzDonem" />
+      <xs:element name="oncekiDonem" type="tns:oncekiDonem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bulundugumuzDonem">
+    <xs:sequence>
+      <xs:element name="belgeturu" type="xs:short" />
+      <xs:element name="hakedilenucret" type="xs:double" />
+      <xs:element name="primikramiye" type="xs:double" />
+      <xs:element name="eksikgunsayisi" type="xs:short" />
+      <xs:element name="eksikgunnedeni" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oncekiDonem">
+    <xs:sequence>
+      <xs:element name="belgeturu" type="xs:short" />
+      <xs:element name="hakedilenucret" type="xs:double" />
+      <xs:element name="primikramiye" type="xs:double" />
+      <xs:element name="eksikgunsayisi" type="xs:short" />
+      <xs:element name="eksikgunnedeni" type="xs:short" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisKaydetResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="istenCikisKaydetReturn" type="tns:sigortaliIstenCikisIslemSonuclari" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sigortaliIstenCikisIslemSonuclari">
+    <xs:sequence>
+      <xs:element name="hataKodu" type="xs:int" />
+      <xs:element minOccurs="0" name="hataAciklamasi" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="sigortaliIstenCikisSonuc" type="tns:sigortaliIstenCikisSonuc" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sigortaliIstenCikisSonuc">
+    <xs:sequence>
+      <xs:element name="islemSonucu" type="xs:long" />
+      <xs:element minOccurs="0" name="islemAciklamasi" type="xs:string" />
+      <xs:element name="tcKimlikNo" type="xs:long" />
+      <xs:element minOccurs="0" name="sicilno" type="xs:string" />
+      <xs:element minOccurs="0" name="adSoyad" type="xs:string" />
+      <xs:element name="referansKodu" type="xs:long" />
+      <xs:element minOccurs="0" name="istenCikisTarihi" type="xs:string" />
+      <xs:element minOccurs="0" name="isyeriSicil" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoTarihileistenCikisSorgula">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tcKimlikTarihtenIstenCikisSorParametre" type="tns:tcKimlikTarihtenIstenCikisSorParametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tcKimlikTarihtenIstenCikisSorParametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullaniciBilgileri" type="tns:kullaniciBilgileri" />
+      <xs:element name="tcKimlikNo" type="xs:long" />
+      <xs:element minOccurs="0" name="istenCikisTarihi" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoTarihileistenCikisSorgulaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tckimlikNoTarihileistenCikisSorgulaReturn" type="tns:istenCikisListesi" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="istenCikisListesi">
+    <xs:sequence>
+      <xs:element name="hatakodu" type="xs:int" />
+      <xs:element minOccurs="0" name="hataAciklama" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="istenCikisKayitlari" type="tns:sgkIstenCikisKaydi" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sgkIstenCikisKaydi">
+    <xs:sequence>
+      <xs:element name="tckimlikNo" type="xs:long" />
+      <xs:element name="sicilno" type="xs:long" />
+      <xs:element minOccurs="0" name="cikisTarihi" type="xs:string" />
+      <xs:element minOccurs="0" name="islemTarihi" type="xs:string" />
+      <xs:element name="idariParaCezasi" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoileistenCikisSorgula">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tcKimliktenIstenCikisSorParametre" type="tns:tcKimliktenIstenCikisSorParametre" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tcKimliktenIstenCikisSorParametre">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="kullaniciBilgileri" type="tns:kullaniciBilgileri" />
+      <xs:element name="tcKimlikNo" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="tckimlikNoileistenCikisSorgulaResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="tckimlikNoileistenCikisSorgulaReturn" type="tns:istenCikisListesi" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

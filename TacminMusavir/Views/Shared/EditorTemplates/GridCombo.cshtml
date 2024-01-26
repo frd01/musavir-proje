@@ -1,0 +1,22 @@
+﻿@using Kendo.Mvc.UI
+
+@model int?
+
+@(Html.Kendo().ComboBoxFor(x=>x)
+                        .Name("grid_combo")
+                        .Filter(FilterType.Contains)
+                        .HtmlAttributes(new { style = "width: 100%;" })
+                        .DataTextField("Donem_Adi")
+                        .DataValueField("Id")
+
+                        .ValuePrimitive(true)
+
+                        .DataSource(dataSource => {
+                            dataSource.Read("BeyannameDonemListesi", "mukellef");
+                        })
+                        .SelectedIndex(0)
+                        .Suggest(true)
+                        .AutoBind(false)
+                        .Events(e=>e.Change("grid_combo_change_event"))
+
+                        )

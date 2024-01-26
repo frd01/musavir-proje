@@ -1,0 +1,145 @@
+﻿@{
+    Title = "Vergi Levha Listesi";
+}
+
+
+@Html.Ty().TyToolBar().Items(items =>
+{
+items.Add().Filter(
+@<text>
+    @(Html.Ty().TyFilter<BeyannameAraModel>()
+                .Fields(f =>
+                {
+                    f.Add(p => p.DONEM_BAS).Label("İlk Dönem");
+                    f.Add(p => p.DONEM_SON).Label("Son Dönem");
+                    f.Add(p => p.GONDERIM_TARIHI).Label("Gönd. Tarihi");
+                    f.Add(p => p.UNVAN);
+                })
+                .FilterExpression(f =>
+                {
+                    f.Add(p => p.GONDERIM_TARIHI).IsGreaterThanOrEqualTo(DateTime.Now.FirstDayOfMonth());
+                    f.Add(p => p.GONDERIM_TARIHI).IsLessThanOrEqualTo(DateTime.Now.LastDayOfMonth());
+                })
+            )
+</text>
+);
+
+items.Add().Share();
+items.Add().Download(Url.RouteUrl(new { controller = "beyanname", action = "BeyannameZipDownload" }));
+items.Add().Request(Html.Partial("Partial/_levhaSorgula"));
+})
+
+@(Html.Kendo().DataSource<DataIslemler.Models.Mukellef.VergiLevhaListeModel>()
+    .Name("masterds")
+    .Ajax(x => x.PageSize(20))
+)
+@(Html.Ty().TyGrid<DataIslemler.Models.Mukellef.VergiLevhaListeModel>().Name("master")
+    .Columns(c => {
+
+        c.Bound(m => m.UNVAN);
+        c.Bound(m => m.VERGI_DAIRESI);
+        c.Bound(m => m.VERGI_NO);
+        c.Bound(m => m.Yil);
+        c.Bound(m => m.Beyan);
+        c.Bound(m => m.Matrah);
+        c.Detay(Url.RouteUrl(new { controller = "vergiLevha", action = "levhaPdfGor", id = "#=Id#" }), "_blank", "beyanIcon");
+
+    })
+)
+
+@section scripts{
+    <script>
+
+        const firma_list = [];
+
+        $(document).ready(function () {
+            var multiSelect = $("#FirmaListesi").data("kendoMultiSelect");
+        });
+        $(document).on('submit', '#form_RequestModal', function (e) {
+            $('#RequestModal').data('kendoWindow').close();
+            var _formData = $.ty.utils.serializeObject($('#form_RequestModal'));
+            kendo.ui.progress($('.content'), true);
+
+            const formData = {FirmaListesi: firma_list }
+
+            console.log("formData : ", formData)
+
+            var req = $.ajax({
+                url: '@Url.RouteUrl(new { controller = "vergiLevha", action = "VergiLevhasiSorgula" })',
+                method: 'POST',
+                data: formData
+            });
+
+            req.done(function (res) {
+                console.log(res);
+            });
+
+            req.always(function () {
+                kendo.ui.progress($('.content'), false);
+            });
+
+            e.preventDefault();
+        });
+
+        function firma_selectAll() {
+            var multiSelect = $("#ver_gelir_firma").data("kendoMultiSelect");
+            var selectedValues = [];
+
+            console.log("multiSelect : ", multiSelect)
+
+            for (var i = 0; i < multiSelect.dataSource.data().length; i++) {
+                var item = multiSelect.dataSource.data()[i];
+                selectedValues.push(item.Id);
+                const model = {
+                    Unvan: item.Unvan,
+                    GibKodu: item.GibKodu,
+                    GibParola: item.GibParola,
+                    GibSifre: item.GibSifre,
+                    Id: item.Id
+                }
+
+                firma_list.push(model);
+            }
+            multiSelect.value(selectedValues);
+            multiSelect.trigger("change");
+
+            console.log("Firma Listesi : ", firma_list)
+
+        }
+
+        function firma_select_event(e) {
+
+            console.log("teb_gelir_select_event : ", e.dataItem)
+
+            var item = e.dataItem;
+            const model = {
+                Unvan: item.Unvan,
+                GibKodu: item.GibKodu,
+                GibParola: item.GibParola,
+                GibSifre: item.GibSifre,
+                Id: item.Id
+            }
+
+            firma_list.push(model)
+
+            console.log("Firma Listesi : ", firma_list)
+
+        }
+        function firma_deselect_event(e) {
+
+            console.log("teb_gelir_deselect_event : ", e.dataItem)
+
+            for (let i = 0; i < firma_list.length; i++) {
+
+                const item = firma_list[i]
+
+                if (item.Id == e.dataItem.Id) {
+
+                    firma_list.splice(i, 1);
+                }
+            }
+
+            console.log("Firma Listesi : ", firma_list)
+        }
+    </script>
+}

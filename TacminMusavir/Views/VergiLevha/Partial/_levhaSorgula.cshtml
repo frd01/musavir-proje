@@ -1,0 +1,56 @@
+﻿@model DataIslemler.Models.Gib.GelenFaturaRequest
+
+
+
+<div class="form-group row">
+
+
+    @Html.Label("Firmalar", new { @class = "col-md-4" })
+    <div class="col-md-8">
+        @(Html.Kendo().MultiSelectFor(x=>x.Firma.Id)
+
+          .Name("FirmaListesi")
+          .DataTextField("Unvan")
+          .DataValueField("Id")
+          .TagMode(TagMode.Single)
+          .IgnoreCase(true)
+          .AutoBind(true)
+          .Filter(FilterType.Contains)
+          .HtmlAttributes(new { @class = "size100Percent", Id = "ver_gelir_firma" })
+           .Events(e =>
+           {
+               e.Select("firma_select_event").Deselect("firma_deselect_event");
+           })
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("FirmaListesi", "gelenfatura");
+              })
+              .ServerFiltering(false);
+          })
+
+        )
+    </div>
+</div>
+
+<button type="submit" class="btn btn-info">Sorgula</button>
+<button type="button" class="btn btn-default float-right">Temizle</button>
+
+
+<script>
+    function onChange() {
+        kendoConsole.log("event: change");
+    }
+    function firmaSelect(e) {
+        @{
+            var firma = new DataIslemler.Models.Firma();
+
+
+        }
+        console.log(e.dataItem);
+    }
+
+
+
+</script>

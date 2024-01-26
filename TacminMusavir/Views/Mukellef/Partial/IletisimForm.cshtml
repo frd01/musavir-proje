@@ -1,0 +1,152 @@
+﻿<div class="container-fluid k-card">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex flex-row">
+                <div class="p-2" style="width : 25%;">
+                    @Html.Label("Adı")
+                </div>
+                <div class="p-2" style="width : 75%;">
+                    @(
+                Html.Kendo().TextBox()
+                .Name("ilt_frm_tx_adi")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                )
+                </div>
+            </div>
+
+            <div class="d-flex flex-row">
+                <div class="p-2" style="width : 25%;">
+                    @Html.Label("Telefon")
+                </div>
+                <div class="p-2" style="width : 75%;">
+                    @(
+                Html.Kendo().TextBox()
+                .Name("ilt_frm_tx_telefon")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                )
+                </div>
+            </div>
+
+            <div class="d-flex flex-row">
+                <div class="p-2" style="width : 25%;">
+                    @Html.Label("Mail")
+                </div>
+                <div class="p-2" style="width : 75%;">
+                    @(
+                Html.Kendo().TextBox()
+                .Name("ilt_frm_tx_mail")
+                .HtmlAttributes(new { style = "width : 100%;",@class = "form-control form-control-sm" })
+                )
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex flex-row justify-content-end">
+                <div class="p-2">
+                    <button class="btn btn-success btn-sm" onclick="iletisim_form_kaydet_click_event()">
+                        Kaydet
+                    </button>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-danger btn-sm" onclick="iletisim_form_kapat_click_event()">
+                        Kapat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function iletisim_form_kapat_click_event() {
+
+        const wn_ilt_form = $("#wn_ilt_form").data("kendoWindow")
+
+        wn_ilt_form.close()
+    }
+
+    function iletisim_form_kaydet_click_event() {
+
+        const ilt_frm_tx_adi = $("#ilt_frm_tx_adi").data("kendoTextBox")
+        const ilt_frm_tx_telefon = $("#ilt_frm_tx_telefon").data("kendoTextBox")
+        const ilt_frm_tx_mail = $("#ilt_frm_tx_mail").data("kendoTextBox")
+
+        
+
+        if (ilt_frm_tx_adi.value().length <=0) {
+
+            alert("Adını Giriniz")
+            return
+        }
+
+        if (ilt_frm_tx_telefon.value().length <=0) {
+
+            alert("Telefon Bilgisini Giriniz.")
+            return
+        }
+
+        if (ilt_frm_tx_mail.value().length <= 0) {
+
+            alert("Mail Bilgisini Giriniiz.")
+            return
+        }
+
+        const model = {
+
+            Id: get_id(),
+            Adi: ilt_frm_tx_adi.value(),
+            Telefon: ilt_frm_tx_telefon.value(),
+            Mail: ilt_frm_tx_mail.value()
+        }
+
+        var iletisim_grid = $("#iletisim").data("kendoGrid");
+        const liste = iletisim_grid.dataSource._pristineData;
+        const kontrol = liste.find(x => x.Adi == model.Adi && x.Telefon == model.Telefon)
+
+        if (kontrol != null) {
+
+            alert("Bu Kayıt Daha Önce Eklenmiş. Kontrol Ediniz.")
+            return
+        }
+        if (select_iletisim.Id == null) {
+
+            liste.push(model)
+        }
+
+        if (select_iletisim.Id != null) {
+
+            for (var i = 0; i < liste.length; i++) {
+
+                if (liste[i].Id == select_iletisim.Id) {
+
+                    liste[i].Adi = model.Adi
+                    liste[i].Telefon = model.Telefon
+                    liste[i].Mail = model.Mail
+                }
+            }
+        }
+
+        try {
+
+            iletisim_grid.setDataSource(liste)
+
+        } catch {
+
+            console.log("")
+        }
+
+        ilt_frm_tx_adi.value("")
+        ilt_frm_tx_telefon.value("")
+        ilt_frm_tx_mail.value("")
+
+        ilt_frm_tx_adi.focus()
+
+
+    }
+
+</script>
